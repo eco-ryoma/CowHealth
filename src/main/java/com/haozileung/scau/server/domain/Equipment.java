@@ -56,8 +56,8 @@ public class Equipment implements IDomain {
 
 	private void update(EquipmentInfo equipmentInfo) {
 		try {
-			this.expireDate = DateUtil.convertStr2Date(equipmentInfo
-					.getExpireDate());
+			this.expireDate = DateUtil.parse(equipmentInfo.getExpireDate(),
+					DateUtil.defaultDatePatternStr);
 		} catch (ParseException e) {
 			this.expireDate = new Timestamp(0);
 		}
