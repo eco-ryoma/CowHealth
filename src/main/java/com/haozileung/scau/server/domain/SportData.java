@@ -1,5 +1,6 @@
 package com.haozileung.scau.server.domain;
 
+import java.text.ParseException;
 import java.util.Date;
 
 import org.bson.types.ObjectId;
@@ -8,6 +9,7 @@ import org.springframework.data.mongodb.core.index.Indexed;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 import com.haozileung.scau.server.common.domain.IDomain;
+import com.haozileung.scau.server.common.utility.DateUtil;
 import com.haozileung.scau.server.dto.SportDataInfo;
 
 /**
@@ -45,15 +47,47 @@ public class SportData implements IDomain {
 
 	private String data;
 
+	public boolean isPassTime() {
+		if (DateUtil.compareDateTimeIgnoreMinute(updateDate, currentDate) >= 0) {
+			return true;
+		}
+		return false;
+	}
+
 	public SportData() {
 	}
 
 	public SportData(SportDataInfo sportDataInfo) {
-		if (null != sportDataInfo)
+		if (null != sportDataInfo) {
 			update(sportDataInfo);
+		}
 	}
 
 	private void update(SportDataInfo sportDataInfo) {
+		this.cowId = new ObjectId(sportDataInfo.getCowId());
+		try {
+			this.currentDate = DateUtil.convertStr2Date(sportDataInfo
+					.getCurrentDate());
+		} catch (ParseException e) {
+			this.currentDate = new Date(0);
+		}
+		StringBuffer dataStr = new StringBuffer();
+		for (int i = 0; i < sportDataInfo.getData().length; i++) {
+			dataStr.append(sportDataInfo.getData()[i] + ",");
+		}
+		if (dataStr.length() > 0) {
+			this.data = dataStr.substring(0, dataStr.length() - 1);
+		} else {
+			this.data = dataStr.toString();
+		}
+		this.equipmentId = new ObjectId(sportDataInfo.getEquipmentId());
+		this.id = new ObjectId(sportDataInfo.getId());
+		try {
+			this.updateDate = DateUtil.parse(sportDataInfo.getUpdateDate(),
+					DateUtil.defaultDatePatternStr);
+		} catch (ParseException e) {
+			this.updateDate = new Date(0);
+		}
 
 	}
 
