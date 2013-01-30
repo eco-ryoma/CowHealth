@@ -6,7 +6,7 @@
  * @date 2012-12-18 上午10:42:33
  * @version V1.0
  */
-package com.haozileung.scau.server;
+package com.haozileung.scau.server.common;
 
 import org.junit.runner.RunWith;
 import org.springframework.test.context.ContextConfiguration;
