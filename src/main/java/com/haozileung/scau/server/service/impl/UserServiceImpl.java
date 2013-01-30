@@ -29,7 +29,7 @@ import com.haozileung.scau.server.service.IUserService;
  * @version 1.0.0<br/>
  * 
  */
-@Service("SystemUserService")
+@Service("UserService")
 public class UserServiceImpl implements IUserService {
 
 	private final Log logger = LogFactory.getLog(getClass().getName());

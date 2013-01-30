@@ -8,7 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 
 import com.haozileung.scau.server.common.action.BaseAction;
 import com.haozileung.scau.server.common.dto.MyPage;
-import com.haozileung.scau.server.common.utility.RestDataSourceResponse;
+import com.haozileung.scau.server.common.dto.RestDataSourceResponse;
 import com.haozileung.scau.server.dto.UserInfo;
 import com.haozileung.scau.server.service.IUserService;
 
@@ -45,14 +45,14 @@ public class UserAction extends BaseAction {
 	private static final long serialVersionUID = 7873797059589872336L;
 
 	@Autowired
-	private IUserService systemUserService;
+	private IUserService userService;
 
 	/**
 	 * @param systemUserService
 	 *            the systemUserService to set
 	 */
-	public void setSystemUserService(IUserService systemUserService) {
-		this.systemUserService = systemUserService;
+	public void setUserService(IUserService userService) {
+		this.userService = userService;
 	}
 
 	private String name;
@@ -67,8 +67,8 @@ public class UserAction extends BaseAction {
 			"response\\.\\w+,response\\.data\\[\\d+\\]\\.\\w+",
 			"ignoreHierarchy", "false" }) })
 	public String getUserList() {
-		MyPage<UserInfo> userInfos = systemUserService.getUserByName(name,
-				_startRow, _endRow);
+		MyPage<UserInfo> userInfos = userService.getUserByName(name, _startRow,
+				_endRow);
 		response.setData(userInfos.getContent());
 		response.setStartRow(userInfos.getNumber() * userInfos.getSize());
 		response.setEndRow(response.getStartRow()
@@ -87,7 +87,7 @@ public class UserAction extends BaseAction {
 		user.setName(name);
 		user.setSex(sex);
 		user.setUserType(userType);
-		systemUserService.addUser(user);
+		userService.addUser(user);
 		response.setStatus(0);
 		return SUCCESS;
 	}
@@ -101,7 +101,7 @@ public class UserAction extends BaseAction {
 		user.setName(name);
 		user.setSex(sex);
 		user.setUserType(userType);
-		systemUserService.deleteUser(user);
+		userService.deleteUser(user);
 		response.setStatus(0);
 		return SUCCESS;
 	}
@@ -115,7 +115,7 @@ public class UserAction extends BaseAction {
 		user.setName(name);
 		user.setSex(sex);
 		user.setUserType(userType);
-		systemUserService.updateUser(user);
+		userService.updateUser(user);
 		response.setStatus(0);
 		return SUCCESS;
 	}
