@@ -1,9 +1,12 @@
 package com.haozileung.scau.server.action;
 
 import org.apache.struts2.convention.annotation.Action;
+import org.apache.struts2.convention.annotation.ExceptionMapping;
+import org.apache.struts2.convention.annotation.ExceptionMappings;
 import org.apache.struts2.convention.annotation.Namespace;
 import org.apache.struts2.convention.annotation.ParentPackage;
 import org.apache.struts2.convention.annotation.Result;
+import org.apache.struts2.convention.annotation.Results;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import com.haozileung.scau.server.common.action.BaseAction;
@@ -26,14 +29,9 @@ import com.haozileung.scau.server.service.IUserService;
  */
 @ParentPackage("json-default")
 @Namespace("/user")
-/*
- * @Results({ @Result(name = "success", location = "/index.jsp"),
- * 
- * @Result(name = "error", location = "/error.jsp") })
- * 
- * @ExceptionMappings({ @ExceptionMapping(exception =
- * "java.lange.RuntimeException", result = "error") })
- */
+@Results({ @Result(name = "success", location = "/index.jsp"),
+		@Result(name = "error", location = "/error.jsp") })
+@ExceptionMappings({ @ExceptionMapping(exception = "java.lange.RuntimeException", result = "error") })
 public class UserAction extends BaseAction {
 
 	/**

@@ -1,8 +1,7 @@
 package com.haozileung.scau.client;
 
 import com.google.gwt.core.client.EntryPoint;
-import com.haozileung.scau.client.common.widget.LiveGridFormWidget;
-import com.haozileung.scau.client.home.ds.UserDataSource;
+import com.haozileung.scau.client.home.view.UserManageView;
 
 /**
  * Entry point classes define <code>onModuleLoad()</code>.
@@ -15,12 +14,9 @@ public class main implements EntryPoint {
 	 * This is the entry point method.
 	 */
 	public void onModuleLoad() {
-		/*
-		 * UserManageView umv = new UserManageView(); umv.draw();
-		 */
-		LiveGridFormWidget lgfw = new LiveGridFormWidget(
-				UserDataSource.getInstance(), "user");
-		lgfw.draw();
+
+		UserManageView umv = new UserManageView();
+		umv.draw();
 
 	}
 }

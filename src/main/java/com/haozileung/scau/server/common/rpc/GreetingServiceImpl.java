@@ -1,7 +1,7 @@
 package com.haozileung.scau.server.common.rpc;
 
 import com.google.gwt.user.server.rpc.RemoteServiceServlet;
-import com.haozileung.scau.client.common.rpc.GreetingService;
+import com.haozileung.scau.client.rpc.GreetingService;
 import com.haozileung.scau.shared.FieldVerifier;
 
 /**

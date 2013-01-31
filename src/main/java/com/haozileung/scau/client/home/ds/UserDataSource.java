@@ -5,17 +5,19 @@ package com.haozileung.scau.client.home.ds;
 
 import java.util.LinkedHashMap;
 
-import com.haozileung.scau.client.common.BaseDataSource;
+import com.smartgwt.client.data.RestDataSource;
 import com.smartgwt.client.data.fields.DataSourceDateTimeField;
 import com.smartgwt.client.data.fields.DataSourceIntegerField;
 import com.smartgwt.client.data.fields.DataSourceTextField;
+import com.smartgwt.client.types.DSDataFormat;
+import com.smartgwt.client.types.DSProtocol;
 import com.smartgwt.client.types.DateDisplayFormat;
 
 /**
  * @author lianghaopeng
  * 
  */
-public class UserDataSource extends BaseDataSource {
+public class UserDataSource extends RestDataSource {
 
 	private static UserDataSource instance = null;
 
@@ -53,6 +55,12 @@ public class UserDataSource extends BaseDataSource {
 		userType.setValueMap(userTypeValueMap);
 
 		setFields(userId, name, age, sex, birthdate, userType);
+		
+		setClientOnly(false);
+		setSendMetaData(true);
+		setDataFormat(DSDataFormat.JSON);
+		setRecordXPath("response/data");
+		setDataProtocol(DSProtocol.POSTPARAMS);
 
 		setRecordXPath("response/data");
 		setAddDataURL("user/addUser.action");

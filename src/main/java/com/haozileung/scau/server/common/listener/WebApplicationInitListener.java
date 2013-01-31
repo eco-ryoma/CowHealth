@@ -6,9 +6,6 @@ import java.util.List;
 import javax.servlet.ServletContextEvent;
 import javax.servlet.ServletContextListener;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
-
 import com.haozileung.scau.server.common.websocket.MyWebSocket;
 
 /**
@@ -24,9 +21,6 @@ import com.haozileung.scau.server.common.websocket.MyWebSocket;
  * 
  */
 public class WebApplicationInitListener implements ServletContextListener {
-
-	private final static Log logger = LogFactory
-			.getLog(WebApplicationInitListener.class.getName());
 
 	// private PassportService passportService;
 
@@ -49,10 +43,6 @@ public class WebApplicationInitListener implements ServletContextListener {
 		// passportService.addPassport(p);
 		// }
 		WebApplicationInitListener.socketList = new ArrayList<MyWebSocket>();
-		System.out.println("\nWebSocket Server Started.\n");
-		if (logger.isDebugEnabled()) {
-			logger.debug("WebSocket Server Started.");
-		}
 	}
 
 	public void contextDestroyed(ServletContextEvent sce) {

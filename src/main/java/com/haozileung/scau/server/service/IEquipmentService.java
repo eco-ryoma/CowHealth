@@ -28,6 +28,6 @@ import com.haozileung.scau.server.common.service.IService;
  * @version 1.0.0
  * 
  */
-public class IEquipmentService implements IService {
+public interface IEquipmentService extends IService {
 
 }

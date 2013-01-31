@@ -46,7 +46,7 @@
 				<configuration>
 					<runTarget>main.html</runTarget>
 					<hostedWebapp>${webappDirectory}</hostedWebapp>
-					<i18nMessagesBundle>com.haozileung.scau.client.Messages</i18nMessagesBundle>
+					<i18nMessagesBundle>com.haozileung.scau.shared.Messages</i18nMessagesBundle>
 				</configuration>
 			</plugin>
 			<plugin>
