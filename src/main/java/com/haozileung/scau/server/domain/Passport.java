@@ -1,6 +1,9 @@
 package com.haozileung.scau.server.domain;
 
 import org.bson.types.ObjectId;
+import org.springframework.data.annotation.Id;
+import org.springframework.data.mongodb.core.index.Indexed;
+import org.springframework.data.mongodb.core.mapping.Document;
 
 import com.haozileung.scau.server.common.domain.IDomain;
 import com.haozileung.scau.server.dto.PassportInfo;
@@ -18,6 +21,7 @@ import com.haozileung.scau.server.dto.PassportInfo;
  * @version 1.0.0<br/>
  * 
  */
+@Document(collection="passportDoc")
 public class Passport implements IDomain {
 
 	/**
@@ -25,10 +29,13 @@ public class Passport implements IDomain {
 	 */
 	private static final long serialVersionUID = -851885710424068575L;
 
+	@Id
 	private ObjectId id;
 
+	@Indexed
 	private ObjectId userId;
 
+	@Indexed
 	private String userName;
 
 	private String password;
