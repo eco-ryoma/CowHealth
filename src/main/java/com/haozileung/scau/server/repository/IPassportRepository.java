@@ -14,6 +14,11 @@
  */
 package com.haozileung.scau.server.repository;
 
+import org.bson.types.ObjectId;
+import org.springframework.data.mongodb.repository.MongoRepository;
+
+import com.haozileung.scau.server.domain.Passport;
+
 /**
  * 
  * <b>类名称：</b>IPassportRepository<br/>
@@ -26,6 +31,7 @@ package com.haozileung.scau.server.repository;
  * @version 1.0.0
  * 
  */
-public interface IPassportRepository {
+public interface IPassportRepository extends
+		MongoRepository<Passport, ObjectId> {
 
 }

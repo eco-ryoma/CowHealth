@@ -9,7 +9,7 @@ import com.haozileung.scau.server.dto.UserInfo;
 /**
  * 
  * <b>类名称：</b>ISystemUserService<br/>
- * <b>类描述：</b>SystemUser的服务接口<br/>
+ * <b>类描述：</b>User的服务接口<br/>
  * <b>创建人：</b>lianghaopeng<br/>
  * <b>修改人：</b>lianghaopeng<br/>
  * <b>修改时间：</b>2012-12-7 下午3:52:14<br/>
@@ -62,7 +62,7 @@ public interface IUserService extends IService {
 	 * @exception
 	 * @since 1.0.0
 	 */
-	public List<UserInfo> getAllSystemUser();
+	public List<UserInfo> getAllUser();
 
 	/**
 	 * 按名字查询

@@ -14,7 +14,16 @@
  */
 package com.haozileung.scau.server.action;
 
+import org.apache.struts2.convention.annotation.ExceptionMapping;
+import org.apache.struts2.convention.annotation.ExceptionMappings;
+import org.apache.struts2.convention.annotation.Namespace;
+import org.apache.struts2.convention.annotation.ParentPackage;
+import org.apache.struts2.convention.annotation.Result;
+import org.apache.struts2.convention.annotation.Results;
+import org.springframework.beans.factory.annotation.Autowired;
+
 import com.haozileung.scau.server.common.action.BaseAction;
+import com.haozileung.scau.server.service.IEquipmentService;
 
 /**
  * 
@@ -28,11 +37,27 @@ import com.haozileung.scau.server.common.action.BaseAction;
  * @version 1.0.0
  * 
  */
+@ParentPackage("json-default")
+@Namespace("/equipment")
+@Results({ @Result(name = "success", location = "/index.jsp"),
+		@Result(name = "error", location = "/error.jsp") })
+@ExceptionMappings({ @ExceptionMapping(exception = "java.lange.RuntimeException", result = "error") })
 public class EquipmentAction extends BaseAction {
 
 	/**
 	 * 
 	 */
 	private static final long serialVersionUID = 2749244337613640317L;
+	
+	@Autowired
+	private IEquipmentService equimentService;
+
+	public IEquipmentService getEquimentService() {
+		return equimentService;
+	}
+
+	public void setEquimentService(IEquipmentService equimentService) {
+		this.equimentService = equimentService;
+	}
 
 }

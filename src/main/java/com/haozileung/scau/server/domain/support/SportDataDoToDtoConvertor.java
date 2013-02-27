@@ -15,6 +15,7 @@
 package com.haozileung.scau.server.domain.support;
 
 import com.haozileung.scau.server.common.dto.AbstractDoToDtoConvertor;
+import com.haozileung.scau.server.common.dto.DoToDtoConvertorFactory;
 import com.haozileung.scau.server.common.utility.DateUtil;
 import com.haozileung.scau.server.domain.SportData;
 import com.haozileung.scau.server.dto.SportDataInfo;
@@ -33,6 +34,22 @@ import com.haozileung.scau.server.dto.SportDataInfo;
  */
 public class SportDataDoToDtoConvertor extends
 		AbstractDoToDtoConvertor<SportData, SportDataInfo> {
+
+	private static SportDataDoToDtoConvertor instance;
+
+	private SportDataDoToDtoConvertor() {
+	}
+
+	static {
+		if (null == instance) {
+			instance = new SportDataDoToDtoConvertor();
+			DoToDtoConvertorFactory.register(SportData.class, instance);
+		}
+	}
+
+	public static SportDataDoToDtoConvertor getInstance() {
+		return instance;
+	}
 
 	@Override
 	public SportDataInfo doToDto(SportData sportData) {

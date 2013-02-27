@@ -47,6 +47,14 @@
 			<set>
 				<value>com.haozileung.scau.server.domain.support.UserDoToDtoConvertor
 				</value>
+				<value>com.haozileung.scau.server.domain.support.CowDoToDtoConvertor
+				</value>
+				<value>com.haozileung.scau.server.domain.support.EquipmentDoToDtoConvertor
+				</value>
+				<value>com.haozileung.scau.server.domain.support.PassportDoToDtoConvertor
+				</value>
+				<value>com.haozileung.scau.server.domain.support.SportDataDoToDtoConvertor
+				</value>
 			</set>
 		</property>
 	</bean>

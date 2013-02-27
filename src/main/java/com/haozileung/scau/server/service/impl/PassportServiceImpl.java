@@ -14,6 +14,14 @@
  */
 package com.haozileung.scau.server.service.impl;
 
+import java.util.List;
+
+import org.bson.types.ObjectId;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
+import com.haozileung.scau.server.dto.PassportInfo;
+import com.haozileung.scau.server.repository.IPassportRepository;
 import com.haozileung.scau.server.service.IPassportService;
 
 /**
@@ -28,6 +36,48 @@ import com.haozileung.scau.server.service.IPassportService;
  * @version 1.0.0
  * 
  */
+@Service("PassportService")
 public class PassportServiceImpl implements IPassportService {
+	
+	@Autowired
+	private IPassportRepository passportRepository;
+
+	@Override
+	public boolean addPassport(PassportInfo passportInfo) {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+	@Override
+	public boolean updatePassport(PassportInfo passportInfo) {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+	@Override
+	public boolean deletePassportById(ObjectId oId) {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+	@Override
+	public List<PassportInfo> getAllPassport() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public PassportInfo getPassportById(ObjectId oId) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	public IPassportRepository getPassportRepository() {
+		return passportRepository;
+	}
+
+	public void setPassportRepository(IPassportRepository passportRepository) {
+		this.passportRepository = passportRepository;
+	}
 
 }

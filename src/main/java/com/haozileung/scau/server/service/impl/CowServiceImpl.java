@@ -14,8 +14,14 @@
  */
 package com.haozileung.scau.server.service.impl;
 
+import java.util.List;
+
+import org.bson.types.ObjectId;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.haozileung.scau.server.dto.CowInfo;
+import com.haozileung.scau.server.repository.ICowRepository;
 import com.haozileung.scau.server.service.ICowService;
 
 /**
@@ -32,5 +38,46 @@ import com.haozileung.scau.server.service.ICowService;
  */
 @Service("CowService")
 public class CowServiceImpl implements ICowService {
+	
+	@Autowired
+	private ICowRepository cowRepository;
+
+	@Override
+	public boolean saveCow(CowInfo cowInfo) {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+	@Override
+	public boolean updateCow(CowInfo cowInfo) {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+	@Override
+	public List<CowInfo> getAllCow() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public CowInfo getCowById(ObjectId oId) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public boolean deleteCowById(ObjectId oId) {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+	public ICowRepository getCowRepository() {
+		return cowRepository;
+	}
+
+	public void setCowRepository(ICowRepository cowRepository) {
+		this.cowRepository = cowRepository;
+	}
 
 }

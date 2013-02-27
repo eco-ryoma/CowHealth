@@ -39,19 +39,10 @@ public class UserAction extends BaseAction {
 	 * 
 	 * @since 1.0.0
 	 */
-
 	private static final long serialVersionUID = 7873797059589872336L;
 
 	@Autowired
 	private IUserService userService;
-
-	/**
-	 * @param systemUserService
-	 *            the systemUserService to set
-	 */
-	public void setUserService(IUserService userService) {
-		this.userService = userService;
-	}
 
 	private String name;
 	private String birthdate;
@@ -63,7 +54,7 @@ public class UserAction extends BaseAction {
 	@Action(value = "getUser", results = { @Result(name = SUCCESS, type = "json", params = {
 			"includeProperties",
 			"response\\.\\w+,response\\.data\\[\\d+\\]\\.\\w+",
-			"ignoreHierarchy", "false" }) })
+			"ignoreHierarchy", "false", "excludeNullProperties", "true" }) })
 	public String getUserList() {
 		MyPage<UserInfo> userInfos = userService.getUserByName(name, _startRow,
 				_endRow);
@@ -77,7 +68,9 @@ public class UserAction extends BaseAction {
 	}
 
 	@Action(value = "addUser", results = { @Result(name = SUCCESS, type = "json", params = {
-			"includeProperties", "response\\.\\w+", "ignoreHierarchy", "false" }) })
+			"includeProperties",
+			"response\\.\\w+,response\\.data\\[\\d+\\]\\.\\w+",
+			"ignoreHierarchy", "false", "excludeNullProperties", "true" }) })
 	public String addUser() {
 		UserInfo user = new UserInfo();
 		user.setUserId(userId);
@@ -91,7 +84,9 @@ public class UserAction extends BaseAction {
 	}
 
 	@Action(value = "deleteUser", results = { @Result(name = SUCCESS, type = "json", params = {
-			"includeProperties", "response\\.\\w+", "ignoreHierarchy", "false" }) })
+			"includeProperties",
+			"response\\.\\w+,response\\.data\\[\\d+\\]\\.\\w+",
+			"ignoreHierarchy", "false", "excludeNullProperties", "true" }) })
 	public String deleteUser() {
 		UserInfo user = new UserInfo();
 		user.setUserId(userId);
@@ -105,7 +100,9 @@ public class UserAction extends BaseAction {
 	}
 
 	@Action(value = "updateUser", results = { @Result(name = SUCCESS, type = "json", params = {
-			"includeProperties", "response\\.\\w+", "ignoreHierarchy", "false" }) })
+			"includeProperties",
+			"response\\.\\w+,response\\.data\\[\\d+\\]\\.\\w+",
+			"ignoreHierarchy", "false", "excludeNullProperties", "true" }) })
 	public String updateUser() {
 		UserInfo user = new UserInfo();
 		user.setUserId(userId);
@@ -199,5 +196,13 @@ public class UserAction extends BaseAction {
 	 */
 	public void setSex(String sex) {
 		this.sex = sex;
+	}
+	
+	/**
+	 * @param systemUserService
+	 *            the systemUserService to set
+	 */
+	public void setUserService(IUserService userService) {
+		this.userService = userService;
 	}
 }

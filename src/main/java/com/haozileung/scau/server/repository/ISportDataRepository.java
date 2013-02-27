@@ -14,10 +14,12 @@
  */
 package com.haozileung.scau.server.repository;
 
+import java.util.List;
+
+import org.bson.types.ObjectId;
 import org.springframework.data.mongodb.repository.MongoRepository;
 
 import com.haozileung.scau.server.domain.SportData;
-import com.haozileung.scau.server.dto.SportDataInfo;
 
 /**
  * 
@@ -32,6 +34,13 @@ import com.haozileung.scau.server.dto.SportDataInfo;
  * 
  */
 public interface ISportDataRepository extends
-		MongoRepository<SportData, SportDataInfo> {
+		MongoRepository<SportData, ObjectId> {
 
+	/**
+	 * 根据奶牛id返回运动数据并按日期排序
+	 * 
+	 * @param cowId
+	 * @return List<SportData>
+	 */
+	public List<SportData> findByCowIdOrderByCurrentDateDesc(ObjectId cowId);
 }

@@ -34,11 +34,12 @@ public class SportData implements IDomain {
 	private static final long serialVersionUID = 8911247246778924421L;
 
 	@Id
-	@Indexed
 	private ObjectId id;
 
+	@Indexed
 	private ObjectId cowId;
 
+	@Indexed
 	private ObjectId equipmentId;
 
 	private Date updateDate;

@@ -14,6 +14,14 @@
  */
 package com.haozileung.scau.server.service.impl;
 
+import java.util.List;
+
+import org.bson.types.ObjectId;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
+import com.haozileung.scau.server.dto.EquipmentInfo;
+import com.haozileung.scau.server.repository.IEquipmentRepository;
 import com.haozileung.scau.server.service.IEquipmentService;
 
 /**
@@ -28,6 +36,48 @@ import com.haozileung.scau.server.service.IEquipmentService;
  * @version 1.0.0
  * 
  */
+@Service("EquipmentService")
 public class EquipmentServiceImpl implements IEquipmentService {
+	
+	@Autowired
+	private IEquipmentRepository equipmentRepository;
+
+	@Override
+	public boolean addEquipment(EquipmentInfo equipmentInfo) {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+	@Override
+	public boolean updateEquipment(EquipmentInfo equipmentInfo) {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+	@Override
+	public boolean deleteEquipmentById(ObjectId oId) {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+	@Override
+	public List<EquipmentInfo> getAllEquipment() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public EquipmentInfo getEquipmentById(ObjectId oId) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	public IEquipmentRepository getEquipmentRepository() {
+		return equipmentRepository;
+	}
+
+	public void setEquipmentRepository(IEquipmentRepository equipmentRepository) {
+		this.equipmentRepository = equipmentRepository;
+	}
 
 }

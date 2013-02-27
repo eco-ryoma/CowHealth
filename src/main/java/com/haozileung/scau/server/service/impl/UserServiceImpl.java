@@ -108,7 +108,7 @@ public class UserServiceImpl implements IUserService {
 	 */
 	@SuppressWarnings("unchecked")
 	@Override
-	public List<UserInfo> getAllSystemUser() {
+	public List<UserInfo> getAllUser() {
 		if (logger.isInfoEnabled()) {
 			logger.info("Listing All User!");
 		}

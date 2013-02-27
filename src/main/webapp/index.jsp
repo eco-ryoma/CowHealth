@@ -5,53 +5,57 @@
 <head>
 <meta charset="utf-8">
 <title>test</title>
-<script type="text/javascript" src="./js/jquery/jquery-1.8.3.min.js"></script>
-<script type="text/javascript" src="./js/highcharts/highcharts.js"></script>
 <script type="text/javascript"
-	src="./js/highcharts/modules/exporting.js"></script>
+	src="./javascript/jquery/jquery-1.8.3.min.js"></script>
 <script type="text/javascript"
-	src="./js/highslide/highslide-full.min.js"></script>
-<script type="text/javascript" src="./js/highslide/highslide.config.js"
-	charset="utf-8"></script>
+	src="./javascript/highcharts/highcharts.js"></script>
+<script type="text/javascript"
+	src="./javascript/highcharts/modules/exporting.js"></script>
+<script type="text/javascript"
+	src="./javascript/highslide/highslide-full.min.js"></script>
+<script type="text/javascript"
+	src="./javascript/highslide/highslide.config.js" charset="utf-8"></script>
 <link rel="stylesheet" type="text/css"
-	href="./js/highslide/highslide.css" />
+	href="./javascript/highslide/highslide.css" />
 <script type="text/javascript">
 	$(function() {
 		var chart;
 		var ws = null;
+		function connect(){
+			if (!window.WebSocket) {
+				alert("WebSocket not supported by this browser!");
+			} else {
+				// 创建WebSocket  
+				ws = new WebSocket(
+						"ws://localhost:8080/CowHealth/ws/mywebsocket.ws");
+				// 收到消息时在消息框内显示  
+				ws.onmessage = function(evt) {
+					var scrollTop = $("#msgBox")[0].scrollHeight;
+					$('#msgBox').append(evt.data);
+					$('#msgBox').append('\r\n');
+					$('#msgBox').scrollTop(scrollTop);
+				};
+				// 断开时会走这个方法  
+				ws.onclose = function() {
+					alert('WebSocket连接断开！');
+				};
+				// 连接上时走这个方法  
+				ws.onopen = function() {
+					alert('WebSocket连接成功！');
+				};
+				$('#sendBtn').click(function() {
+					var data = $('#msgSendBox').val();
+					ws.send(data);
+					if (ws === null) {
+						alert(data);
+					}
+					$('#msgSendBox').val('');
+				});
+			}
+		}
 		$(document)
 				.ready(
 						function() {
-							if (!window.WebSocket) {
-								alert("WebSocket not supported by this browser!");
-							} else {
-								// 创建WebSocket  
-								ws = new WebSocket(
-										"ws://localhost:8080/CowHealth/ws/mywebsocket.ws");
-								// 收到消息时在消息框内显示  
-								ws.onmessage = function(evt) {
-									var scrollTop = $("#msgBox")[0].scrollHeight;
-									$('#msgBox').append(evt.data);
-									$('#msgBox').append('\r\n');
-									$('#msgBox').scrollTop(scrollTop);
-								};
-								// 断开时会走这个方法  
-								ws.onclose = function() {
-									alert('WebSocket连接断开！');
-								};
-								// 连接上时走这个方法  
-								ws.onopen = function() {
-									alert('WebSocket连接成功！');
-								};
-								$('#sendBtn').click(function() {
-									var data = $('#msgSendBox').val();
-									ws.send(data);
-									if (ws === null) {
-										alert(data);
-									}
-									$('#msgSendBox').val('');
-								});
-							}
 							//语言选项要先设置再初始化
 							Highcharts.setOptions({
 								lang : {
@@ -569,6 +573,9 @@
 </script>
 </head>
 <body>
+	<p>
+		<a href="main.html">SmartGWT Page</a>
+	</p>
 	<p>JavaScript 图表测试：</p>
 	<div id="container"
 		style="min-width: 400px; height: 400px; margin: 0 auto"></div>
