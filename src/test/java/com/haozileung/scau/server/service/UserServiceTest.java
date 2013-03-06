@@ -15,9 +15,9 @@
 package com.haozileung.scau.server.service;
 
 import org.junit.After;
+import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
-import org.springframework.util.Assert;
 
 import com.haozileung.scau.server.common.BaseJUnitTest;
 
@@ -52,7 +52,7 @@ public class UserServiceTest extends BaseJUnitTest {
 	@Test
 	public void test() {
 		int a = 1;
-		Assert.isTrue(a + 1 == 2, "失败：a + 1 != 2");
+		Assert.assertTrue("失败：a + 1 != 2", a + 1 == 2);
 	}
 
 }

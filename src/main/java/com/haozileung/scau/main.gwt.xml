@@ -13,10 +13,12 @@
 
 	<!-- Other module inherits -->
 	<inherits name="com.google.gwt.i18n.I18N" />
+	<extend-property name="locale" values="zh" />
 	<inherits name="com.google.gwt.json.JSON" />
 	<inherits name="com.google.gwt.http.HTTP" />
 	<inherits name='com.google.gwt.query.Query' />
 	<inherits name="com.smartgwt.SmartGwt" />
+
 	<!-- Specify the app entry point class. -->
 	<entry-point class='com.haozileung.scau.client.main' />
 

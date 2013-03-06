@@ -28,10 +28,11 @@ public class Cow implements IDomain {
 	 * 
 	 */
 	private static final long serialVersionUID = 6384207239416969734L;
+
 	@Id
-	@Indexed
 	private ObjectId id;
 
+	@Indexed(unique = true)
 	private String name;
 
 	private int age;

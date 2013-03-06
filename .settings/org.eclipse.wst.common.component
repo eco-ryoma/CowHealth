@@ -3,8 +3,8 @@
 	<wb-module deploy-name="CowHealth">
 		<wb-resource deploy-path="/WEB-INF/classes" source-path="/src/main/java"/>
 		<wb-resource deploy-path="/WEB-INF/classes" source-path="/src/main/resources"/>
-        <wb-resource deploy-path="/" source-path="/src/main/webapp"/>
         <wb-resource deploy-path="/WEB-INF/classes" source-path="/target/generated-sources/gwt"/>
+        <wb-resource deploy-path="/" source-path="/src/main/webapp"/>
 		<property name="context-root" value="CowHealth"/>
 		<property name="java-output-path" value="/CowHealth/target/CowHealth-3.0/WEB-INF/classes"/>
 	</wb-module>

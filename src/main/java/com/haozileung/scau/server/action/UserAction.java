@@ -1,14 +1,17 @@
 package com.haozileung.scau.server.action;
 
 import org.apache.struts2.convention.annotation.Action;
+import org.apache.struts2.convention.annotation.ExceptionMapping;
+import org.apache.struts2.convention.annotation.ExceptionMappings;
 import org.apache.struts2.convention.annotation.Namespace;
 import org.apache.struts2.convention.annotation.ParentPackage;
 import org.apache.struts2.convention.annotation.Result;
+import org.apache.struts2.convention.annotation.Results;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import com.haozileung.scau.server.common.action.BaseAction;
 import com.haozileung.scau.server.common.dto.MyPage;
-import com.haozileung.scau.server.common.utility.RestDataSourceResponse;
+import com.haozileung.scau.server.common.dto.RestDataSourceResponse;
 import com.haozileung.scau.server.dto.UserInfo;
 import com.haozileung.scau.server.service.IUserService;
 
@@ -26,14 +29,9 @@ import com.haozileung.scau.server.service.IUserService;
  */
 @ParentPackage("json-default")
 @Namespace("/user")
-/*
- * @Results({ @Result(name = "success", location = "/index.jsp"),
- * 
- * @Result(name = "error", location = "/error.jsp") })
- * 
- * @ExceptionMappings({ @ExceptionMapping(exception =
- * "java.lange.RuntimeException", result = "error") })
- */
+@Results({ @Result(name = "success", location = "/index.jsp"),
+		@Result(name = "error", location = "/error.jsp") })
+@ExceptionMappings({ @ExceptionMapping(exception = "java.lange.RuntimeException", result = "error") })
 public class UserAction extends BaseAction {
 
 	/**
@@ -41,19 +39,10 @@ public class UserAction extends BaseAction {
 	 * 
 	 * @since 1.0.0
 	 */
-
 	private static final long serialVersionUID = 7873797059589872336L;
 
 	@Autowired
-	private IUserService systemUserService;
-
-	/**
-	 * @param systemUserService
-	 *            the systemUserService to set
-	 */
-	public void setSystemUserService(IUserService systemUserService) {
-		this.systemUserService = systemUserService;
-	}
+	private IUserService userService;
 
 	private String name;
 	private String birthdate;
@@ -65,10 +54,10 @@ public class UserAction extends BaseAction {
 	@Action(value = "getUser", results = { @Result(name = SUCCESS, type = "json", params = {
 			"includeProperties",
 			"response\\.\\w+,response\\.data\\[\\d+\\]\\.\\w+",
-			"ignoreHierarchy", "false" }) })
+			"ignoreHierarchy", "false", "excludeNullProperties", "true" }) })
 	public String getUserList() {
-		MyPage<UserInfo> userInfos = systemUserService.getUserByName(name,
-				_startRow, _endRow);
+		MyPage<UserInfo> userInfos = userService.getUserByName(name, _startRow,
+				_endRow);
 		response.setData(userInfos.getContent());
 		response.setStartRow(userInfos.getNumber() * userInfos.getSize());
 		response.setEndRow(response.getStartRow()
@@ -79,7 +68,9 @@ public class UserAction extends BaseAction {
 	}
 
 	@Action(value = "addUser", results = { @Result(name = SUCCESS, type = "json", params = {
-			"includeProperties", "response\\.\\w+", "ignoreHierarchy", "false" }) })
+			"includeProperties",
+			"response\\.\\w+,response\\.data\\[\\d+\\]\\.\\w+",
+			"ignoreHierarchy", "false", "excludeNullProperties", "true" }) })
 	public String addUser() {
 		UserInfo user = new UserInfo();
 		user.setUserId(userId);
@@ -87,13 +78,15 @@ public class UserAction extends BaseAction {
 		user.setName(name);
 		user.setSex(sex);
 		user.setUserType(userType);
-		systemUserService.addUser(user);
+		userService.addUser(user);
 		response.setStatus(0);
 		return SUCCESS;
 	}
 
 	@Action(value = "deleteUser", results = { @Result(name = SUCCESS, type = "json", params = {
-			"includeProperties", "response\\.\\w+", "ignoreHierarchy", "false" }) })
+			"includeProperties",
+			"response\\.\\w+,response\\.data\\[\\d+\\]\\.\\w+",
+			"ignoreHierarchy", "false", "excludeNullProperties", "true" }) })
 	public String deleteUser() {
 		UserInfo user = new UserInfo();
 		user.setUserId(userId);
@@ -101,13 +94,15 @@ public class UserAction extends BaseAction {
 		user.setName(name);
 		user.setSex(sex);
 		user.setUserType(userType);
-		systemUserService.deleteUser(user);
+		userService.deleteUser(user);
 		response.setStatus(0);
 		return SUCCESS;
 	}
 
 	@Action(value = "updateUser", results = { @Result(name = SUCCESS, type = "json", params = {
-			"includeProperties", "response\\.\\w+", "ignoreHierarchy", "false" }) })
+			"includeProperties",
+			"response\\.\\w+,response\\.data\\[\\d+\\]\\.\\w+",
+			"ignoreHierarchy", "false", "excludeNullProperties", "true" }) })
 	public String updateUser() {
 		UserInfo user = new UserInfo();
 		user.setUserId(userId);
@@ -115,7 +110,7 @@ public class UserAction extends BaseAction {
 		user.setName(name);
 		user.setSex(sex);
 		user.setUserType(userType);
-		systemUserService.updateUser(user);
+		userService.updateUser(user);
 		response.setStatus(0);
 		return SUCCESS;
 	}
@@ -201,5 +196,13 @@ public class UserAction extends BaseAction {
 	 */
 	public void setSex(String sex) {
 		this.sex = sex;
+	}
+	
+	/**
+	 * @param systemUserService
+	 *            the systemUserService to set
+	 */
+	public void setUserService(IUserService userService) {
+		this.userService = userService;
 	}
 }

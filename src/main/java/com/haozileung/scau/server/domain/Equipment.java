@@ -35,9 +35,9 @@ public class Equipment implements IDomain {
 	private static final long serialVersionUID = 2809489995169462486L;
 
 	@Id
-	@Indexed
 	private ObjectId id;
 
+	@Indexed
 	private String name;
 
 	private String type;

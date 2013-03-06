@@ -1,11 +1,10 @@
-package com.haozileung.scau.server.common.utility;
+package com.haozileung.scau.server.common.dto;
 
 import java.util.List;
 import java.util.Map;
 
 import org.apache.struts2.json.annotations.JSON;
 
-import com.haozileung.scau.server.common.dto.IDataTransferObject;
 
 public class RestDataSourceResponse<O extends IDataTransferObject> {
 	

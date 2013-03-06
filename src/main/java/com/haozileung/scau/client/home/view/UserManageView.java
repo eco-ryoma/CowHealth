@@ -1,6 +1,9 @@
 package com.haozileung.scau.client.home.view;
 
+import com.google.gwt.core.shared.GWT;
+import com.haozileung.scau.shared.Messages;
 import com.haozileung.scau.client.home.ds.UserDataSource;
+import com.smartgwt.client.types.Alignment;
 import com.smartgwt.client.types.VerticalAlignment;
 import com.smartgwt.client.widgets.IButton;
 import com.smartgwt.client.widgets.events.ClickEvent;
@@ -12,7 +15,9 @@ import com.smartgwt.client.widgets.grid.events.RecordClickHandler;
 import com.smartgwt.client.widgets.layout.HLayout;
 import com.smartgwt.client.widgets.layout.VLayout;
 
-public class UserManageView extends HLayout {
+public class UserManageView extends VLayout {
+	
+	final private Messages message = GWT.create(Messages.class);
 
 	public UserManageView() {
 		super();
@@ -31,9 +36,7 @@ public class UserManageView extends HLayout {
 		form.setDataSource(userDataSource);
 		form.getField("userId").hide();
 		form.getField("age").disable();
-		form.setWidth(500);
-		form.setHeight(194);
-		IButton newButton = new IButton("新建");
+		IButton newButton = new IButton(message.newButton());
 		newButton.setWidth(80);
 		newButton.addClickHandler(new ClickHandler() {
 
@@ -42,7 +45,7 @@ public class UserManageView extends HLayout {
 			}
 		});
 
-		IButton saveButton = new IButton("保存");
+		IButton saveButton = new IButton(message.addButton());
 		saveButton.setWidth(80);
 		saveButton.addClickHandler(new ClickHandler() {
 
@@ -51,7 +54,7 @@ public class UserManageView extends HLayout {
 			}
 		});
 
-		IButton removeButton = new IButton("删除");
+		IButton removeButton = new IButton(message.deleteButton());
 		removeButton.setWidth(80);
 		removeButton.addClickHandler(new ClickHandler() {
 
@@ -61,18 +64,20 @@ public class UserManageView extends HLayout {
 		});
 
 		VLayout editorLayout = new VLayout(5);
-		editorLayout.setHeight(250);
-		editorLayout.setAlign(VerticalAlignment.TOP);
+		editorLayout.setAlign(Alignment.CENTER);
+		editorLayout.setHeight("25%");
 		editorLayout.addMember(form);
-			
+
 		HLayout buttonPanel = new HLayout(20);
+		buttonPanel.setBackgroundColor("gray");
+		buttonPanel.setWidth100();
+		//buttonPanel.setAlign(Alignment.CENTER);
+		buttonPanel.setAlign(VerticalAlignment.CENTER);
 		buttonPanel.addMember(newButton);
 		buttonPanel.addMember(saveButton);
 		buttonPanel.addMember(removeButton);
 		editorLayout.addMember(buttonPanel);
 
-		userGrid.setWidth(500);
-		userGrid.setHeight(224);
 		userGrid.setDataSource(userDataSource);
 		userGrid.setEmptyCellValue("--");
 		userGrid.setSortField(0);
@@ -84,8 +89,9 @@ public class UserManageView extends HLayout {
 				form.editSelectedData(userGrid);
 			}
 		});
-		addMember(userGrid);
 		addMember(editorLayout);
+		addMember(userGrid);
+		setAlign(Alignment.CENTER);
 	}
 
 }
