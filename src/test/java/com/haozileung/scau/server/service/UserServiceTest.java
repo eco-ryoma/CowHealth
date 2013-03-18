@@ -52,7 +52,8 @@ public class UserServiceTest extends BaseJUnitTest {
 	@Test
 	public void test() {
 		int a = 1;
-		Assert.assertTrue("失败：a + 1 != 2", a + 1 == 2);
+		boolean flag = a + 1 == 2;
+		Assert.assertTrue("失败：a + 1 != 2", flag);
 	}
 
 }
