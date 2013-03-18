@@ -69,7 +69,6 @@ public class UserManageView extends VLayout {
 		editorLayout.addMember(form);
 
 		HLayout buttonPanel = new HLayout(20);
-		buttonPanel.setBackgroundColor("gray");
 		buttonPanel.setWidth100();
 		buttonPanel.setAlign(VerticalAlignment.CENTER);
 		buttonPanel.addMember(newButton);
