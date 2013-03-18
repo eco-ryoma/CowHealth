@@ -62,7 +62,6 @@ public class UserDataSource extends RestDataSource {
 		setRecordXPath("response/data");
 		setDataProtocol(DSProtocol.POSTPARAMS);
 
-		setRecordXPath("response/data");
 		setAddDataURL("user/addUser.action");
 		setRemoveDataURL("user/deleteUser.action");
 		setFetchDataURL("user/getUser.action");
