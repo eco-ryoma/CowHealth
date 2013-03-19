@@ -30,7 +30,7 @@ import com.haozileung.scau.server.service.IUserService;
 @ParentPackage("json-default")
 @Namespace("/user")
 @Results({ @Result(name = "success", location = "/index.jsp"),
-		@Result(name = "error", location = "/error.jsp") })
+		@Result(name = "error", location = "/error.html") })
 @ExceptionMappings({ @ExceptionMapping(exception = "java.lange.RuntimeException", result = "error") })
 public class UserAction extends BaseAction {
 

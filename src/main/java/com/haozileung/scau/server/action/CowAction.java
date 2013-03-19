@@ -40,7 +40,7 @@ import com.haozileung.scau.server.service.ICowService;
 @ParentPackage("json-default")
 @Namespace("/cow")
 @Results({ @Result(name = "success", location = "/index.jsp"),
-		@Result(name = "error", location = "/error.jsp") })
+		@Result(name = "error", location = "/error.html") })
 @ExceptionMappings({ @ExceptionMapping(exception = "java.lange.RuntimeException", result = "error") })
 public class CowAction extends BaseAction {
 

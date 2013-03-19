@@ -40,7 +40,7 @@ import com.haozileung.scau.server.service.ISportDataService;
 @ParentPackage("json-default")
 @Namespace("/data")
 @Results({ @Result(name = "success", location = "/index.jsp"),
-		@Result(name = "error", location = "/error.jsp") })
+		@Result(name = "error", location = "/error.html") })
 @ExceptionMappings({ @ExceptionMapping(exception = "java.lange.RuntimeException", result = "error") })
 public class SportDataAction extends BaseAction {
 
