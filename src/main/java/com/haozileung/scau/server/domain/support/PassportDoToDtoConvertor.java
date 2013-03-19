@@ -54,7 +54,7 @@ public class PassportDoToDtoConvertor extends
 	public PassportInfo doToDto(Passport passport) {
 		PassportInfo passportInfo = new PassportInfo();
 		passportInfo.setEmail(passport.getEmail());
-		passportInfo.setId(null == passport.getId() ? null : passport.getId()
+		passportInfo.setPassportId(null == passport.getId() ? null : passport.getId()
 				.toString());
 		passportInfo.setIsEnabled(passport.getIsEnabled());
 		return passportInfo;

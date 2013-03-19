@@ -27,7 +27,7 @@ public class PassportInfo implements IDataTransferObject {
 	 */
 	private static final long serialVersionUID = 8788869633074474619L;
 
-	private String id;
+	private String passportId;
 
 	private String userId;
 
@@ -39,12 +39,12 @@ public class PassportInfo implements IDataTransferObject {
 
 	private int isEnabled;
 
-	public String getId() {
-		return id;
+	public String getPassportId() {
+		return passportId;
 	}
 
-	public void setId(String id) {
-		this.id = id;
+	public void setPassportId(String passportId) {
+		this.passportId = passportId;
 	}
 
 	public String getUserId() {

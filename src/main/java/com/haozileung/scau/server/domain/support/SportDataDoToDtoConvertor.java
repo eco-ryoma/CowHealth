@@ -76,7 +76,7 @@ public class SportDataDoToDtoConvertor extends
 		sportDataInfo.setData(data);
 		sportDataInfo.setEquipmentId(null == sportData.getEquipmentId() ? null
 				: sportData.getEquipmentId().toString());
-		sportDataInfo.setId(null == sportData.getId() ? null : sportData
+		sportDataInfo.setSportDataId(null == sportData.getId() ? null : sportData
 				.getId().toString());
 		sportDataInfo.setUpdateDate(DateUtil.convertDate2Str(sportData
 				.getUpdateDate()));

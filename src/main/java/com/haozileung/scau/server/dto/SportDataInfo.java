@@ -21,7 +21,7 @@ public class SportDataInfo implements IDataTransferObject {
 	 */
 	private static final long serialVersionUID = 6102383745215971866L;
 
-	private String id;
+	private String sportDataId;
 	
 	private String cowId;
 
@@ -33,12 +33,12 @@ public class SportDataInfo implements IDataTransferObject {
 
 	private float[] data;
 
-	public String getId() {
-		return id;
+	public String getSportDataId() {
+		return sportDataId;
 	}
 
-	public void setId(String id) {
-		this.id = id;
+	public void setSportDataId(String sportDataId) {
+		this.sportDataId = sportDataId;
 	}
 
 	public String getCowId() {

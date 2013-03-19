@@ -54,7 +54,7 @@ public class Passport implements IDomain {
 
 	private void update(PassportInfo passportInfo) {
 		this.email = passportInfo.getEmail();
-		this.id = new ObjectId(passportInfo.getId());
+		this.id = new ObjectId(passportInfo.getPassportId());
 		this.isEnabled = passportInfo.getIsEnabled();
 		this.password = passportInfo.getPassword();
 		this.userId = new ObjectId(passportInfo.getUserId());

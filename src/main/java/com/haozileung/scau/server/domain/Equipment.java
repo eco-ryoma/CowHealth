@@ -61,7 +61,7 @@ public class Equipment implements IDomain {
 		} catch (ParseException e) {
 			this.expireDate = new Timestamp(0);
 		}
-		this.id = new ObjectId(equipmentInfo.getId());
+		this.id = new ObjectId(equipmentInfo.getEquipmentId());
 		this.name = equipmentInfo.getName();
 		this.producter = equipmentInfo.getProducter();
 		this.type = equipmentInfo.getType();

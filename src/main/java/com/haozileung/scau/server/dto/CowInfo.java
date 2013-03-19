@@ -22,7 +22,7 @@ public class CowInfo implements IDataTransferObject {
 	 */
 	private static final long serialVersionUID = 6480708859151450051L;
 
-	private String id;
+	private String cowId;
 
 	private String name;
 
@@ -30,12 +30,12 @@ public class CowInfo implements IDataTransferObject {
 
 	private String sex;
 
-	public String getId() {
-		return id;
+	public String getCowId() {
+		return cowId;
 	}
 
-	public void setId(String id) {
-		this.id = id;
+	public void setCowId(String cowId) {
+		this.cowId = cowId;
 	}
 
 	public String getName() {

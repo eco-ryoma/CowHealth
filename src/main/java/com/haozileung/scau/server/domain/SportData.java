@@ -82,7 +82,7 @@ public class SportData implements IDomain {
 			this.data = dataStr.toString();
 		}
 		this.equipmentId = new ObjectId(sportDataInfo.getEquipmentId());
-		this.id = new ObjectId(sportDataInfo.getId());
+		this.id = new ObjectId(sportDataInfo.getSportDataId());
 		try {
 			this.updateDate = DateUtil.parse(sportDataInfo.getUpdateDate(),
 					DateUtil.defaultDatePatternStr);

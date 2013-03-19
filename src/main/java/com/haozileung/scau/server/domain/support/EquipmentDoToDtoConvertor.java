@@ -80,7 +80,7 @@ public class EquipmentDoToDtoConvertor extends
 		EquipmentInfo equipmentInfo = new EquipmentInfo();
 		equipmentInfo.setExpireDate(DateUtil.convertDate2Str(equipment
 				.getExpireDate()));
-		equipmentInfo.setId(null == equipment.getId() ? null : equipment
+		equipmentInfo.setEquipmentId(null == equipment.getId() ? null : equipment
 				.getId().toString());
 		equipmentInfo.setName(equipment.getName());
 		equipmentInfo.setProducter(equipment.getProducter());

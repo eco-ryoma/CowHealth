@@ -48,7 +48,7 @@ public class CowDoToDtoConvertor extends AbstractDoToDtoConvertor<Cow, CowInfo> 
 		}
 		CowInfo cowInfo = new CowInfo();
 		cowInfo.setAge(cow.getAge());
-		cowInfo.setId(null == cow.getId() ? null : cow.getId().toString());
+		cowInfo.setCowId(null == cow.getId() ? null : cow.getId().toString());
 		cowInfo.setName(cow.getName());
 		cowInfo.setSex(cow.getSex());
 		return cowInfo;
