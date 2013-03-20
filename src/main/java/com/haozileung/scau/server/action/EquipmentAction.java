@@ -52,12 +52,20 @@ public class EquipmentAction extends BaseAction {
 	@Autowired
 	private IEquipmentService equimentService;
 
-	public IEquipmentService getEquimentService() {
-		return equimentService;
+	public String getEquipmentInfoList() {
+		return null;
 	}
 
-	public void setEquimentService(IEquipmentService equimentService) {
-		this.equimentService = equimentService;
+	public String addEquipmentInfo() {
+		return null;
+	}
+	
+	public String updateEquipmentInfo(){
+		return null;
+	}
+	
+	public String deleteEquipmentInfo(){
+		return null;
 	}
 
 }

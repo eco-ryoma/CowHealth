@@ -48,16 +48,64 @@ public class CowAction extends BaseAction {
 	 * 
 	 */
 	private static final long serialVersionUID = 8059333964126602031L;
-	
+
 	@Autowired
 	private ICowService cowService;
+	
+	private String cowId;
 
-	public ICowService getCowService() {
-		return cowService;
+	private String name;
+
+	private int age;
+
+	private String sex;
+
+	public String getCowInfoList() {
+		return null;
 	}
 
-	public void setCowService(ICowService cowService) {
-		this.cowService = cowService;
+	public String addCowInfo() {
+		return null;
+	}
+	
+	public String updateCowInfo(){
+		return null;
+	}
+	
+	public String deleteCowInfo(){
+		return null;
+	}
+
+	public String getCowId() {
+		return cowId;
+	}
+
+	public void setCowId(String cowId) {
+		this.cowId = cowId;
+	}
+
+	public String getName() {
+		return name;
+	}
+
+	public void setName(String name) {
+		this.name = name;
+	}
+
+	public int getAge() {
+		return age;
+	}
+
+	public void setAge(int age) {
+		this.age = age;
+	}
+
+	public String getSex() {
+		return sex;
+	}
+
+	public void setSex(String sex) {
+		this.sex = sex;
 	}
 
 }

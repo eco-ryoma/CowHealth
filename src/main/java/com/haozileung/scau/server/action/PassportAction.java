@@ -52,12 +52,20 @@ public class PassportAction extends BaseAction {
 	@Autowired
 	private IPassportService passportService;
 
-	public IPassportService getPassportService() {
-		return passportService;
+	public String getEquipmentInfoList() {
+		return null;
 	}
 
-	public void setPassportService(IPassportService passportService) {
-		this.passportService = passportService;
+	public String addEquipmentInfo() {
+		return null;
+	}
+	
+	public String updateEquipmentInfo(){
+		return null;
+	}
+	
+	public String deleteEquipmentInfo(){
+		return null;
 	}
 
 }

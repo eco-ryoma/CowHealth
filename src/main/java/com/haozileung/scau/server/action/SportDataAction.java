@@ -52,12 +52,20 @@ public class SportDataAction extends BaseAction {
 	@Autowired
 	private ISportDataService sportDataService;
 
-	public ISportDataService getSportDataService() {
-		return sportDataService;
+	public String getCowInfoList() {
+		return null;
 	}
 
-	public void setSportDataService(ISportDataService sportDataService) {
-		this.sportDataService = sportDataService;
+	public String addEquipmentInfo() {
+		return null;
+	}
+	
+	public String updateEquipmentInfo(){
+		return null;
+	}
+	
+	public String deleteEquipmentInfo(){
+		return null;
 	}
 
 }
