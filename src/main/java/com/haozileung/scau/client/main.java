@@ -2,6 +2,7 @@ package com.haozileung.scau.client;
 
 import com.google.gwt.core.client.EntryPoint;
 import com.google.gwt.core.client.GWT;
+import com.haozileung.scau.client.home.view.SportDataChartView;
 import com.haozileung.scau.client.home.view.UserManageView;
 import com.haozileung.scau.shared.Messages;
 import com.smartgwt.client.types.Side;
@@ -25,6 +26,9 @@ public class main implements EntryPoint {
 		tabs.setTabBarAlign(Side.RIGHT);
 		tabs.setWidth("100%");
 		tabs.setHeight("100%");
+		final Tab testTab = new Tab("Test");
+		testTab.setPane(new SportDataChartView());
+		tabs.addTab(testTab);
 		final Tab userTab = new Tab(messages.userManage());
 		final UserManageView userManageView = new UserManageView();
 		userTab.setPane(userManageView);
