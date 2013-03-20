@@ -43,7 +43,7 @@ public class SportDataChartView extends HLayout {
 		rightPanel.setWidth("80%");
 		Chart chart = new Chart();
 		Series series = chart.createSeries().setName("Moles per Yard")
-				.setPoints(new Number[] { 163, 203, 276, 408, 547, 729, 628 });
+				.setPoints(new Number[] { 163, 203, 276, 308, 347, 150, 99 });
 		chart.addSeries(series);
 		rightPanel.addMember(chart);
 		addMember(leftPanel);
