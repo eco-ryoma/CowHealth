@@ -3,7 +3,7 @@
 <module rename-to='main'>
 	<!-- Inherit the core Web Toolkit stuff. -->
 	<inherits name='com.google.gwt.user.User' />
-	<inherits name="org.moxieapps.gwt.highcharts.Highcharts"/> 
+	<inherits name="org.moxieapps.gwt.highcharts.Highcharts" />
 
 	<!-- Inherit the default GWT style sheet. You can change -->
 	<!-- the theme of your GWT application by uncommenting -->
@@ -14,7 +14,8 @@
 
 	<!-- Other module inherits -->
 	<inherits name="com.google.gwt.i18n.I18N" />
-	<extend-property name="locale" values="zh" />
+	<extend-property name="locale" values="en,zh_CN" />
+	<set-property-fallback name="locale" value="zh_CN" />
 	<inherits name="com.google.gwt.json.JSON" />
 	<inherits name="com.google.gwt.http.HTTP" />
 	<inherits name='com.google.gwt.query.Query' />
