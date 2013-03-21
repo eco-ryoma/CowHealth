@@ -2,6 +2,8 @@ package com.haozileung.scau.client.home.ds;
 
 import java.util.LinkedHashMap;
 
+import com.google.gwt.core.shared.GWT;
+import com.haozileung.scau.shared.Messages;
 import com.smartgwt.client.data.RestDataSource;
 import com.smartgwt.client.data.fields.DataSourceIntegerField;
 import com.smartgwt.client.data.fields.DataSourceTextField;
@@ -18,6 +20,8 @@ import com.smartgwt.client.types.DSProtocol;
  * @version V1.0
  */
 public class CowDataSource extends RestDataSource {
+	
+	final private Messages message = GWT.create(Messages.class);
 
 	private static CowDataSource instance = null;
 
@@ -30,15 +34,15 @@ public class CowDataSource extends RestDataSource {
 
 	public CowDataSource(String id) {
 		setID(id);
-		DataSourceTextField cowId = new DataSourceTextField("cowId", "数据库主键");
+		DataSourceTextField cowId = new DataSourceTextField("cowId", message.id());
 		cowId.setPrimaryKey(true);
 		cowId.setDetail(true);
-		DataSourceIntegerField age = new DataSourceIntegerField("age", "年龄", 3);
-		DataSourceTextField name = new DataSourceTextField("name", "名称", 16);
-		DataSourceTextField sex = new DataSourceTextField("sex", "性别", 3);
+		DataSourceIntegerField age = new DataSourceIntegerField("age", message.age(), 3);
+		DataSourceTextField name = new DataSourceTextField("name", message.name(), 16);
+		DataSourceTextField sex = new DataSourceTextField("sex", message.sex(), 3);
 		LinkedHashMap<String,Object> sexValueMap = new LinkedHashMap<String,Object>();
-		sexValueMap.put("M", "雄性");
-		sexValueMap.put("F", "雌性");
+		sexValueMap.put("M", message.manAnimal());
+		sexValueMap.put("F", message.femailAnimal());
 		sex.setValueMap(sexValueMap);
 		setFields(cowId, name, age, sex);
 		setClientOnly(false);

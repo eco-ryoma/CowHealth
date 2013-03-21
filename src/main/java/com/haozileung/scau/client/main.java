@@ -2,6 +2,7 @@ package com.haozileung.scau.client;
 
 import com.google.gwt.core.client.EntryPoint;
 import com.google.gwt.core.client.GWT;
+import com.haozileung.scau.client.home.view.CowManageView;
 import com.haozileung.scau.client.home.view.SportDataChartView;
 import com.haozileung.scau.client.home.view.UserManageView;
 import com.haozileung.scau.shared.Messages;
@@ -30,9 +31,11 @@ public class main implements EntryPoint {
 		testTab.setPane(new SportDataChartView());
 		tabs.addTab(testTab);
 		final Tab userTab = new Tab(messages.userManage());
-		final UserManageView userManageView = new UserManageView();
-		userTab.setPane(userManageView);
+		userTab.setPane(new UserManageView());
 		tabs.addTab(userTab);
+		final Tab cowTab = new Tab(messages.cowManage());
+		cowTab.setPane(new CowManageView());
+		tabs.addTab(cowTab);
 		tabs.draw();
 	}
 }

@@ -14,6 +14,7 @@
  */
 package com.haozileung.scau.server.action;
 
+import org.apache.struts2.convention.annotation.Action;
 import org.apache.struts2.convention.annotation.ExceptionMapping;
 import org.apache.struts2.convention.annotation.ExceptionMappings;
 import org.apache.struts2.convention.annotation.Namespace;
@@ -51,7 +52,7 @@ public class CowAction extends BaseAction {
 
 	@Autowired
 	private ICowService cowService;
-	
+
 	private String cowId;
 
 	private String name;
@@ -60,19 +61,35 @@ public class CowAction extends BaseAction {
 
 	private String sex;
 
+	@Action(value = "getCow", results = { @Result(name = SUCCESS, type = "json", params = {
+			"includeProperties",
+			"response\\.\\w+,response\\.data\\[\\d+\\]\\.\\w+",
+			"ignoreHierarchy", "false", "excludeNullProperties", "true" }) })
 	public String getCowInfoList() {
 		return null;
 	}
 
+	@Action(value = "addCow", results = { @Result(name = SUCCESS, type = "json", params = {
+			"includeProperties",
+			"response\\.\\w+,response\\.data\\[\\d+\\]\\.\\w+",
+			"ignoreHierarchy", "false", "excludeNullProperties", "true" }) })
 	public String addCowInfo() {
 		return null;
 	}
-	
-	public String updateCowInfo(){
+
+	@Action(value = "updateCow", results = { @Result(name = SUCCESS, type = "json", params = {
+			"includeProperties",
+			"response\\.\\w+,response\\.data\\[\\d+\\]\\.\\w+",
+			"ignoreHierarchy", "false", "excludeNullProperties", "true" }) })
+	public String updateCowInfo() {
 		return null;
 	}
-	
-	public String deleteCowInfo(){
+
+	@Action(value = "deleteCow", results = { @Result(name = SUCCESS, type = "json", params = {
+			"includeProperties",
+			"response\\.\\w+,response\\.data\\[\\d+\\]\\.\\w+",
+			"ignoreHierarchy", "false", "excludeNullProperties", "true" }) })
+	public String deleteCowInfo() {
 		return null;
 	}
 

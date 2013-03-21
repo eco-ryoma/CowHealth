@@ -35,6 +35,7 @@ public class UserManageView extends VLayout {
 		form.setDataSource(userDataSource);
 		form.getField("userId").hide();
 		form.getField("age").hide();
+		form.setHeight("50%");
 		IButton newButton = new IButton(message.newButton());
 		newButton.setWidth(80);
 		newButton.addClickHandler(new ClickHandler() {
