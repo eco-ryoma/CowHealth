@@ -1,11 +1,12 @@
 package com.haozileung.scau.client.home.ds;
 
+import java.util.LinkedHashMap;
+
 import com.smartgwt.client.data.RestDataSource;
 import com.smartgwt.client.data.fields.DataSourceIntegerField;
 import com.smartgwt.client.data.fields.DataSourceTextField;
 import com.smartgwt.client.types.DSDataFormat;
 import com.smartgwt.client.types.DSProtocol;
-import com.sun.tools.jdi.LinkedHashMap;
 
 /**
  * <p>
@@ -39,7 +40,7 @@ public class PassportDataSource extends RestDataSource {
 		DataSourceTextField email = new DataSourceTextField("email", "电子邮件");
 		DataSourceIntegerField isEnabled = new DataSourceIntegerField(
 				"isEnabled", "状态");
-		LinkedHashMap isEnabledValueMap = new LinkedHashMap();
+		LinkedHashMap<Integer, Object> isEnabledValueMap = new LinkedHashMap<Integer, Object>();
 		isEnabledValueMap.put(1, "启用");
 		isEnabledValueMap.put(0, "禁用");
 		isEnabled.setValueMap(isEnabledValueMap);

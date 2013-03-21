@@ -1,11 +1,12 @@
 package com.haozileung.scau.client.home.ds;
 
+import java.util.LinkedHashMap;
+
 import com.smartgwt.client.data.RestDataSource;
 import com.smartgwt.client.data.fields.DataSourceIntegerField;
 import com.smartgwt.client.data.fields.DataSourceTextField;
 import com.smartgwt.client.types.DSDataFormat;
 import com.smartgwt.client.types.DSProtocol;
-import com.sun.tools.jdi.LinkedHashMap;
 
 /**
  * <p>
@@ -35,7 +36,7 @@ public class CowDataSource extends RestDataSource {
 		DataSourceIntegerField age = new DataSourceIntegerField("age", "年龄", 3);
 		DataSourceTextField name = new DataSourceTextField("name", "名称", 16);
 		DataSourceTextField sex = new DataSourceTextField("sex", "性别", 3);
-		LinkedHashMap sexValueMap = new LinkedHashMap();
+		LinkedHashMap<String,Object> sexValueMap = new LinkedHashMap<String,Object>();
 		sexValueMap.put("M", "雄性");
 		sexValueMap.put("F", "雌性");
 		sex.setValueMap(sexValueMap);

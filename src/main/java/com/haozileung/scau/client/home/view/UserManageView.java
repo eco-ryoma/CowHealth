@@ -1,9 +1,8 @@
 package com.haozileung.scau.client.home.view;
 
 import com.google.gwt.core.shared.GWT;
-import com.haozileung.scau.shared.Messages;
 import com.haozileung.scau.client.home.ds.UserDataSource;
-import com.smartgwt.client.types.Alignment;
+import com.haozileung.scau.shared.Messages;
 import com.smartgwt.client.types.VerticalAlignment;
 import com.smartgwt.client.widgets.IButton;
 import com.smartgwt.client.widgets.events.ClickEvent;
@@ -31,11 +30,11 @@ public class UserManageView extends VLayout {
 		final ListGrid userGrid = new ListGrid();
 		final DynamicForm form = new DynamicForm();
 		form.setIsGroup(true);
-		form.setGroupTitle("Details");
-		form.setNumCols(4);
+		form.setGroupTitle(message.editFormTitle());
+		form.setNumCols(8);
 		form.setDataSource(userDataSource);
 		form.getField("userId").hide();
-		form.getField("age").disable();
+		form.getField("age").hide();
 		IButton newButton = new IButton(message.newButton());
 		newButton.setWidth(80);
 		newButton.addClickHandler(new ClickHandler() {
@@ -63,21 +62,22 @@ public class UserManageView extends VLayout {
 			}
 		});
 
-		VLayout editorLayout = new VLayout(5);
-		editorLayout.setAlign(Alignment.CENTER);
-		editorLayout.setHeight("10%");
-		editorLayout.addMember(form);
+		VLayout editorLayout = new VLayout();
 
-		HLayout buttonPanel = new HLayout(20);
+		HLayout buttonPanel = new HLayout();
 		buttonPanel.setWidth100();
 		buttonPanel.setAlign(VerticalAlignment.CENTER);
 		buttonPanel.addMember(newButton);
 		buttonPanel.addMember(saveButton);
 		buttonPanel.addMember(removeButton);
+		
+		editorLayout.addMember(form);
 		editorLayout.addMember(buttonPanel);
+		editorLayout.setHeight("30%");
+		
 
 		userGrid.setDataSource(userDataSource);
-		userGrid.setEmptyCellValue("--");
+		userGrid.setEmptyCellValue("-");
 		userGrid.setSortField(0);
 		userGrid.setDataPageSize(50);
 		userGrid.setAutoFetchData(true);
@@ -87,9 +87,8 @@ public class UserManageView extends VLayout {
 				form.editSelectedData(userGrid);
 			}
 		});
-		addMember(editorLayout);
 		addMember(userGrid);
-		setAlign(Alignment.CENTER);
+		addMember(editorLayout);
 	}
 
 }

@@ -24,9 +24,9 @@ public class main implements EntryPoint {
 		tabs.setTabBarPosition(Side.TOP);
 		tabs.setTabBarThickness(25);
 		tabs.setTabBarAlign(Side.RIGHT);
-		tabs.setWidth("100%");
-		tabs.setHeight("100%");
-		final Tab testTab = new Tab("Test");
+		tabs.setWidth100();
+		tabs.setHeight100();
+		final Tab testTab = new Tab(messages.cowSportData());
 		testTab.setPane(new SportDataChartView());
 		tabs.addTab(testTab);
 		final Tab userTab = new Tab(messages.userManage());
