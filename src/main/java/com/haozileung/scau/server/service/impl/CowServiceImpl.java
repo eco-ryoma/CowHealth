@@ -20,6 +20,8 @@ import org.bson.types.ObjectId;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.haozileung.scau.server.domain.Cow;
+import com.haozileung.scau.server.domain.support.CowDoToDtoConvertor;
 import com.haozileung.scau.server.dto.CowInfo;
 import com.haozileung.scau.server.repository.ICowRepository;
 import com.haozileung.scau.server.service.ICowService;
@@ -38,37 +40,46 @@ import com.haozileung.scau.server.service.ICowService;
  */
 @Service("CowService")
 public class CowServiceImpl implements ICowService {
-	
+
 	@Autowired
 	private ICowRepository cowRepository;
 
 	@Override
 	public boolean saveCow(CowInfo cowInfo) {
-		// TODO Auto-generated method stub
+		Cow cow = new Cow(cowInfo);
+		if (cowRepository.save(cow) != null) {
+			return true;
+		}
 		return false;
 	}
 
 	@Override
 	public boolean updateCow(CowInfo cowInfo) {
-		// TODO Auto-generated method stub
+		if (cowInfo.getCowId() != null && !cowInfo.getCowId().isEmpty()) {
+			saveCow(cowInfo);
+			return true;
+		}
 		return false;
 	}
 
 	@Override
 	public List<CowInfo> getAllCow() {
-		// TODO Auto-generated method stub
-		return null;
+		List<Cow> cows = cowRepository.findAll();
+		return CowDoToDtoConvertor.getInstance().dos2Dtos(cows);
 	}
 
 	@Override
 	public CowInfo getCowById(ObjectId oId) {
-		// TODO Auto-generated method stub
-		return null;
+		return CowDoToDtoConvertor.getInstance().doToDto(
+				cowRepository.findOne(oId));
 	}
 
 	@Override
 	public boolean deleteCowById(ObjectId oId) {
-		// TODO Auto-generated method stub
+		if (oId != null) {
+			cowRepository.delete(oId);
+			return true;
+		}
 		return false;
 	}
 

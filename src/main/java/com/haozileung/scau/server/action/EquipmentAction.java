@@ -1,6 +1,6 @@
 /**
  * 
- * <b>项目名：</b>CowHealth<br />
+ * <b>项目名：</b>EquipmentHealth<br />
  * <b>包名：</b>com.haozileung.scau.server.action<br />
  * <b>文件名：</b>EquipmentAction.java<br />
  * <b>文件描述：</b>TODO<br />
@@ -14,6 +14,7 @@
  */
 package com.haozileung.scau.server.action;
 
+import org.apache.struts2.convention.annotation.Action;
 import org.apache.struts2.convention.annotation.ExceptionMapping;
 import org.apache.struts2.convention.annotation.ExceptionMappings;
 import org.apache.struts2.convention.annotation.Namespace;
@@ -39,7 +40,7 @@ import com.haozileung.scau.server.service.IEquipmentService;
  */
 @ParentPackage("json-default")
 @Namespace("/equipment")
-@Results({ @Result(name = "success", location = "/index.jsp"),
+@Results({ @Result(name = "success", location = "/index.html"),
 		@Result(name = "error", location = "/error.html") })
 @ExceptionMappings({ @ExceptionMapping(exception = "java.lange.RuntimeException", result = "error") })
 public class EquipmentAction extends BaseAction {
@@ -51,19 +52,31 @@ public class EquipmentAction extends BaseAction {
 	
 	@Autowired
 	private IEquipmentService equimentService;
-
+	@Action(value = "getEquipment", results = { @Result(name = SUCCESS, type = "json", params = {
+			"includeProperties",
+			"response\\.\\w+,response\\.data\\[\\d+\\]\\.\\w+",
+			"ignoreHierarchy", "false", "excludeNullProperties", "true" }) })
 	public String getEquipmentInfoList() {
 		return null;
 	}
-
+	@Action(value = "addEquipment", results = { @Result(name = SUCCESS, type = "json", params = {
+			"includeProperties",
+			"response\\.\\w+,response\\.data\\[\\d+\\]\\.\\w+",
+			"ignoreHierarchy", "false", "excludeNullProperties", "true" }) })
 	public String addEquipmentInfo() {
 		return null;
 	}
-	
+	@Action(value = "updateEquipment", results = { @Result(name = SUCCESS, type = "json", params = {
+			"includeProperties",
+			"response\\.\\w+,response\\.data\\[\\d+\\]\\.\\w+",
+			"ignoreHierarchy", "false", "excludeNullProperties", "true" }) })
 	public String updateEquipmentInfo(){
 		return null;
 	}
-	
+	@Action(value = "deleteEquipment", results = { @Result(name = SUCCESS, type = "json", params = {
+			"includeProperties",
+			"response\\.\\w+,response\\.data\\[\\d+\\]\\.\\w+",
+			"ignoreHierarchy", "false", "excludeNullProperties", "true" }) })
 	public String deleteEquipmentInfo(){
 		return null;
 	}

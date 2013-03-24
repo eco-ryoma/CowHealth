@@ -24,6 +24,8 @@ import org.apache.struts2.convention.annotation.Results;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import com.haozileung.scau.server.common.action.BaseAction;
+import com.haozileung.scau.server.common.dto.RestDataSourceResponse;
+import com.haozileung.scau.server.dto.CowInfo;
 import com.haozileung.scau.server.service.ICowService;
 
 /**
@@ -60,13 +62,16 @@ public class CowAction extends BaseAction {
 	private int age;
 
 	private String sex;
+	
+	private RestDataSourceResponse<CowInfo> response = new RestDataSourceResponse<CowInfo>();
 
 	@Action(value = "getCow", results = { @Result(name = SUCCESS, type = "json", params = {
 			"includeProperties",
 			"response\\.\\w+,response\\.data\\[\\d+\\]\\.\\w+",
 			"ignoreHierarchy", "false", "excludeNullProperties", "true" }) })
 	public String getCowInfoList() {
-		return null;
+		response.setData(cowService.getAllCow());
+		return SUCCESS;
 	}
 
 	@Action(value = "addCow", results = { @Result(name = SUCCESS, type = "json", params = {
@@ -74,6 +79,9 @@ public class CowAction extends BaseAction {
 			"response\\.\\w+,response\\.data\\[\\d+\\]\\.\\w+",
 			"ignoreHierarchy", "false", "excludeNullProperties", "true" }) })
 	public String addCowInfo() {
+		CowInfo cowInfo = new CowInfo();
+		cowInfo.setAge(age);
+		cowInfo.setCowId(cowId);
 		return null;
 	}
 

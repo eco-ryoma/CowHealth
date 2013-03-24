@@ -35,7 +35,7 @@ public class CowManageView extends VLayout{
 		final DynamicForm form = new DynamicForm();
 		form.setIsGroup(true);
 		form.setGroupTitle(message.editFormTitle());
-		form.setNumCols(8);
+		form.setNumCols(6);
 		form.setDataSource(cowDS);
 		form.getField("cowId").hide();
 		
@@ -69,7 +69,7 @@ public class CowManageView extends VLayout{
 
 		VLayout editorLayout = new VLayout();
 
-		HLayout buttonPanel = new HLayout();
+		HLayout buttonPanel = new HLayout(20);
 		buttonPanel.setWidth100();
 		buttonPanel.setAlign(VerticalAlignment.CENTER);
 		buttonPanel.addMember(newButton);

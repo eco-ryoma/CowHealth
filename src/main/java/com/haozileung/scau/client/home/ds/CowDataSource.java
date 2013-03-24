@@ -42,7 +42,7 @@ public class CowDataSource extends RestDataSource {
 		DataSourceTextField sex = new DataSourceTextField("sex", message.sex(), 3);
 		LinkedHashMap<String,Object> sexValueMap = new LinkedHashMap<String,Object>();
 		sexValueMap.put("M", message.manAnimal());
-		sexValueMap.put("F", message.femailAnimal());
+		sexValueMap.put("F", message.femaleAnimal());
 		sex.setValueMap(sexValueMap);
 		setFields(cowId, name, age, sex);
 		setClientOnly(false);

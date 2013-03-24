@@ -20,6 +20,8 @@ import org.bson.types.ObjectId;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.haozileung.scau.server.domain.Equipment;
+import com.haozileung.scau.server.domain.support.EquipmentDoToDtoConvertor;
 import com.haozileung.scau.server.dto.EquipmentInfo;
 import com.haozileung.scau.server.repository.IEquipmentRepository;
 import com.haozileung.scau.server.service.IEquipmentService;
@@ -38,38 +40,46 @@ import com.haozileung.scau.server.service.IEquipmentService;
  */
 @Service("EquipmentService")
 public class EquipmentServiceImpl implements IEquipmentService {
-	
+
 	@Autowired
 	private IEquipmentRepository equipmentRepository;
 
 	@Override
 	public boolean addEquipment(EquipmentInfo equipmentInfo) {
-		// TODO Auto-generated method stub
+		if (equipmentRepository.save(new Equipment(equipmentInfo)) != null) {
+			return true;
+		}
 		return false;
 	}
 
 	@Override
 	public boolean updateEquipment(EquipmentInfo equipmentInfo) {
-		// TODO Auto-generated method stub
+		if (equipmentInfo.getEquipmentId() != null
+				&& !equipmentInfo.getEquipmentId().isEmpty()) {
+			return addEquipment(equipmentInfo);
+		}
 		return false;
 	}
 
 	@Override
 	public boolean deleteEquipmentById(ObjectId oId) {
-		// TODO Auto-generated method stub
+		if (oId != null) {
+			equipmentRepository.delete(oId);
+			return true;
+		}
 		return false;
 	}
 
 	@Override
 	public List<EquipmentInfo> getAllEquipment() {
-		// TODO Auto-generated method stub
-		return null;
+		return EquipmentDoToDtoConvertor.getInstance().dos2Dtos(
+				equipmentRepository.findAll());
 	}
 
 	@Override
 	public EquipmentInfo getEquipmentById(ObjectId oId) {
-		// TODO Auto-generated method stub
-		return null;
+		return EquipmentDoToDtoConvertor.getInstance().doToDto(
+				equipmentRepository.findOne(oId));
 	}
 
 	public IEquipmentRepository getEquipmentRepository() {
