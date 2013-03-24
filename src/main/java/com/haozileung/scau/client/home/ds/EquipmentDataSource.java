@@ -38,10 +38,10 @@ public class EquipmentDataSource extends RestDataSource {
 		equipmentId.setDetail(true);
 		DataSourceTextField name = new DataSourceTextField("name", message.name());
 		DataSourceTextField producter = new DataSourceTextField("producter",
-				"生产商");
+				message.producter());
 		DataSourceDateTimeField expireDate = new DataSourceDateTimeField("expireDate",
-				"有效期");
-		DataSourceTextField type = new DataSourceTextField("type", "类型");
+				message.expireDate());
+		DataSourceTextField type = new DataSourceTextField("type", message.equipmentType());
 
 		setFields(equipmentId, name, producter, type, expireDate);
 
