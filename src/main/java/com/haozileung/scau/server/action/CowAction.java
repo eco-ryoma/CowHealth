@@ -43,7 +43,7 @@ import com.haozileung.scau.server.service.ICowService;
  */
 @ParentPackage("json-default")
 @Namespace("/cow")
-@Results({ @Result(name = "success", location = "/index.jsp"),
+@Results({ @Result(name = "success", location = "/index.html"),
 		@Result(name = "error", location = "/error.html") })
 @ExceptionMappings({ @ExceptionMapping(exception = "java.lange.RuntimeException", result = "error") })
 public class CowAction extends BaseAction {
@@ -64,14 +64,19 @@ public class CowAction extends BaseAction {
 
 	private String sex;
 	
-	private RestDataSourceResponse<CowInfo> response = new RestDataSourceResponse<CowInfo>();
+	private RestDataSourceResponse<CowInfo> response ;
 
 	@Action(value = "getCow", results = { @Result(name = SUCCESS, type = "json", params = {
 			"includeProperties",
 			"response\\.\\w+,response\\.data\\[\\d+\\]\\.\\w+",
 			"ignoreHierarchy", "false", "excludeNullProperties", "true" }) })
 	public String getCowInfoList() {
+		response = new RestDataSourceResponse<CowInfo>();
 		response.setData(cowService.getAllCow());
+		response.setStartRow(0);
+		response.setEndRow(cowService.getAllCow().size());
+		response.setTotalRow(cowService.getAllCow().size());
+		response.setStatus(0);
 		return SUCCESS;
 	}
 
@@ -80,6 +85,7 @@ public class CowAction extends BaseAction {
 			"response\\.\\w+,response\\.data\\[\\d+\\]\\.\\w+",
 			"ignoreHierarchy", "false", "excludeNullProperties", "true" }) })
 	public String addCowInfo() {
+		response = new RestDataSourceResponse<CowInfo>();
 		CowInfo cowInfo = new CowInfo();
 		cowInfo.setAge(age);
 		cowInfo.setName(name);
@@ -98,6 +104,7 @@ public class CowAction extends BaseAction {
 			"response\\.\\w+,response\\.data\\[\\d+\\]\\.\\w+",
 			"ignoreHierarchy", "false", "excludeNullProperties", "true" }) })
 	public String updateCowInfo() {
+		response = new RestDataSourceResponse<CowInfo>();
 		CowInfo cowInfo = new CowInfo();
 		cowInfo.setAge(age);
 		cowInfo.setCowId(cowId);
@@ -117,6 +124,7 @@ public class CowAction extends BaseAction {
 			"response\\.\\w+,response\\.data\\[\\d+\\]\\.\\w+",
 			"ignoreHierarchy", "false", "excludeNullProperties", "true" }) })
 	public String deleteCowInfo() {
+		response = new RestDataSourceResponse<CowInfo>();
 		if(cowId != null && cowService.deleteCowById(new ObjectId(cowId))){
 			response.setStatus(0);
 		}else{
