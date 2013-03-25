@@ -22,7 +22,7 @@
 	<inherits name="com.smartgwt.SmartGwt" />
 
 	<!-- Specify the app entry point class. -->
-	<entry-point class='com.haozileung.scau.client.main' />
+	<entry-point class='com.haozileung.scau.client.CowHealth' />
 
 	<!-- Specify the paths for translatable code -->
 	<source path='client' />

@@ -64,13 +64,11 @@ public class CowAction extends BaseAction {
 
 	private String sex;
 
-	private int test = 1;
-
 	private RestDataSourceResponse<CowInfo> response;
 
 	@Action(value = "getCow", results = { @Result(name = SUCCESS, type = "json", params = {
 			"includeProperties",
-			"response\\.\\w+,response\\.data\\[\\d+\\]\\.\\w+,test",
+			"response\\.\\w+,response\\.data\\[\\d+\\]\\.\\w+",
 			"ignoreHierarchy", "false", "excludeNullProperties", "false" }) })
 	public String getCowInfoList() {
 		response = new RestDataSourceResponse<CowInfo>();

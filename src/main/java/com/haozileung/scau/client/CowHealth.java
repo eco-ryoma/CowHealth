@@ -15,7 +15,7 @@ import com.smartgwt.client.widgets.tab.TabSet;
 /**
  * Entry point classes define <code>onModuleLoad()</code>.
  */
-public class main implements EntryPoint {
+public class CowHealth implements EntryPoint {
 
 	private final Messages messages = GWT.create(Messages.class);
 
