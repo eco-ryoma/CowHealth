@@ -37,13 +37,12 @@ public class CowManageView extends VLayout{
 		form.setGroupTitle(message.editFormTitle());
 		form.setNumCols(6);
 		form.setDataSource(cowDS);
-		form.getField("cowId").hide();
+		//form.getField("cowId").hide();
 		
 		form.setHeight("50%");
 		IButton newButton = new IButton(message.newButton());
 		newButton.setWidth(80);
 		newButton.addClickHandler(new ClickHandler() {
-
 			public void onClick(ClickEvent event) {
 				form.editNewRecord();
 			}
@@ -52,7 +51,6 @@ public class CowManageView extends VLayout{
 		IButton saveButton = new IButton(message.addButton());
 		saveButton.setWidth(80);
 		saveButton.addClickHandler(new ClickHandler() {
-
 			public void onClick(ClickEvent event) {
 				form.saveData();
 			}
@@ -61,7 +59,6 @@ public class CowManageView extends VLayout{
 		IButton removeButton = new IButton(message.deleteButton());
 		removeButton.setWidth(80);
 		removeButton.addClickHandler(new ClickHandler() {
-
 			public void onClick(ClickEvent event) {
 				cowList.removeSelectedData();
 			}
@@ -80,7 +77,6 @@ public class CowManageView extends VLayout{
 		editorLayout.addMember(buttonPanel);
 		editorLayout.setHeight("30%");
 		
-
 		cowList.setDataSource(cowDS);
 		cowList.setEmptyCellValue("-");
 		cowList.setSortField(0);
@@ -92,6 +88,7 @@ public class CowManageView extends VLayout{
 				form.editSelectedData(cowList);
 			}
 		});
+		
 		addMember(cowList);
 		addMember(editorLayout);
 	}

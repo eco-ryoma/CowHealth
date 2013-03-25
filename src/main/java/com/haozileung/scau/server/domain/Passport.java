@@ -21,7 +21,7 @@ import com.haozileung.scau.server.dto.PassportInfo;
  * @version 1.0.0<br/>
  * 
  */
-@Document(collection="passportDoc")
+@Document(collection = "passportDoc")
 public class Passport implements IDomain {
 
 	/**
@@ -54,10 +54,14 @@ public class Passport implements IDomain {
 
 	private void update(PassportInfo passportInfo) {
 		this.email = passportInfo.getEmail();
-		this.id = new ObjectId(passportInfo.getPassportId());
+		if (passportInfo.getPassportId() != null) {
+			this.id = new ObjectId(passportInfo.getPassportId());
+		}
 		this.isEnabled = passportInfo.getIsEnabled();
 		this.password = passportInfo.getPassword();
-		this.userId = new ObjectId(passportInfo.getUserId());
+		if (passportInfo.getUserId() != null) {
+			this.userId = new ObjectId(passportInfo.getUserId());
+		}
 		this.userName = passportInfo.getUserName();
 	}
 

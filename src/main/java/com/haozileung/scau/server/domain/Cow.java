@@ -49,7 +49,9 @@ public class Cow implements IDomain {
 
 	private void update(CowInfo cowInfo) {
 		this.age = cowInfo.getAge();
-		this.id = new ObjectId(cowInfo.getCowId());
+		if (cowInfo.getCowId() != null) {
+			this.id = new ObjectId(cowInfo.getCowId());
+		}
 		this.name = cowInfo.getName();
 		this.sex = cowInfo.getSex();
 	}

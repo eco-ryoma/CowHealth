@@ -65,7 +65,9 @@ public class SportData implements IDomain {
 	}
 
 	private void update(SportDataInfo sportDataInfo) {
-		this.cowId = new ObjectId(sportDataInfo.getCowId());
+		if (sportDataInfo.getCowId() != null) {
+			this.cowId = new ObjectId(sportDataInfo.getCowId());
+		}
 		try {
 			this.currentDate = DateUtil.convertStr2Date(sportDataInfo
 					.getCurrentDate());

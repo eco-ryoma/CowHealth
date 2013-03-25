@@ -21,6 +21,7 @@ import org.apache.struts2.convention.annotation.Namespace;
 import org.apache.struts2.convention.annotation.ParentPackage;
 import org.apache.struts2.convention.annotation.Result;
 import org.apache.struts2.convention.annotation.Results;
+import org.bson.types.ObjectId;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import com.haozileung.scau.server.common.action.BaseAction;
@@ -81,8 +82,15 @@ public class CowAction extends BaseAction {
 	public String addCowInfo() {
 		CowInfo cowInfo = new CowInfo();
 		cowInfo.setAge(age);
-		cowInfo.setCowId(cowId);
-		return null;
+		cowInfo.setName(name);
+		cowInfo.setSex(sex);
+		boolean flag = cowService.saveCow(cowInfo);
+		if (flag){
+			response.setStartRow(0);
+		}else{
+			response.setStartRow(1);
+		}
+		return SUCCESS;
 	}
 
 	@Action(value = "updateCow", results = { @Result(name = SUCCESS, type = "json", params = {
@@ -90,7 +98,18 @@ public class CowAction extends BaseAction {
 			"response\\.\\w+,response\\.data\\[\\d+\\]\\.\\w+",
 			"ignoreHierarchy", "false", "excludeNullProperties", "true" }) })
 	public String updateCowInfo() {
-		return null;
+		CowInfo cowInfo = new CowInfo();
+		cowInfo.setAge(age);
+		cowInfo.setCowId(cowId);
+		cowInfo.setName(name);
+		cowInfo.setSex(sex);
+		boolean flag = cowService.saveCow(cowInfo);
+		if (flag){
+			response.setStartRow(0);
+		}else{
+			response.setStartRow(-1);
+		}
+		return SUCCESS;
 	}
 
 	@Action(value = "deleteCow", results = { @Result(name = SUCCESS, type = "json", params = {
@@ -98,7 +117,12 @@ public class CowAction extends BaseAction {
 			"response\\.\\w+,response\\.data\\[\\d+\\]\\.\\w+",
 			"ignoreHierarchy", "false", "excludeNullProperties", "true" }) })
 	public String deleteCowInfo() {
-		return null;
+		if(cowId != null && cowService.deleteCowById(new ObjectId(cowId))){
+			response.setStatus(0);
+		}else{
+			response.setStatus(-1);
+		}
+		return SUCCESS;
 	}
 
 	public String getCowId() {
