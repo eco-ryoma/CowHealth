@@ -20,10 +20,8 @@ import org.apache.struts2.convention.annotation.Namespace;
 import org.apache.struts2.convention.annotation.ParentPackage;
 import org.apache.struts2.convention.annotation.Result;
 import org.apache.struts2.convention.annotation.Results;
-import org.springframework.beans.factory.annotation.Autowired;
 
 import com.haozileung.scau.server.common.action.BaseAction;
-import com.haozileung.scau.server.service.IPassportService;
 
 /**
  * 
@@ -49,8 +47,8 @@ public class PassportAction extends BaseAction {
 	 */
 	private static final long serialVersionUID = 6120430714015763169L;
 	
-	@Autowired
-	private IPassportService passportService;
+	//@Autowired
+	//private IPassportService passportService;
 
 	public String getEquipmentInfoList() {
 		return null;

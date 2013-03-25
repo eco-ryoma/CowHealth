@@ -37,7 +37,7 @@ public class CowManageView extends VLayout{
 		form.setGroupTitle(message.editFormTitle());
 		form.setNumCols(6);
 		form.setDataSource(cowDS);
-		//form.getField("cowId").hide();
+		form.getField("cowId").hide();
 		
 		form.setHeight("50%");
 		IButton newButton = new IButton(message.newButton());

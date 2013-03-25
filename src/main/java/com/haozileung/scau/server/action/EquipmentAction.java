@@ -24,6 +24,8 @@ import org.apache.struts2.convention.annotation.Results;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import com.haozileung.scau.server.common.action.BaseAction;
+import com.haozileung.scau.server.common.dto.RestDataSourceResponse;
+import com.haozileung.scau.server.dto.EquipmentInfo;
 import com.haozileung.scau.server.service.IEquipmentService;
 
 /**
@@ -49,16 +51,25 @@ public class EquipmentAction extends BaseAction {
 	 * 
 	 */
 	private static final long serialVersionUID = 2749244337613640317L;
-	
+
+	private RestDataSourceResponse<EquipmentInfo> response = new RestDataSourceResponse<EquipmentInfo>();
+
 	@Autowired
 	private IEquipmentService equimentService;
+
 	@Action(value = "getEquipment", results = { @Result(name = SUCCESS, type = "json", params = {
 			"includeProperties",
 			"response\\.\\w+,response\\.data\\[\\d+\\]\\.\\w+",
 			"ignoreHierarchy", "false", "excludeNullProperties", "true" }) })
 	public String getEquipmentInfoList() {
-		return null;
+		response.setData(equimentService.getAllEquipment());
+		response.setStatus(0);
+		response.setStartRow(0);
+		response.setEndRow(equimentService.getAllEquipment() == null ? 0
+				: equimentService.getAllEquipment().size());
+		return SUCCESS;
 	}
+
 	@Action(value = "addEquipment", results = { @Result(name = SUCCESS, type = "json", params = {
 			"includeProperties",
 			"response\\.\\w+,response\\.data\\[\\d+\\]\\.\\w+",
@@ -66,18 +77,20 @@ public class EquipmentAction extends BaseAction {
 	public String addEquipmentInfo() {
 		return null;
 	}
+
 	@Action(value = "updateEquipment", results = { @Result(name = SUCCESS, type = "json", params = {
 			"includeProperties",
 			"response\\.\\w+,response\\.data\\[\\d+\\]\\.\\w+",
 			"ignoreHierarchy", "false", "excludeNullProperties", "true" }) })
-	public String updateEquipmentInfo(){
+	public String updateEquipmentInfo() {
 		return null;
 	}
+
 	@Action(value = "deleteEquipment", results = { @Result(name = SUCCESS, type = "json", params = {
 			"includeProperties",
 			"response\\.\\w+,response\\.data\\[\\d+\\]\\.\\w+",
 			"ignoreHierarchy", "false", "excludeNullProperties", "true" }) })
-	public String deleteEquipmentInfo(){
+	public String deleteEquipmentInfo() {
 		return null;
 	}
 

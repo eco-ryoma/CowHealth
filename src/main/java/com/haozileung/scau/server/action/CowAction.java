@@ -63,13 +63,15 @@ public class CowAction extends BaseAction {
 	private int age;
 
 	private String sex;
-	
-	private RestDataSourceResponse<CowInfo> response ;
+
+	private int test = 1;
+
+	private RestDataSourceResponse<CowInfo> response;
 
 	@Action(value = "getCow", results = { @Result(name = SUCCESS, type = "json", params = {
 			"includeProperties",
-			"response\\.\\w+,response\\.data\\[\\d+\\]\\.\\w+",
-			"ignoreHierarchy", "false", "excludeNullProperties", "true" }) })
+			"response\\.\\w+,response\\.data\\[\\d+\\]\\.\\w+,test",
+			"ignoreHierarchy", "false", "excludeNullProperties", "false" }) })
 	public String getCowInfoList() {
 		response = new RestDataSourceResponse<CowInfo>();
 		response.setData(cowService.getAllCow());
@@ -91,9 +93,9 @@ public class CowAction extends BaseAction {
 		cowInfo.setName(name);
 		cowInfo.setSex(sex);
 		boolean flag = cowService.saveCow(cowInfo);
-		if (flag){
+		if (flag) {
 			response.setStartRow(0);
-		}else{
+		} else {
 			response.setStartRow(1);
 		}
 		return SUCCESS;
@@ -111,9 +113,9 @@ public class CowAction extends BaseAction {
 		cowInfo.setName(name);
 		cowInfo.setSex(sex);
 		boolean flag = cowService.saveCow(cowInfo);
-		if (flag){
+		if (flag) {
 			response.setStartRow(0);
-		}else{
+		} else {
 			response.setStartRow(-1);
 		}
 		return SUCCESS;
@@ -125,9 +127,9 @@ public class CowAction extends BaseAction {
 			"ignoreHierarchy", "false", "excludeNullProperties", "true" }) })
 	public String deleteCowInfo() {
 		response = new RestDataSourceResponse<CowInfo>();
-		if(cowId != null && cowService.deleteCowById(new ObjectId(cowId))){
+		if (cowId != null && cowService.deleteCowById(new ObjectId(cowId))) {
 			response.setStatus(0);
-		}else{
+		} else {
 			response.setStatus(-1);
 		}
 		return SUCCESS;
