@@ -6,6 +6,11 @@ import javax.servlet.http.HttpServletRequest;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.apache.struts2.convention.annotation.ExceptionMapping;
+import org.apache.struts2.convention.annotation.ExceptionMappings;
+import org.apache.struts2.convention.annotation.ParentPackage;
+import org.apache.struts2.convention.annotation.Result;
+import org.apache.struts2.convention.annotation.Results;
 import org.apache.struts2.interceptor.ServletRequestAware;
 import org.apache.struts2.interceptor.SessionAware;
 
@@ -23,7 +28,17 @@ import com.opensymphony.xwork2.ActionSupport;
  * @version 1.0.0<br/>
  * 
  */
-public class BaseAction extends ActionSupport implements SessionAware,
+@ParentPackage("json-default")
+@Results({
+		@Result(name = "success", type = "json", params = {
+				"includeProperties",
+				"response\\.\\w+,response\\.data\\[\\d+\\]\\.\\w+",
+				"ignoreHierarchy", "false", "excludeNullProperties", "true" }),
+		@Result(name = "error", type = "json", params = { "includeProperties",
+				"response\\.\\errors\\*,response\\.status",
+				"ignoreHierarchy", "false", "excludeNullProperties", "true" }) })
+@ExceptionMappings({ @ExceptionMapping(exception = "java.lange.RuntimeException", result = "error") })
+public abstract class BaseAction extends ActionSupport implements SessionAware,
 		ServletRequestAware {
 	private static final long serialVersionUID = 1L;
 	protected Map<String, Object> session;

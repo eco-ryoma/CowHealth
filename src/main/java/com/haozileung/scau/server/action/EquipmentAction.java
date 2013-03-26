@@ -15,12 +15,7 @@
 package com.haozileung.scau.server.action;
 
 import org.apache.struts2.convention.annotation.Action;
-import org.apache.struts2.convention.annotation.ExceptionMapping;
-import org.apache.struts2.convention.annotation.ExceptionMappings;
 import org.apache.struts2.convention.annotation.Namespace;
-import org.apache.struts2.convention.annotation.ParentPackage;
-import org.apache.struts2.convention.annotation.Result;
-import org.apache.struts2.convention.annotation.Results;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import com.haozileung.scau.server.common.action.BaseAction;
@@ -40,11 +35,7 @@ import com.haozileung.scau.server.service.IEquipmentService;
  * @version 1.0.0
  * 
  */
-@ParentPackage("json-default")
 @Namespace("/equipment")
-@Results({ @Result(name = "success", location = "/index.html"),
-		@Result(name = "error", location = "/error.html") })
-@ExceptionMappings({ @ExceptionMapping(exception = "java.lange.RuntimeException", result = "error") })
 public class EquipmentAction extends BaseAction {
 
 	/**
@@ -57,10 +48,7 @@ public class EquipmentAction extends BaseAction {
 	@Autowired
 	private IEquipmentService equimentService;
 
-	@Action(value = "getEquipment", results = { @Result(name = SUCCESS, type = "json", params = {
-			"includeProperties",
-			"response\\.\\w+,response\\.data\\[\\d+\\]\\.\\w+",
-			"ignoreHierarchy", "false", "excludeNullProperties", "true" }) })
+	@Action(value = "getEquipment")
 	public String getEquipmentInfoList() {
 		response.setData(equimentService.getAllEquipment());
 		response.setStatus(0);
@@ -70,26 +58,17 @@ public class EquipmentAction extends BaseAction {
 		return SUCCESS;
 	}
 
-	@Action(value = "addEquipment", results = { @Result(name = SUCCESS, type = "json", params = {
-			"includeProperties",
-			"response\\.\\w+,response\\.data\\[\\d+\\]\\.\\w+",
-			"ignoreHierarchy", "false", "excludeNullProperties", "true" }) })
+	@Action(value = "addEquipment")
 	public String addEquipmentInfo() {
 		return null;
 	}
 
-	@Action(value = "updateEquipment", results = { @Result(name = SUCCESS, type = "json", params = {
-			"includeProperties",
-			"response\\.\\w+,response\\.data\\[\\d+\\]\\.\\w+",
-			"ignoreHierarchy", "false", "excludeNullProperties", "true" }) })
+	@Action(value = "updateEquipment")
 	public String updateEquipmentInfo() {
 		return null;
 	}
 
-	@Action(value = "deleteEquipment", results = { @Result(name = SUCCESS, type = "json", params = {
-			"includeProperties",
-			"response\\.\\w+,response\\.data\\[\\d+\\]\\.\\w+",
-			"ignoreHierarchy", "false", "excludeNullProperties", "true" }) })
+	@Action(value = "deleteEquipment")
 	public String deleteEquipmentInfo() {
 		return null;
 	}

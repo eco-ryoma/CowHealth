@@ -15,12 +15,7 @@
 package com.haozileung.scau.server.action;
 
 import org.apache.struts2.convention.annotation.Action;
-import org.apache.struts2.convention.annotation.ExceptionMapping;
-import org.apache.struts2.convention.annotation.ExceptionMappings;
 import org.apache.struts2.convention.annotation.Namespace;
-import org.apache.struts2.convention.annotation.ParentPackage;
-import org.apache.struts2.convention.annotation.Result;
-import org.apache.struts2.convention.annotation.Results;
 import org.bson.types.ObjectId;
 import org.springframework.beans.factory.annotation.Autowired;
 
@@ -41,11 +36,8 @@ import com.haozileung.scau.server.service.ICowService;
  * @version 1.0.0
  * 
  */
-@ParentPackage("json-default")
+
 @Namespace("/cow")
-@Results({ @Result(name = "success", location = "/index.html"),
-		@Result(name = "error", location = "/error.html") })
-@ExceptionMappings({ @ExceptionMapping(exception = "java.lange.RuntimeException", result = "error") })
 public class CowAction extends BaseAction {
 
 	/**
@@ -64,14 +56,10 @@ public class CowAction extends BaseAction {
 
 	private String sex;
 
-	private RestDataSourceResponse<CowInfo> response;
+	private RestDataSourceResponse<CowInfo> response = new RestDataSourceResponse<CowInfo>();
 
-	@Action(value = "getCow", results = { @Result(name = SUCCESS, type = "json", params = {
-			"includeProperties",
-			"response\\.\\w+,response\\.data\\[\\d+\\]\\.\\w+",
-			"ignoreHierarchy", "false", "excludeNullProperties", "false" }) })
+	@Action(value = "getCow")
 	public String getCowInfoList() {
-		response = new RestDataSourceResponse<CowInfo>();
 		response.setData(cowService.getAllCow());
 		response.setStartRow(0);
 		response.setEndRow(cowService.getAllCow().size());
@@ -80,12 +68,8 @@ public class CowAction extends BaseAction {
 		return SUCCESS;
 	}
 
-	@Action(value = "addCow", results = { @Result(name = SUCCESS, type = "json", params = {
-			"includeProperties",
-			"response\\.\\w+,response\\.data\\[\\d+\\]\\.\\w+",
-			"ignoreHierarchy", "false", "excludeNullProperties", "true" }) })
+	@Action(value = "addCow")
 	public String addCowInfo() {
-		response = new RestDataSourceResponse<CowInfo>();
 		CowInfo cowInfo = new CowInfo();
 		cowInfo.setAge(age);
 		cowInfo.setName(name);
@@ -99,12 +83,8 @@ public class CowAction extends BaseAction {
 		return SUCCESS;
 	}
 
-	@Action(value = "updateCow", results = { @Result(name = SUCCESS, type = "json", params = {
-			"includeProperties",
-			"response\\.\\w+,response\\.data\\[\\d+\\]\\.\\w+",
-			"ignoreHierarchy", "false", "excludeNullProperties", "true" }) })
+	@Action(value = "updateCow")
 	public String updateCowInfo() {
-		response = new RestDataSourceResponse<CowInfo>();
 		CowInfo cowInfo = new CowInfo();
 		cowInfo.setAge(age);
 		cowInfo.setCowId(cowId);
@@ -119,12 +99,8 @@ public class CowAction extends BaseAction {
 		return SUCCESS;
 	}
 
-	@Action(value = "deleteCow", results = { @Result(name = SUCCESS, type = "json", params = {
-			"includeProperties",
-			"response\\.\\w+,response\\.data\\[\\d+\\]\\.\\w+",
-			"ignoreHierarchy", "false", "excludeNullProperties", "true" }) })
+	@Action(value = "deleteCow")
 	public String deleteCowInfo() {
-		response = new RestDataSourceResponse<CowInfo>();
 		if (cowId != null && cowService.deleteCowById(new ObjectId(cowId))) {
 			response.setStatus(0);
 		} else {

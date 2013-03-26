@@ -1,12 +1,7 @@
 package com.haozileung.scau.server.action;
 
 import org.apache.struts2.convention.annotation.Action;
-import org.apache.struts2.convention.annotation.ExceptionMapping;
-import org.apache.struts2.convention.annotation.ExceptionMappings;
 import org.apache.struts2.convention.annotation.Namespace;
-import org.apache.struts2.convention.annotation.ParentPackage;
-import org.apache.struts2.convention.annotation.Result;
-import org.apache.struts2.convention.annotation.Results;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import com.haozileung.scau.server.common.action.BaseAction;
@@ -27,11 +22,7 @@ import com.haozileung.scau.server.service.IUserService;
  * @version 1.0.0<br/>
  * 
  */
-@ParentPackage("json-default")
 @Namespace("/user")
-@Results({ @Result(name = "success", location = "/index.html"),
-		@Result(name = "error", location = "/error.html") })
-@ExceptionMappings({ @ExceptionMapping(exception = "java.lange.RuntimeException", result = "error") })
 public class UserAction extends BaseAction {
 
 	/**
@@ -51,10 +42,7 @@ public class UserAction extends BaseAction {
 	private String sex;
 	private RestDataSourceResponse<UserInfo> response = new RestDataSourceResponse<UserInfo>();
 
-	@Action(value = "getUser", results = { @Result(name = SUCCESS, type = "json", params = {
-			"includeProperties",
-			"response\\.\\w+,response\\.data\\[\\d+\\]\\.\\w+",
-			"ignoreHierarchy", "false", "excludeNullProperties", "true" }) })
+	@Action(value = "getUser")
 	public String getUserList() {
 		MyPage<UserInfo> userInfos = userService.getUserByName(name, _startRow,
 				_endRow);
@@ -67,10 +55,7 @@ public class UserAction extends BaseAction {
 		return SUCCESS;
 	}
 
-	@Action(value = "addUser", results = { @Result(name = SUCCESS, type = "json", params = {
-			"includeProperties",
-			"response\\.\\w+,response\\.data\\[\\d+\\]\\.\\w+",
-			"ignoreHierarchy", "false", "excludeNullProperties", "true" }) })
+	@Action(value = "addUser")
 	public String addUser() {
 		UserInfo user = new UserInfo();
 		user.setUserId(userId);
@@ -83,10 +68,7 @@ public class UserAction extends BaseAction {
 		return SUCCESS;
 	}
 
-	@Action(value = "deleteUser", results = { @Result(name = SUCCESS, type = "json", params = {
-			"includeProperties",
-			"response\\.\\w+,response\\.data\\[\\d+\\]\\.\\w+",
-			"ignoreHierarchy", "false", "excludeNullProperties", "true" }) })
+	@Action(value = "deleteUser")
 	public String deleteUser() {
 		UserInfo user = new UserInfo();
 		user.setUserId(userId);
@@ -99,10 +81,7 @@ public class UserAction extends BaseAction {
 		return SUCCESS;
 	}
 
-	@Action(value = "updateUser", results = { @Result(name = SUCCESS, type = "json", params = {
-			"includeProperties",
-			"response\\.\\w+,response\\.data\\[\\d+\\]\\.\\w+",
-			"ignoreHierarchy", "false", "excludeNullProperties", "true" }) })
+	@Action(value = "updateUser")
 	public String updateUser() {
 		UserInfo user = new UserInfo();
 		user.setUserId(userId);
