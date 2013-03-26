@@ -63,7 +63,8 @@ public class CowAction extends BaseAction {
 		response.setData(cowService.getAllCow());
 		response.setStartRow(0);
 		response.setEndRow(cowService.getAllCow().size());
-		response.setTotalRow(cowService.getAllCow().size());
+		response.setTotalRow(cowService.getAllCow() == null ? 0 : cowService
+				.getAllCow().size());
 		response.setStatus(0);
 		return SUCCESS;
 	}
@@ -139,6 +140,14 @@ public class CowAction extends BaseAction {
 
 	public void setSex(String sex) {
 		this.sex = sex;
+	}
+
+	public RestDataSourceResponse<CowInfo> getResponse() {
+		return response;
+	}
+
+	public void setResponse(RestDataSourceResponse<CowInfo> response) {
+		this.response = response;
 	}
 
 }

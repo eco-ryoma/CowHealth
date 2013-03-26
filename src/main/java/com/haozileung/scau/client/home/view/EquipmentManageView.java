@@ -15,32 +15,43 @@ import com.smartgwt.client.widgets.layout.HLayout;
 import com.smartgwt.client.widgets.layout.VLayout;
 
 /**
- * <p>类的简介说明</p>
- * 创建时间：2013-3-20 下午5:18:09 
+ * <p>
+ * 类的简介说明
+ * </p>
+ * 创建时间：2013-3-20 下午5:18:09
+ * 
  * @author lianghaopeng
  * @version V1.0
  */
-public class EquipmentManageView extends VLayout{
+public class EquipmentManageView extends VLayout {
 	final private Messages message = GWT.create(Messages.class);
-	
-	public EquipmentManageView(){
+
+	public EquipmentManageView() {
 		super();
 		setWidth100();
 		setHeight100();
 		initView();
 	}
-	
+
 	public void initView() {
-		final EquipmentDataSource equipmentDataSource = EquipmentDataSource.getInstance();
-		final ListGrid userGrid = new ListGrid();
+		final EquipmentDataSource dataSource = EquipmentDataSource
+				.getInstance();
+		final ListGrid listGrid = new ListGrid();
 		final DynamicForm form = new DynamicForm();
+		final IButton newButton = new IButton(message.newButton());
+		final IButton freshButton = new IButton(message.freshButton());
+		final IButton saveButton = new IButton(message.addButton());
+		final IButton removeButton = new IButton(message.deleteButton());
+		final VLayout editorLayout = new VLayout();
+		final HLayout buttonPanel = new HLayout(20);
+		
 		form.setIsGroup(true);
 		form.setGroupTitle(message.editFormTitle());
 		form.setNumCols(8);
-		form.setDataSource(equipmentDataSource);
+		form.setDataSource(dataSource);
 		form.getField("equipmentId").hide();
 		form.setHeight("50%");
-		IButton newButton = new IButton(message.newButton());
+
 		newButton.setWidth(80);
 		newButton.addClickHandler(new ClickHandler() {
 
@@ -49,7 +60,15 @@ public class EquipmentManageView extends VLayout{
 			}
 		});
 
-		IButton saveButton = new IButton(message.addButton());
+		freshButton.setWidth(80);
+		freshButton.addClickHandler(new ClickHandler() {
+
+			public void onClick(ClickEvent event) {
+				listGrid.invalidateCache();
+			}
+		});
+
+		
 		saveButton.setWidth(80);
 		saveButton.addClickHandler(new ClickHandler() {
 
@@ -58,41 +77,39 @@ public class EquipmentManageView extends VLayout{
 			}
 		});
 
-		IButton removeButton = new IButton(message.deleteButton());
+		
 		removeButton.setWidth(80);
 		removeButton.addClickHandler(new ClickHandler() {
 
 			public void onClick(ClickEvent event) {
-				userGrid.removeSelectedData();
+				listGrid.removeSelectedData();
 			}
 		});
 
-		VLayout editorLayout = new VLayout();
-
-		HLayout buttonPanel = new HLayout(20);
+		
 		buttonPanel.setWidth100();
 		buttonPanel.setAlign(VerticalAlignment.CENTER);
 		buttonPanel.addMember(newButton);
 		buttonPanel.addMember(saveButton);
 		buttonPanel.addMember(removeButton);
-		
+		buttonPanel.addMember(freshButton);
+
 		editorLayout.addMember(form);
 		editorLayout.addMember(buttonPanel);
 		editorLayout.setHeight("30%");
-		
 
-		userGrid.setDataSource(equipmentDataSource);
-		userGrid.setEmptyCellValue("-");
-		userGrid.setSortField(0);
-		userGrid.setDataPageSize(50);
-		userGrid.setAutoFetchData(true);
-		userGrid.addRecordClickHandler(new RecordClickHandler() {
+		listGrid.setDataSource(dataSource);
+		listGrid.setEmptyCellValue("-");
+		listGrid.setSortField(0);
+		listGrid.setDataPageSize(50);
+		listGrid.setAutoFetchData(true);
+		listGrid.addRecordClickHandler(new RecordClickHandler() {
 			public void onRecordClick(RecordClickEvent event) {
 				form.reset();
-				form.editSelectedData(userGrid);
+				form.editSelectedData(listGrid);
 			}
 		});
-		addMember(userGrid);
+		addMember(listGrid);
 		addMember(editorLayout);
 	}
 }

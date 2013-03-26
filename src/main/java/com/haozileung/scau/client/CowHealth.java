@@ -32,15 +32,15 @@ public class CowHealth implements EntryPoint {
 		final Tab testTab = new Tab(messages.cowSportData());
 		testTab.setPane(new SportDataChartView());
 		tabs.addTab(testTab);
-		final Tab userTab = new Tab(messages.userManage());
-		userTab.setPane(new UserManageView());
-		tabs.addTab(userTab);
 		final Tab cowTab = new Tab(messages.cowManage());
 		cowTab.setPane(new CowManageView());
 		tabs.addTab(cowTab);
 		final Tab equipmentTab = new Tab(messages.equipmentManage());
 		equipmentTab.setPane(new EquipmentManageView());
 		tabs.addTab(equipmentTab);
+		final Tab userTab = new Tab(messages.userManage());
+		userTab.setPane(new UserManageView());
+		tabs.addTab(userTab);
 		tabs.draw();
 		Document.get().setTitle(messages.siteName());
 	}

@@ -1,13 +1,10 @@
 package com.haozileung.scau.client.home.view;
 
-import java.util.LinkedHashMap;
-
 import org.moxieapps.gwt.highcharts.client.Chart;
 import org.moxieapps.gwt.highcharts.client.Series;
+import org.moxieapps.gwt.highcharts.client.Series.Type;
 
 import com.google.gwt.core.shared.GWT;
-import com.smartgwt.client.widgets.form.DynamicForm;
-import com.smartgwt.client.widgets.form.fields.SelectItem;
 import com.smartgwt.client.widgets.layout.HLayout;
 import com.smartgwt.client.widgets.layout.VLayout;
 
@@ -22,28 +19,16 @@ import com.smartgwt.client.widgets.layout.VLayout;
  */
 public class SportDataChartView extends HLayout {
 
-	private VLayout leftPanel;
-
-	private VLayout rightPanel;
-
 	public SportDataChartView() {
-		leftPanel = new VLayout();
+		final VLayout leftPanel = new VLayout();
+		final VLayout rightPanel = new VLayout();
 		leftPanel.setWidth("20%");
-		DynamicForm form = new DynamicForm();
-		SelectItem selectItem = new SelectItem();
-		LinkedHashMap<String, Object> map = new LinkedHashMap<String, Object>();
-		map.put("1", "1111");
-		map.put("2", "2222");
-		map.put("3", "3333");
-		selectItem.setValueMap(map);
-		selectItem.setName("CowNumber");
-		form.setItems(selectItem);
-		leftPanel.addMember(form);
-		rightPanel = new VLayout();
+
 		rightPanel.setWidth("80%");
 		Chart chart = new Chart();
 		Series series = chart.createSeries().setName("Moles per Yard")
 				.setPoints(new Number[] { 163, 203, 276, 308, 347, 150, 99 });
+		series.setType(Type.AREA);
 		chart.addSeries(series);
 		rightPanel.addMember(chart);
 		addMember(leftPanel);

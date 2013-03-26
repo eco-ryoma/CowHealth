@@ -7,6 +7,7 @@ import com.smartgwt.client.data.fields.DataSourceDateTimeField;
 import com.smartgwt.client.data.fields.DataSourceTextField;
 import com.smartgwt.client.types.DSDataFormat;
 import com.smartgwt.client.types.DSProtocol;
+import com.smartgwt.client.types.DateDisplayFormat;
 
 /**
  * <p>
@@ -40,7 +41,8 @@ public class EquipmentDataSource extends RestDataSource {
 		DataSourceTextField producter = new DataSourceTextField("producter",
 				message.producter());
 		DataSourceDateTimeField expireDate = new DataSourceDateTimeField("expireDate",
-				message.expireDate());
+				message.expireDate(),10);
+		expireDate.setDateFormatter(DateDisplayFormat.TOSERIALIZEABLEDATE);
 		DataSourceTextField type = new DataSourceTextField("type", message.equipmentType());
 
 		setFields(equipmentId, name, producter, type, expireDate);

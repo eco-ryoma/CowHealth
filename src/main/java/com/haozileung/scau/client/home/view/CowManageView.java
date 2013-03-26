@@ -30,66 +30,81 @@ public class CowManageView extends VLayout{
 	}
 	
 	public void initView(){
-		final CowDataSource cowDS = CowDataSource.getInstance();
-		final ListGrid cowList = new ListGrid();
+		final CowDataSource dataSource = CowDataSource.getInstance();
+		final ListGrid listGrid = new ListGrid();
 		final DynamicForm form = new DynamicForm();
+		final IButton newButton = new IButton(message.newButton());
+		final IButton freshButton = new IButton(message.freshButton());
+		final IButton saveButton = new IButton(message.addButton());
+		final IButton removeButton = new IButton(message.deleteButton());
+		final VLayout editorLayout = new VLayout();
+		final HLayout buttonPanel = new HLayout(20);
+		
 		form.setIsGroup(true);
 		form.setGroupTitle(message.editFormTitle());
-		form.setNumCols(6);
-		form.setDataSource(cowDS);
+		form.setNumCols(8);
+		form.setDataSource(dataSource);
 		form.getField("cowId").hide();
-		
 		form.setHeight("50%");
-		IButton newButton = new IButton(message.newButton());
+
 		newButton.setWidth(80);
 		newButton.addClickHandler(new ClickHandler() {
+
 			public void onClick(ClickEvent event) {
 				form.editNewRecord();
 			}
 		});
 
-		IButton saveButton = new IButton(message.addButton());
+		freshButton.setWidth(80);
+		freshButton.addClickHandler(new ClickHandler() {
+
+			public void onClick(ClickEvent event) {
+				listGrid.invalidateCache();
+			}
+		});
+
+		
 		saveButton.setWidth(80);
 		saveButton.addClickHandler(new ClickHandler() {
+
 			public void onClick(ClickEvent event) {
 				form.saveData();
 			}
 		});
 
-		IButton removeButton = new IButton(message.deleteButton());
+		
 		removeButton.setWidth(80);
 		removeButton.addClickHandler(new ClickHandler() {
+
 			public void onClick(ClickEvent event) {
-				cowList.removeSelectedData();
+				listGrid.removeSelectedData();
 			}
 		});
 
-		VLayout editorLayout = new VLayout();
-
-		HLayout buttonPanel = new HLayout(20);
+		
 		buttonPanel.setWidth100();
 		buttonPanel.setAlign(VerticalAlignment.CENTER);
 		buttonPanel.addMember(newButton);
 		buttonPanel.addMember(saveButton);
 		buttonPanel.addMember(removeButton);
-		
+		buttonPanel.addMember(freshButton);
+
 		editorLayout.addMember(form);
 		editorLayout.addMember(buttonPanel);
 		editorLayout.setHeight("30%");
-		
-		cowList.setDataSource(cowDS);
-		cowList.setEmptyCellValue("-");
-		cowList.setSortField(0);
-		cowList.setDataPageSize(50);
-		cowList.setAutoFetchData(true);
-		cowList.addRecordClickHandler(new RecordClickHandler() {
+
+		listGrid.setDataSource(dataSource);
+		listGrid.setEmptyCellValue("-");
+		listGrid.setSortField(0);
+		listGrid.setDataPageSize(50);
+		listGrid.setAutoFetchData(true);
+		listGrid.addRecordClickHandler(new RecordClickHandler() {
 			public void onRecordClick(RecordClickEvent event) {
 				form.reset();
-				form.editSelectedData(cowList);
+				form.editSelectedData(listGrid);
 			}
 		});
-		
-		addMember(cowList);
+		addMember(listGrid);
 		addMember(editorLayout);
 	}
 }

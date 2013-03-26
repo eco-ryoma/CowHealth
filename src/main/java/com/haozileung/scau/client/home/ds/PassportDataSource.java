@@ -40,9 +40,9 @@ public class PassportDataSource extends RestDataSource {
 		DataSourceTextField email = new DataSourceTextField("email", "电子邮件");
 		DataSourceIntegerField isEnabled = new DataSourceIntegerField(
 				"isEnabled", "状态");
-		LinkedHashMap<Integer, Object> isEnabledValueMap = new LinkedHashMap<Integer, Object>();
-		isEnabledValueMap.put(1, "启用");
-		isEnabledValueMap.put(0, "禁用");
+		LinkedHashMap<String, Object> isEnabledValueMap = new LinkedHashMap<String, Object>();
+		isEnabledValueMap.put("1", "启用");
+		isEnabledValueMap.put("0", "禁用");
 		isEnabled.setValueMap(isEnabledValueMap);
 
 		setFields(passportId, userName, password, email, isEnabled);

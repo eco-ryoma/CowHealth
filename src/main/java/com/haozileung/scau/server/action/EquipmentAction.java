@@ -16,6 +16,7 @@ package com.haozileung.scau.server.action;
 
 import org.apache.struts2.convention.annotation.Action;
 import org.apache.struts2.convention.annotation.Namespace;
+import org.bson.types.ObjectId;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import com.haozileung.scau.server.common.action.BaseAction;
@@ -48,6 +49,64 @@ public class EquipmentAction extends BaseAction {
 	@Autowired
 	private IEquipmentService equimentService;
 
+	private String equipmentId;
+
+	private String name;
+
+	private String type;
+
+	private String producter;
+
+	private String expireDate;
+
+	public String getEquipmentId() {
+		return equipmentId;
+	}
+
+	public void setEquipmentId(String id) {
+		this.equipmentId = id;
+	}
+
+	public String getName() {
+		return name;
+	}
+
+	public void setName(String name) {
+		this.name = name;
+	}
+
+	public String getType() {
+		return type;
+	}
+
+	public void setType(String type) {
+		this.type = type;
+	}
+
+	public String getProducter() {
+		return producter;
+	}
+
+	public void setProducter(String producter) {
+		this.producter = producter;
+	}
+
+	public String getExpireDate() {
+		return expireDate;
+	}
+
+	public void setExpireDate(String expireDate) {
+		this.expireDate = expireDate;
+	}
+
+	public RestDataSourceResponse<EquipmentInfo> getResponse() {
+		return response;
+	}
+
+	public void setResponse(RestDataSourceResponse<EquipmentInfo> response) {
+		this.response = response;
+	}
+
 	@Action(value = "getEquipment")
 	public String getEquipmentInfoList() {
 		response.setData(equimentService.getAllEquipment());
@@ -60,17 +119,47 @@ public class EquipmentAction extends BaseAction {
 
 	@Action(value = "addEquipment")
 	public String addEquipmentInfo() {
-		return null;
+		EquipmentInfo equipmentInfo = new EquipmentInfo();
+		equipmentInfo.setName(name);
+		equipmentInfo.setProducter(producter);
+		equipmentInfo.setType(type);
+		equipmentInfo.setExpireDate(expireDate);
+		if (equimentService.addEquipment(equipmentInfo)) {
+			response.setStatus(0);
+			return SUCCESS;
+		} else {
+			response.setStatus(-1);
+			return ERROR;
+		}
 	}
 
 	@Action(value = "updateEquipment")
 	public String updateEquipmentInfo() {
-		return null;
+		EquipmentInfo equipmentInfo = new EquipmentInfo();
+		equipmentInfo.setEquipmentId(equipmentId);
+		equipmentInfo.setName(name);
+		equipmentInfo.setProducter(producter);
+		equipmentInfo.setType(type);
+		equipmentInfo.setExpireDate(expireDate);
+		if (equimentService.updateEquipment(equipmentInfo)) {
+			response.setStatus(0);
+			return SUCCESS;
+		} else {
+			response.setStatus(-1);
+			return ERROR;
+		}
 	}
 
 	@Action(value = "deleteEquipment")
 	public String deleteEquipmentInfo() {
-		return null;
+		if (equipmentId != null && !equipmentId.isEmpty()) {
+			ObjectId oId = new ObjectId();
+			if (equimentService.deleteEquipmentById(oId)) {
+				response.setStatus(0);
+				return SUCCESS;
+			}
+		}
+		response.setStatus(-1);
+		return ERROR;
 	}
-
 }
