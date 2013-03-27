@@ -1,12 +1,19 @@
 package com.haozileung.scau.client.home.view;
 
+import org.moxieapps.gwt.highcharts.client.Axis;
 import org.moxieapps.gwt.highcharts.client.Chart;
 import org.moxieapps.gwt.highcharts.client.Chart.ZoomType;
 import org.moxieapps.gwt.highcharts.client.Credits;
-import org.moxieapps.gwt.highcharts.client.Legend;
+import org.moxieapps.gwt.highcharts.client.DateTimeLabelFormats;
+import org.moxieapps.gwt.highcharts.client.Highcharts;
+import org.moxieapps.gwt.highcharts.client.Lang;
 import org.moxieapps.gwt.highcharts.client.Series;
 import org.moxieapps.gwt.highcharts.client.Series.Type;
 import org.moxieapps.gwt.highcharts.client.ToolTip;
+import org.moxieapps.gwt.highcharts.client.plotOptions.LinePlotOptions;
+import org.moxieapps.gwt.highcharts.client.plotOptions.Marker;
+import org.moxieapps.gwt.highcharts.client.plotOptions.PlotOptions.Cursor;
+import org.moxieapps.gwt.highcharts.client.plotOptions.SeriesPlotOptions;
 
 import com.google.gwt.core.shared.GWT;
 import com.smartgwt.client.widgets.layout.HLayout;
@@ -24,44 +31,46 @@ import com.smartgwt.client.widgets.layout.VLayout;
 public class SportDataChartView extends HLayout {
 	private final VLayout leftPanel = new VLayout();
 	private final VLayout rightPanel = new VLayout();
-	private final Chart chart = new Chart();
+	private Chart chart;
 
 	public SportDataChartView() {
+		Highcharts.setOptions(new Highcharts.Options().setLang(new Lang()
+				.setMonths(
+						new String[] { "一月", "二月", "三月", "四月", "五月", "六月",
+								"七月", "八月", "九月", "十月", "十一月", "十二月" })
+				.setWeekdays(
+						new String[] { "星期一", "星期二", "星期三", "星期四", "星期五",
+								"星期六", "星期天" }).setResetZoom("重置")
+				.setResetZoomTitle("重置到初始样式")));
+		chart = new Chart();
+		chart.setToolTip(new ToolTip().setEnabled(true).setShadow(true)
+				.setXDateFormat("%Y年%B%e日%H时 %A"));
 		chart.setZoomType(ZoomType.X);
 		chart.setSpacingRight(20);
-		chart.setTitle("奶牛运动数据曲线图");
 		chart.setChartTitleText("奶牛运动数据曲线图");
-		Credits credits = new Credits();
-		credits.setHref("http://www.haozileung.com");
-		credits.setText("Haozi Leung 制作");
-		chart.setCredits(credits);
-		chart.setOption("/xAxis/type", "datetime");
-		chart.setOption("/xAxis/maxZoom", 7 * 24 * 3600000);
-		chart.setOption("/xAxis/dateTimeLabelFormats/second", "%H:%M:%S");
-		chart.setOption("/xAxis/dateTimeLabelFormats/minute", "%B%e日 %H:%M");
-		chart.setOption("/xAxis/dateTimeLabelFormats/hour", "%B%e日 %H:%M");
-		chart.setOption("/xAxis/dateTimeLabelFormats/day", "%B%e日");
-		chart.setOption("/xAxis/dateTimeLabelFormats/week", "%B%e日");
-		chart.setOption("/xAxis/dateTimeLabelFormats/month", "%Y年%B");
-		chart.setOption("/xAxis/dateTimeLabelFormats/year", "%Y年");
-		chart.setOption("/yAxis/title/text", "汇率");
-		chart.setOption("/yAxis/showFirstLabel", false);
-		ToolTip toolTip = new ToolTip();
-		toolTip.setEnabled(true);
-		toolTip.setShared(true);
-		chart.setToolTip(toolTip);
-		Legend legend = new Legend();
-		legend.setEnabled(false);
-		chart.setLegend(legend);
-
+		chart.setCredits(new Credits().setHref("http://www.haozileung.com")
+				.setText("Haozi Leung 制作"));
+		chart.getXAxis()
+				.setType(Axis.Type.DATE_TIME)
+				.setMaxZoom(24 * 3600000)
+				.setDateTimeLabelFormats(
+						new DateTimeLabelFormats().setWeek("%B%e日")
+								.setDay("%B%e日").setHour("%B%e日 %H:%M")
+								.setMonth("%Y年%B").setYear("%Y年"));
+		chart.getYAxis().setAxisTitleText("运动量");
+		chart.setSeriesPlotOptions(new SeriesPlotOptions().setCursor(
+				Cursor.POINTER).setMarker(new Marker().setLineWidth(1)));
 		leftPanel.setWidth("20%");
 		rightPanel.setWidth("80%");
 
+		LinePlotOptions plotOptions = new LinePlotOptions();
+		plotOptions.setPointInterval(3600 * 1000);
+		plotOptions.setPointStart(0);
 		Series series = chart
 				.createSeries()
-				.setName("美元（USD）对欧元（EUR）")
-				.setOption("/series/pointStart", "Date.UTC(2006, 0, 01)")
-				.setOption("/series/pointInterval", 24 * 3600 * 1000)
+				.setName("奶牛运动数据")
+				.setType(Type.LINE)
+				.setPlotOptions(plotOptions)
 				.setPoints(
 						new Number[] { 0.8446, 0.8445, 0.8444, 0.8451, 0.8418,
 								0.8264, 0.8258, 0.8232, 0.8233, 0.8258, 0.8283,
@@ -246,7 +255,6 @@ public class SportDataChartView extends HLayout {
 								0.7473, 0.7407, 0.7288, 0.7074, 0.6927, 0.7083,
 								0.7191, 0.719, 0.7153, 0.7156, 0.7158, 0.714,
 								0.7119, 0.7129, 0.7129, 0.7049, 0.7095 });
-		series.setType(Type.AREA);
 		chart.addSeries(series);
 		rightPanel.addMember(chart);
 		addMember(leftPanel);

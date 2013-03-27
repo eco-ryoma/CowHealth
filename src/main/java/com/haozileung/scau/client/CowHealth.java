@@ -6,7 +6,6 @@ import com.google.gwt.dom.client.Document;
 import com.haozileung.scau.client.home.view.CowManageView;
 import com.haozileung.scau.client.home.view.EquipmentManageView;
 import com.haozileung.scau.client.home.view.SportDataChartView;
-import com.haozileung.scau.client.home.view.UserManageView;
 import com.haozileung.scau.shared.Messages;
 import com.smartgwt.client.types.Side;
 import com.smartgwt.client.widgets.tab.Tab;
@@ -38,9 +37,6 @@ public class CowHealth implements EntryPoint {
 		final Tab equipmentTab = new Tab(messages.equipmentManage());
 		equipmentTab.setPane(new EquipmentManageView());
 		tabs.addTab(equipmentTab);
-		final Tab userTab = new Tab(messages.userManage());
-		userTab.setPane(new UserManageView());
-		tabs.addTab(userTab);
 		tabs.draw();
 		Document.get().setTitle(messages.siteName());
 	}
