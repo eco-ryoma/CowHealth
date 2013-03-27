@@ -20,6 +20,7 @@ public class MyWebSocket implements OnTextMessage {
 	@Override
 	public void onClose(int arg0, String arg1) {
 		WebApplicationInitListener.getSocketList().remove(this);
+		System.out.println("onClose==========================");
 	}
 
 	/*
@@ -31,9 +32,10 @@ public class MyWebSocket implements OnTextMessage {
 	 */
 	@Override
 	public void onOpen(Connection conn) {
-		// 如果客户端在MaxIdleTime中都没有活动,则它会自动结束
+		// 如果客户端在这个MaxIdleTime中都没有活动,则它会自动结束
+		System.out.println("onOpen=========================="
+				+ conn.getMaxIdleTime());
 		this.conn = conn;
-		this.conn.setMaxIdleTime(999999999);
 		WebApplicationInitListener.getSocketList().add(this);
 	}
 
@@ -46,6 +48,7 @@ public class MyWebSocket implements OnTextMessage {
 	 */
 	@Override
 	public void onMessage(String data) {
+		System.out.println("~~~~~~~~~~" + data);
 		List<MyWebSocket> socketList = WebApplicationInitListener
 				.getSocketList();
 		for (MyWebSocket socket : socketList) {

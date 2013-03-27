@@ -15,7 +15,6 @@ import org.moxieapps.gwt.highcharts.client.plotOptions.Marker;
 import org.moxieapps.gwt.highcharts.client.plotOptions.PlotOptions.Cursor;
 import org.moxieapps.gwt.highcharts.client.plotOptions.SeriesPlotOptions;
 
-import com.smartgwt.client.util.SC;
 import com.smartgwt.client.widgets.layout.HLayout;
 import com.smartgwt.client.widgets.layout.VLayout;
 
@@ -33,7 +32,7 @@ public class SportDataChartView extends HLayout {
 	private final VLayout rightPanel = new VLayout();
 	private Chart chart;
 
-	public SportDataChartView() {
+	private void initRightPanel() {
 		Highcharts.setOptions(new Highcharts.Options().setLang(new Lang()
 				.setMonths(
 						new String[] { "一月", "二月", "三月", "四月", "五月", "六月",
@@ -55,14 +54,61 @@ public class SportDataChartView extends HLayout {
 				.setMaxZoom(24 * 3600000)
 				.setDateTimeLabelFormats(
 						new DateTimeLabelFormats().setWeek("%B%e日")
-								.setDay("%B%e日").setHour("%B%e日 %H:%M")
+								.setDay("%B%e日").setHour("%H:%M")
 								.setMonth("%Y年%B").setYear("%Y年"));
 		chart.getYAxis().setAxisTitleText("运动量");
 		chart.setSeriesPlotOptions(new SeriesPlotOptions().setCursor(
 				Cursor.POINTER).setMarker(new Marker().setLineWidth(1)));
-		leftPanel.setWidth("20%");
 		rightPanel.setWidth("80%");
+		rightPanel.addMember(chart);
+	}
 
+	private void initLeftPanel() {
+		leftPanel.setWidth("20%");
+	}
+
+	public SportDataChartView() {
+		initLeftPanel();
+		initRightPanel();
+		addMember(leftPanel);
+		addMember(rightPanel);
+		initWebSocket(this);
+	}
+
+	public native void initWebSocket(SportDataChartView t)/*-{
+		var ws = null;
+		var heart_beat_timer;
+		function heart_beat(_ws) {
+			_ws.send("{online:1.0}");
+		}
+		if (!$wnd.WebSocket) {
+			$wnd.alert("WebSocket not supported by this browser!");
+		} else {
+			// 创建WebSocket  
+			ws = new WebSocket(
+					"ws://localhost:8080/CowHealth/ws/mywebsocket.ws");
+			// 收到消息时在消息框内显示  
+			ws.onmessage = function(evt) {
+				t.@com.haozileung.scau.client.home.view.SportDataChartView::setData(Ljava/lang/String;)(evt.data);
+			};
+			// 断开时会走这个方法
+			ws.onclose = function() {
+				clearInterval(heart_beat_timer);
+			};
+			// 连接上时走这个方法
+			ws.onopen = function() {
+				heart_beat_timer = setInterval(heart_beat, 20000, ws);
+			};
+		}
+	}-*/;
+
+	public void setData(String s) {
+		/*
+		 * JSONValue jv = JSONParser.parseStrict(s).isObject().get("online"); if
+		 * (jv != null && jv.isNumber().doubleValue() != 1.0) {
+		 * SC.say("服务器断开连接，请刷新页面！"); }
+		 */
+		chart.removeAllSeries();
 		Series series = chart
 				.createSeries()
 				.setName("奶牛运动数据")
@@ -255,36 +301,5 @@ public class SportDataChartView extends HLayout {
 								0.7191, 0.719, 0.7153, 0.7156, 0.7158, 0.714,
 								0.7119, 0.7129, 0.7129, 0.7049, 0.7095 });
 		chart.addSeries(series);
-		rightPanel.addMember(chart);
-		addMember(leftPanel);
-		addMember(rightPanel);
-		initWebSocket(this);
-	}
-
-	public native void initWebSocket(SportDataChartView t)/*-{
-		var ws = null;
-		if (!$wnd.WebSocket) {
-			$wnd.alert("WebSocket not supported by this browser!");
-		} else {
-			// 创建WebSocket  
-			ws = new WebSocket(
-					"ws://localhost:8080/CowHealth/ws/mywebsocket.ws");
-			// 收到消息时在消息框内显示  
-			ws.onmessage = function(evt) {
-				t.@com.haozileung.scau.client.home.view.SportDataChartView::setData(Ljava/lang/String;)(evt.data);
-			};
-			// 断开时会走这个方法
-			ws.onclose = function() {
-				$wnd.alert('WebSocket连接断开！');
-			};
-			// 连接上时走这个方法
-			ws.onopen = function() {
-				$wnd.alert('WebSocket连接成功！');
-			};
-		}
-	}-*/;
-
-	public void setData(String s) {
-		SC.say(s);
 	}
 }
