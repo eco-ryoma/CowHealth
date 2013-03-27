@@ -15,7 +15,7 @@ import org.moxieapps.gwt.highcharts.client.plotOptions.Marker;
 import org.moxieapps.gwt.highcharts.client.plotOptions.PlotOptions.Cursor;
 import org.moxieapps.gwt.highcharts.client.plotOptions.SeriesPlotOptions;
 
-import com.google.gwt.core.shared.GWT;
+import com.smartgwt.client.util.SC;
 import com.smartgwt.client.widgets.layout.HLayout;
 import com.smartgwt.client.widgets.layout.VLayout;
 
@@ -63,14 +63,13 @@ public class SportDataChartView extends HLayout {
 		leftPanel.setWidth("20%");
 		rightPanel.setWidth("80%");
 
-		LinePlotOptions plotOptions = new LinePlotOptions();
-		plotOptions.setPointInterval(3600 * 1000);
-		plotOptions.setPointStart(0);
 		Series series = chart
 				.createSeries()
 				.setName("奶牛运动数据")
 				.setType(Type.LINE)
-				.setPlotOptions(plotOptions)
+				.setPlotOptions(
+						new LinePlotOptions().setPointInterval(3600000)
+								.setPointStart(0))
 				.setPoints(
 						new Number[] { 0.8446, 0.8445, 0.8444, 0.8451, 0.8418,
 								0.8264, 0.8258, 0.8232, 0.8233, 0.8258, 0.8283,
@@ -259,10 +258,10 @@ public class SportDataChartView extends HLayout {
 		rightPanel.addMember(chart);
 		addMember(leftPanel);
 		addMember(rightPanel);
-		// initWebSocket();
+		initWebSocket(this);
 	}
 
-	public native void initWebSocket()/*-{
+	public native void initWebSocket(SportDataChartView t)/*-{
 		var ws = null;
 		if (!$wnd.WebSocket) {
 			$wnd.alert("WebSocket not supported by this browser!");
@@ -272,7 +271,7 @@ public class SportDataChartView extends HLayout {
 					"ws://localhost:8080/CowHealth/ws/mywebsocket.ws");
 			// 收到消息时在消息框内显示  
 			ws.onmessage = function(evt) {
-				@com.haozileung.scau.client.home.view.SportDataChartView::setData(Ljava/lang/String;)(evt.data);
+				t.@com.haozileung.scau.client.home.view.SportDataChartView::setData(Ljava/lang/String;)(evt.data);
 			};
 			// 断开时会走这个方法
 			ws.onclose = function() {
@@ -285,7 +284,7 @@ public class SportDataChartView extends HLayout {
 		}
 	}-*/;
 
-	public static void setData(String s) {
-		GWT.log(s);
+	public void setData(String s) {
+		SC.say(s);
 	}
 }
