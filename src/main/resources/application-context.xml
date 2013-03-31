@@ -3,19 +3,22 @@
 	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:aop="http://www.springframework.org/schema/aop"
 	xmlns:tx="http://www.springframework.org/schema/tx" xmlns:mongo="http://www.springframework.org/schema/data/mongo"
 	xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:task="http://www.springframework.org/schema/task"
 	xsi:schemaLocation="
      http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd
      http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
      http://www.springframework.org/schema/data/mongo http://www.springframework.org/schema/data/mongo/spring-mongo.xsd
      http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx.xsd
-     http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop.xsd">
+     http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop.xsd
+     http://www.springframework.org/schema/task http://www.springframework.org/schema/task/spring-task.xsd">
 	<context:property-placeholder location="classpath*:mongodb.properties" />
 	<!-- 配置注入源搜索点 -->
-	<context:component-scan base-package="com.haozileung.scau.server.service" />
+	<context:component-scan base-package="com.haozileung.scau.server" />
 	<!-- enable autowire -->
 	<context:annotation-config />
 	<!-- enable transaction demarcation with annotations -->
 	<tx:annotation-driven />
+	<task:annotation-driven/>
 
 	<!-- 定义mongo对象，对应的是mongodb官方jar包中的Mongo，replica-set设置集群副本的ip地址和端口 -->
 	<mongo:mongo host="${host}" port="${port}">

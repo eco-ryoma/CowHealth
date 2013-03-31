@@ -15,6 +15,10 @@ import org.moxieapps.gwt.highcharts.client.plotOptions.Marker;
 import org.moxieapps.gwt.highcharts.client.plotOptions.PlotOptions.Cursor;
 import org.moxieapps.gwt.highcharts.client.plotOptions.SeriesPlotOptions;
 
+import com.haozileung.scau.client.home.ds.CowListDataSource;
+import com.smartgwt.client.widgets.form.DynamicForm;
+import com.smartgwt.client.widgets.form.fields.SelectItem;
+import com.smartgwt.client.widgets.grid.ListGrid;
 import com.smartgwt.client.widgets.layout.HLayout;
 import com.smartgwt.client.widgets.layout.VLayout;
 
@@ -64,7 +68,20 @@ public class SportDataChartView extends HLayout {
 	}
 
 	private void initLeftPanel() {
+		final VLayout top = new VLayout();
+		final VLayout buttom= new VLayout();
+		final DynamicForm form = new DynamicForm();
+		final SelectItem selectItem = new SelectItem("cowId","奶牛");
+		final ListGrid grid = new ListGrid();
+		grid.setDataSource(CowListDataSource.getInstance());
+		form.setItems(selectItem);
+		buttom.addMember(grid);
+		top.addMember(form);
+		top.setHeight("20%");
+		buttom.setHeight("80%");
 		leftPanel.setWidth("20%");
+		leftPanel.addMember(top);
+		leftPanel.addMember(buttom);
 	}
 
 	public SportDataChartView() {
