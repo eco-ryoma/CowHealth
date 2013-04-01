@@ -2,8 +2,8 @@ package com.haozileung.scau.server.common.listener;
 
 import javax.servlet.ServletContextEvent;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.context.ApplicationContext;
 import org.springframework.web.context.ContextLoaderListener;
 import org.springframework.web.context.support.WebApplicationContextUtils;
@@ -15,7 +15,7 @@ import com.haozileung.scau.server.common.context.SpringApplicationContextHolder;
  */
 public class ExtendedSpringContextLoaderListener extends ContextLoaderListener {
 
-	protected Log logger = LogFactory.getLog(getClass());
+	protected Logger logger = LoggerFactory.getLogger(getClass());
 
 	public void contextDestroyed(ServletContextEvent servletContextEvent) {
 		super.contextDestroyed(servletContextEvent);

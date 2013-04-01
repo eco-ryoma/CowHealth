@@ -4,8 +4,6 @@ import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
 import org.apache.struts2.convention.annotation.ExceptionMapping;
 import org.apache.struts2.convention.annotation.ExceptionMappings;
 import org.apache.struts2.convention.annotation.ParentPackage;
@@ -13,6 +11,8 @@ import org.apache.struts2.convention.annotation.Result;
 import org.apache.struts2.convention.annotation.Results;
 import org.apache.struts2.interceptor.ServletRequestAware;
 import org.apache.struts2.interceptor.SessionAware;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.opensymphony.xwork2.ActionSupport;
 
@@ -47,7 +47,7 @@ public abstract class BaseAction extends ActionSupport implements SessionAware,
 	protected int _endRow;
 	protected String _sortBy;
 
-	protected Log logger = LogFactory.getLog(getClass().getName());
+	protected Logger logger = LoggerFactory.getLogger(getClass().getName());
 
 	public String exit() {
 		session.clear();

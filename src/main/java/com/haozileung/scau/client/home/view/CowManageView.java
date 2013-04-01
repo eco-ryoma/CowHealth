@@ -15,20 +15,24 @@ import com.smartgwt.client.widgets.layout.HLayout;
 import com.smartgwt.client.widgets.layout.VLayout;
 
 /**
- * <p>类的简介说明</p>
- * 创建时间：2013-3-20 下午5:17:20 
+ * <p>
+ * 类的简介说明
+ * </p>
+ * 创建时间：2013-3-20 下午5:17:20
+ * 
  * @author lianghaopeng
  * @version V1.0
  */
-public class CowManageView extends VLayout{
+public class CowManageView extends VLayout {
 	final private Messages message = GWT.create(Messages.class);
-	public CowManageView(){
+
+	public CowManageView() {
 		super();
 		setWidth100();
 		setHeight100();
 		initView();
 	}
-	
+
 	public void initView(){
 		final CowDataSource dataSource = CowDataSource.getInstance();
 		final ListGrid listGrid = new ListGrid();

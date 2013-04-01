@@ -1,10 +1,9 @@
 package com.haozileung.scau.server.common.websocket;
 
-import java.io.IOException;
-import java.util.List;
-
 import org.eclipse.jetty.websocket.WebSocket.OnTextMessage;
 
+import com.google.gwt.json.client.JSONParser;
+import com.google.gwt.json.client.JSONValue;
 import com.haozileung.scau.server.common.listener.WebApplicationInitListener;
 
 public class MyWebSocket implements OnTextMessage {
@@ -20,7 +19,6 @@ public class MyWebSocket implements OnTextMessage {
 	@Override
 	public void onClose(int arg0, String arg1) {
 		WebApplicationInitListener.getSocketList().remove(this);
-		System.out.println("onClose==========================");
 	}
 
 	/*
@@ -33,8 +31,6 @@ public class MyWebSocket implements OnTextMessage {
 	@Override
 	public void onOpen(Connection conn) {
 		// 如果客户端在这个MaxIdleTime中都没有活动,则它会自动结束
-		System.out.println("onOpen=========================="
-				+ conn.getMaxIdleTime());
 		this.conn = conn;
 		WebApplicationInitListener.getSocketList().add(this);
 	}
@@ -48,17 +44,10 @@ public class MyWebSocket implements OnTextMessage {
 	 */
 	@Override
 	public void onMessage(String data) {
-		System.out.println("~~~~~~~~~~" + data);
-		List<MyWebSocket> socketList = WebApplicationInitListener
-				.getSocketList();
-		for (MyWebSocket socket : socketList) {
-			try {
-				socket.getConn().sendMessage(data);
-			} catch (IOException e) {
-				e.printStackTrace();
-			}
+		JSONValue jv = JSONParser.parseStrict(data).isObject().get("online");
+		if (jv != null && jv.isNumber().doubleValue() != 1.0) {
+			WebApplicationInitListener.getSocketList().remove(this);
 		}
-
 	}
 
 	public Connection getConn() {

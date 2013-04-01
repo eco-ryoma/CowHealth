@@ -16,9 +16,13 @@ import org.moxieapps.gwt.highcharts.client.plotOptions.PlotOptions.Cursor;
 import org.moxieapps.gwt.highcharts.client.plotOptions.SeriesPlotOptions;
 
 import com.haozileung.scau.client.home.ds.CowListDataSource;
+import com.smartgwt.client.data.events.ErrorEvent;
+import com.smartgwt.client.data.events.HandleErrorHandler;
 import com.smartgwt.client.widgets.form.DynamicForm;
 import com.smartgwt.client.widgets.form.fields.SelectItem;
 import com.smartgwt.client.widgets.grid.ListGrid;
+import com.smartgwt.client.widgets.grid.events.DataArrivedEvent;
+import com.smartgwt.client.widgets.grid.events.DataArrivedHandler;
 import com.smartgwt.client.widgets.layout.HLayout;
 import com.smartgwt.client.widgets.layout.VLayout;
 
@@ -69,11 +73,27 @@ public class SportDataChartView extends HLayout {
 
 	private void initLeftPanel() {
 		final VLayout top = new VLayout();
-		final VLayout buttom= new VLayout();
+		final VLayout buttom = new VLayout();
 		final DynamicForm form = new DynamicForm();
-		final SelectItem selectItem = new SelectItem("cowId","奶牛");
+		final SelectItem selectItem = new SelectItem("cowId", "奶牛");
 		final ListGrid grid = new ListGrid();
+		CowListDataSource.getInstance().addHandleErrorHandler(
+				new HandleErrorHandler() {
+
+					@Override
+					public void onHandleError(ErrorEvent event) {
+						grid.fetchData();
+					}
+
+				});
 		grid.setDataSource(CowListDataSource.getInstance());
+		grid.addDataArrivedHandler(new DataArrivedHandler() {
+
+			@Override
+			public void onDataArrived(DataArrivedEvent event) {
+				grid.fetchData();
+			}
+		});
 		form.setItems(selectItem);
 		buttom.addMember(grid);
 		top.addMember(form);
@@ -89,21 +109,42 @@ public class SportDataChartView extends HLayout {
 		initRightPanel();
 		addMember(leftPanel);
 		addMember(rightPanel);
-		initWebSocket(this);
+		setData("");
+		//loadData(this);
 	}
 
-	public native void initWebSocket(SportDataChartView t)/*-{
+	public native void loadData(SportDataChartView t)/*-{
 		var ws = null;
 		var heart_beat_timer;
+		var moduleName = $moduleName;
+		var baseUrl = $moduleBase;
+		var regModuleName = new RegExp(moduleName + '$');
+		var regProtocalName = new RegExp('^http://');
+		var regPoint = new RegExp(':[0-9]+', 'g');
+		var wsUrl = baseUrl.replace(regModuleName, '');
+		var ajaxUrl = wsUrl;
+		wsUrl = wsUrl.replace(regPoint, '');
+		wsUrl = wsUrl.replace(regProtocalName, 'ws://');
+		wsUrl = wsUrl + '/ws/mywebsocket.ws';
 		function heart_beat(_ws) {
-			_ws.send("{online:1.0}");
+			_ws.send('{online:1}');
+		}
+		function link() {
+			var url = ajaxUrl + 'getSportDataList.action';
+			var params = {};
+			jQuery.post(url, params, callbackFun, 'json');
+		}
+		function callbackFun(json) {
+			//获取数据后渲染页面
+			t.@com.haozileung.scau.client.home.view.SportDataChartView::setData(Ljava/lang/String;)(json);
+			//重新发起链接  
+			link();
 		}
 		if (!$wnd.WebSocket) {
-			$wnd.alert("WebSocket not supported by this browser!");
+			link();
 		} else {
 			// 创建WebSocket  
-			ws = new WebSocket(
-					"ws://localhost:8080/CowHealth/ws/mywebsocket.ws");
+			ws = new WebSocket(wsUrl);
 			// 收到消息时在消息框内显示  
 			ws.onmessage = function(evt) {
 				t.@com.haozileung.scau.client.home.view.SportDataChartView::setData(Ljava/lang/String;)(evt.data);

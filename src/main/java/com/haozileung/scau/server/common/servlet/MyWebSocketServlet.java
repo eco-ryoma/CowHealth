@@ -15,7 +15,7 @@ public class MyWebSocketServlet extends WebSocketServlet {
 	private static final long serialVersionUID = 1887606649574107279L;
 
 	@Override
-	public WebSocket doWebSocketConnect(HttpServletRequest arg0, String arg1) {
+	public WebSocket doWebSocketConnect(HttpServletRequest request, String protocol) {
 		return new MyWebSocket();
 	}
 

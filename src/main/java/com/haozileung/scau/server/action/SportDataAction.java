@@ -14,6 +14,7 @@
  */
 package com.haozileung.scau.server.action;
 
+import org.apache.struts2.convention.annotation.Action;
 import org.apache.struts2.convention.annotation.Namespace;
 
 import com.haozileung.scau.server.common.action.BaseAction;
@@ -37,24 +38,27 @@ public class SportDataAction extends BaseAction {
 	 * 
 	 */
 	private static final long serialVersionUID = 7258562747191660019L;
-	
+
 	// @Autowired
 	// private ISportDataService sportDataService;
 
-	public String getCowInfoList() {
-		return null;
+	@Action(value="getSportDataList")
+	public String getSportDataInfoList() {
+		boolean flag = true;
+		int hearttime = 100;// 当不发送消息的时候，保持50秒一次长轮询
+		int heartbeat = 0;
+		while (flag) {
+			heartbeat++;
+			//TODO 添加后台代码
+			try {
+				Thread.sleep(500);
+			} catch (InterruptedException e) {
+				e.printStackTrace();
+			}
+			if (heartbeat == hearttime) {
+				flag = false;
+			}
+		}
+		return SUCCESS;
 	}
-
-	public String addEquipmentInfo() {
-		return null;
-	}
-	
-	public String updateEquipmentInfo(){
-		return null;
-	}
-	
-	public String deleteEquipmentInfo(){
-		return null;
-	}
-
 }

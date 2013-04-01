@@ -6,6 +6,9 @@ import java.util.List;
 import javax.servlet.ServletContextEvent;
 import javax.servlet.ServletContextListener;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.haozileung.scau.server.common.websocket.MyWebSocket;
 
 /**
@@ -23,6 +26,7 @@ import com.haozileung.scau.server.common.websocket.MyWebSocket;
 public class WebApplicationInitListener implements ServletContextListener {
 
 	// private PassportService passportService;
+	protected Logger logger = LoggerFactory.getLogger(getClass());
 
 	private static List<MyWebSocket> socketList;
 

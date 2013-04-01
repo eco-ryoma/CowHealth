@@ -4,7 +4,7 @@
 	<groupId>com.haozileung.scau</groupId>
 	<artifactId>CowHealth</artifactId>
 	<packaging>war</packaging>
-	<version>3.5</version>
+	<version>4.0</version>
 	<name>CowHealth SmartGWT Web Project</name>
 	<url>http://maven.apache.org</url>
 	<properties>

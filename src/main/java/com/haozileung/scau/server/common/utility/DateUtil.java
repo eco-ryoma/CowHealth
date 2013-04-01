@@ -706,27 +706,438 @@ public class DateUtil {
 				/ DateUtil.DAY_MILLISECOND;
 		return (int) days;
 	}
+	
+	private static Calendar cal = Calendar.getInstance();
 
-	public static void main(String arg[]) throws ParseException {
-		// String date = "2010/10/20";
-		// Date date1= DateUtil.parse(date,"yyyy/MM/dd" );
-		// System.out.println(DateUtil.getStringOfDate(date1,DateUtil.defaultDateTimePatternStr,null));
-		int a = 10;
-		if (a > 1) {
-			System.out.println("a1" + a);
+	/**
+	 * 以字符串形式返回格式化日期
+	 * 
+	 * @param sdate
+	 *            原始日期格式 s - 表示 "yyyy-mm-dd" 形式的日期的 String 对象
+	 * @param format
+	 *            格式化后日期格式
+	 * @return 格式化后的日期显示
+	 */
+	public static String strDateFormat(String strDate, String format) {
+		SimpleDateFormat formatter = new SimpleDateFormat(format);
+		java.sql.Date date = java.sql.Date.valueOf(strDate);
+		return formatter.format(date);
+	}
 
-		} else if (a > 2) {
-			System.out.println("a2" + a);
-		} else
-			System.out.println("a3" + a);
+	/**
+	 * 根据给定的格式与时间(Date类型的)，返回时间字符串。最为通用。
+	 * 
+	 * @param date
+	 *            指定的日期
+	 * @param format
+	 *            日期格式字符串
+	 * @return String 指定格式的日期字符串.
+	 */
+	public static String DateFormat(Date date, String format) {
+		SimpleDateFormat sdf = new SimpleDateFormat(format);
+		return sdf.format(date);
+	}
 
-		Date date = DateUtil.parse("2011-01-19 00:00:00:000",
-				DateUtil.defaultLongDateTimePatternStr);
-		System.out.println(date.getTime());
+	/**
+	 * 获得指定日期所在年份的第一天
+	 * 
+	 * @return java.sql.Date
+	 */
 
-		date = DateUtil.parse("2011-01-23 23:59:59:999",
-				DateUtil.defaultLongDateTimePatternStr);
-		System.out.println(date.getTime());
+	public static Date getFirstDay(Date date) {
 
+		cal.setTime(date);
+		String year = String.valueOf(cal.get(Calendar.YEAR));
+		String firstDay = year + "-01-01";
+		return java.sql.Date.valueOf(firstDay);
+
+	}
+
+	/**
+	 * 获得指定日期所在年份的最后一天
+	 * 
+	 * @return java.sql.Date
+	 */
+	public static Date getLastDay(Date date) {
+
+		cal.setTime(date);
+		String year = String.valueOf(cal.get(Calendar.YEAR));
+		String firstDay = year + "-12-31";
+		return java.sql.Date.valueOf(firstDay);
+
+	}
+
+	/**
+	 * 获得当前系统年份第一天的日期(在使用过程中出现BUG,在hibernateTemplate.find()过程中,年份突然从2011变成了2012)
+	 * 
+	 * @return
+	 */
+	public static Date getFirstDay() {
+		System.out.println(cal.getTime());
+		String year = String.valueOf(cal.get(Calendar.YEAR));
+		String firstDay = year + "-01-01";
+		return java.sql.Date.valueOf(firstDay);
+		/*
+		 * Date date = new java.sql.Date(new Date().getTime());
+		 * System.out.println(date); cal.setTime(date);
+		 * cal.set(Calendar.DAY_OF_YEAR,1); return cal.getTime();
+		 */
+
+	}
+
+	/**
+	 * 获得指定年份第一天的日期
+	 * 
+	 * @param year
+	 *            指定年份
+	 * @return
+	 */
+	public static Date getFirstDay(Integer year) {
+		String firstDay = year + "-01-01"; // System.out.pritnln(1 + "" + 5);
+											// 打印15
+		return java.sql.Date.valueOf(firstDay);
+
+	}
+
+	/**
+	 * 获得指定年份第一天的日期
+	 * 
+	 * @param year
+	 *            指定年份
+	 * @return
+	 */
+	public static Date getFirstDay(String year) {
+		String firstDay = year + "-01-01";
+		return java.sql.Date.valueOf(firstDay);
+	}
+
+	/**
+	 * 获得当前系统年份最后一天的日期
+	 * 
+	 * @return
+	 */
+	public static Date getLastDay() {
+		String year = String.valueOf(cal.get(Calendar.YEAR));
+		String lastDay = year + "-12-31";
+		return java.sql.Date.valueOf(lastDay);
+	}
+
+	/**
+	 * 获得当前系统时间的年份
+	 * 
+	 * @return
+	 */
+	public static Integer getCurrentYear() {
+		Date date = new Date();
+		cal.setTime(date);
+		return cal.get(Calendar.YEAR);
+	}
+
+	/**
+	 * 获得当前系统时间的月份
+	 * 
+	 * @return
+	 */
+	public static Integer getCurrentMonth() {
+		return cal.get(Calendar.MONTH) + 1;
+	}
+
+	/**
+	 * 求两个日期相差天数
+	 * 
+	 * @param startDate
+	 *            起始日期，格式yyyy-MM-dd
+	 * @param endDate
+	 *            终止日期，格式yyyy-MM-dd
+	 * @return 两个日期相差天数
+	 */
+	public static Integer getIntervalDays(String startDate, String endDate) {
+
+		return (int) (((java.sql.Date.valueOf(endDate)).getTime() - (java.sql.Date
+				.valueOf(startDate)).getTime()) / (3600 * 24 * 1000));
+	}
+
+	/**
+	 * 求两个日期相差天数
+	 * 
+	 * @param startDate
+	 *            起始日期，格式yyyy-MM-dd
+	 * @param endDate
+	 *            终止日期，格式yyyy-MM-dd
+	 * @return 两个日期相差天数 ,一般是返回long,配合项目使用int
+	 */
+	public static Integer getIntervalDays(Date startDate, Date endDate) {
+
+		return (int) ((endDate.getTime() - startDate.getTime()) / (3600 * 24 * 1000));
+	}
+
+	/**
+	 * 取得给定日期加上一定天数后的日期对象.
+	 * 
+	 * @param date
+	 *            给定的日期对象
+	 * @param amount
+	 *            需要添加的天数，如果是向前的天数，使用负数就可以.
+	 * @return Date 加上一定天数以后的Date对象. 注意返回的是java.sql.Date 而不是java.sql.Date
+	 */
+	public static Date getDateAdd(Date date, int amount) {
+		cal.setTime(date);
+		cal.add(Calendar.DATE, amount);
+		return cal.getTime();
+	}
+
+	/**
+	 * 获得指定日期月份的第一天
+	 * 
+	 * @param date
+	 *            (如:2011-10-15)
+	 * @return 返回一月中的第一天(如:10月1日00:00:00)
+	 */
+	public static Date getMonthFirstDay(Date date) {
+		cal.setTime(date);
+		cal.set(Calendar.DATE, 1); // 把日期设置为当月第一天
+		return cal.getTime();
+	}
+
+	/**
+	 * 获得指定日期最后一天
+	 * 
+	 * @param date
+	 *            (如:2011-10-15)
+	 * @return 准确说是返回最后一天的开始,(如:10月31号00:00:00)
+	 */
+	public static Date getMonthLastDay(Date date) {
+		cal.setTime(date);
+		cal.set(Calendar.DATE, 1); // 把日期设置为当月第一天
+		cal.roll(Calendar.DATE, -1); // 日期回滚一天,也就是最后一天
+		return cal.getTime();
+	}
+
+	/**
+	 * 获得指定日期下一月的第一天,用于查询两个月间隔
+	 * 
+	 * @param date
+	 *            (2011-10-15)
+	 * @return 返回一月中的第一天(10月31号00:00:00)
+	 */
+	public static Date getNextMonthFirstDay(Date date) {
+		cal.setTime(date);
+		cal.set(Calendar.DATE, 1); // 把日期设置为当月第一天
+		cal.roll(Calendar.DATE, -1); // 把日期回滚一天,也就是最后一天
+		cal.add(Calendar.DATE, 1); // 当前日期加一天
+		return cal.getTime();
+	}
+
+	/**
+	 * 获得指定日期上一月的第一天
+	 * 
+	 * @param date
+	 *            (2011-10-15)
+	 * @return 返回上一月的第一天(09月01号00:00:00)
+	 */
+	public static Date getPriorMonthFirstDay(Date date) {
+		cal.setTime(date);
+		cal.set(Calendar.DATE, 1); // 把日期设置为当月第一天
+		cal.add(Calendar.DATE, -1); // 日期减一天,也就是上一月最后一天
+		cal.set(Calendar.DATE, 1); // 把日期设置为第一天
+		return cal.getTime();
+	}
+
+	/**
+	 * 获取指定日期的月份
+	 * 
+	 * @param date
+	 * @return
+	 */
+	public static Integer getMonth(Date date) {
+		if (date != null) {
+			cal.setTime(date);
+			return cal.get(Calendar.MONTH) + 1;
+		}
+		return null;
+	}
+
+	/**
+	 * 获取指定日期的年份
+	 * 
+	 * @param date
+	 * @return
+	 */
+	public static Integer getYear(Date date) {
+		if (date != null) {
+			cal.setTime(date);
+			return cal.get(Calendar.YEAR);
+		}
+		return null;
+	}
+
+	public static Integer getDay(Date date) {
+		if (date != null) {
+			cal.setTime(date);
+			return cal.get(Calendar.DAY_OF_MONTH);
+		}
+		return null;
+	}
+
+	/**
+	 * 获取当前月份第一天
+	 * 
+	 * @return
+	 */
+	public static Date getCurrentMonthFirstDate() {
+		Date currentDate = new Date();
+		return getMonthFirstDay(currentDate);
+	}
+
+	/**
+	 * 获取当前月份最后一天
+	 * 
+	 * @return
+	 */
+	public static Date getCurrentMonthLastDate() {
+		Date currentDate = new Date();
+		return getMonthLastDay(currentDate);
+	}
+
+	/**
+	 * 根据年&月&日构造Date对象
+	 * 
+	 * @param year
+	 * @param month
+	 * @param date
+	 * @return
+	 * @throws ParseException
+	 */
+	public static Date parse(String year, String month, String date)
+			throws ParseException {
+		Date attendanceDate = null;
+		SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
+		attendanceDate = format.parse(year + "-" + month + "-" + date);
+		return attendanceDate;
+	}
+
+	/**
+	 * 将指定时间转换成一天的起始时间yyyy-MM-dd 00:00:00
+	 * 
+	 * @param dateTime
+	 *            指定时间
+	 * @return 转换后的时间
+	 */
+	public static Date getStartDate(Date dateTime) {
+		return getDate(dateTime, true);
+	}
+
+	/**
+	 * 将指定时间转换成一天的结束时间yyyy-MM-dd 23:59:59)
+	 * 
+	 * @param dateTime
+	 *            指定时间
+	 * @return 转换后的时间
+	 */
+	public static Date getEndDate(Date dateTime) {
+		return getDate(dateTime, false);
+	}
+
+	/**
+	 * 将指定时间转换成一天的起始时间或结束时间
+	 * 
+	 * @param dateTime
+	 *            指定的时间
+	 * @param isStart
+	 *            取一天的起始还是结束
+	 * @return 一天的起始时间yyyy-MM-dd 00:00:00 或结束时间yyyy-MM-dd 23:59:59，
+	 *         如果dateTime为空则返回当天的时间
+	 */
+	public static Date getDate(Date dateTime, boolean isStart) {
+		if (null == dateTime)
+			dateTime = new Date();
+
+		Calendar calendar = Calendar.getInstance();
+		calendar.setTime(dateTime);
+		if (isStart) {
+			calendar.set(Calendar.HOUR_OF_DAY, 0);
+			calendar.set(Calendar.MINUTE, 0);
+			calendar.set(Calendar.SECOND, 0);
+			calendar.set(Calendar.MILLISECOND, 0);
+		} else {
+			calendar.set(Calendar.HOUR_OF_DAY, 23);
+			calendar.set(Calendar.MINUTE, 59);
+			calendar.set(Calendar.SECOND, 59);
+		}
+		return calendar.getTime();
+	}
+
+	/**
+	 * 返回给定日期前（后） 几天的时间
+	 * @param dateTime 给定的时间
+	 * @param days   想要得到几天前（后）的时间
+	 * @param isBefore 该字段true表示获得几天前的时间，false表示获得给定时间几天后的时间
+	 * @return 例如dateTime 给定是 2012-08-28 xx:xx:xx days为7 isBefore 为 true 
+	 * 则返回 七天前的时间 2012-08-21 xx:xx:xx
+	 */
+	public static Date getDateDiscrepancy(Date dateTime, int days, boolean isBefore) {
+		final Long DAY_MILLTIME = 86400000L;
+		cal.setTime(dateTime);
+		Long resultMillTime = isBefore ? (cal.getTimeInMillis() - DAY_MILLTIME
+				* days) : (cal.getTimeInMillis() + DAY_MILLTIME * days);
+		cal.setTimeInMillis(resultMillTime);
+		return cal.getTime();
+
+	}
+	
+	/**
+	 * 将指定时间转换成一天的起始时间yyyy-MM-dd 00:00:00
+	 * 
+	 * @param dateTime
+	 *            指定时间
+	 * @return 转换后的时间
+	 */
+	public static Date getMyStartDate(Date dateTime) {
+		return getMyDate(dateTime, true);
+	}
+	
+	/**
+	 * 将指定时间转换成一天的起始时间或结束时间
+	 * 
+	 * @param dateTime
+	 *            指定的时间
+	 * @param isStart
+	 *            取一天的起始还是结束
+	 * @return 一天的起始时间yyyy-MM-dd 00:00:00 或结束时间yyyy-MM-dd 23:59:59，
+	 *         如果dateTime为空则返回当天的时间
+	 */
+	public static Date getMyDate(Date dateTime, boolean isStart) {
+		if (null == dateTime)
+			dateTime = new Date();
+
+		Calendar calendar = Calendar.getInstance();
+		calendar.setTime(dateTime);
+		if (isStart) {
+			calendar.set(Calendar.HOUR_OF_DAY, 0);
+			calendar.set(Calendar.MINUTE, 0);
+			calendar.set(Calendar.SECOND, 0);
+		} else {
+			calendar.set(Calendar.HOUR_OF_DAY, 23);
+			calendar.set(Calendar.MINUTE, 59);
+			calendar.set(Calendar.SECOND, 59);
+		}
+		return calendar.getTime();
+	}
+	/**
+	 * 验证是否是日期
+	 */
+	public static boolean checkIsDate(String sourceDate) {
+		if (sourceDate == null) {
+			return false;
+		}
+		try {
+			SimpleDateFormat dateFormat = new SimpleDateFormat(
+					"yyyy-MM-dd HH:mm:ss");
+			dateFormat.setLenient(false);
+			dateFormat.parse(sourceDate);
+			return true;
+		} catch (Exception e) {
+		}
+		return false;
 	}
 }
