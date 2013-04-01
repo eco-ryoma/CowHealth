@@ -82,16 +82,14 @@ public class MyTask {
 					} catch (IOException e) {
 						logger.error("文件关闭失败！" + e.getMessage());
 					}
-					moveFile(new File(file));
+					moveFile(file);
 				}
 			}
 		}
 	}
 
-	public boolean moveFile(File file) {
-		File dir = new File(dataBackupPath);
-		boolean success = file.renameTo(new File(dir, file.getName()));
-		return success;
+	public void moveFile(String file) {
+		//org.apache.commons.io.FileUtils.moveToDirectory(new File(file), destDir, true);
 	}
 
 	public List<String> getFileList(String path) {
