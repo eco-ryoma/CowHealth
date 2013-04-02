@@ -15,19 +15,15 @@ import com.haozileung.scau.server.common.dto.IDataTransferObject;
  * 
  */
 public class SportDataInfo implements IDataTransferObject {
-	
+
 	/**
 	 * 
 	 */
 	private static final long serialVersionUID = 6102383745215971866L;
 
 	private String sportDataId;
-	
-	private String cowId;
 
 	private String equipmentId;
-
-	private String updateDate;
 
 	private String currentDate;
 
@@ -41,28 +37,12 @@ public class SportDataInfo implements IDataTransferObject {
 		this.sportDataId = sportDataId;
 	}
 
-	public String getCowId() {
-		return cowId;
-	}
-
-	public void setCowId(String cowId) {
-		this.cowId = cowId;
-	}
-
 	public String getEquipmentId() {
 		return equipmentId;
 	}
 
 	public void setEquipmentId(String equipmentId) {
 		this.equipmentId = equipmentId;
-	}
-
-	public String getUpdateDate() {
-		return updateDate;
-	}
-
-	public void setUpdateDate(String updateDate) {
-		this.updateDate = updateDate;
 	}
 
 	public String getCurrentDate() {

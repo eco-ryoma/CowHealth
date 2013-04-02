@@ -85,6 +85,7 @@ public class EquipmentDoToDtoConvertor extends
 		equipmentInfo.setName(equipment.getName());
 		equipmentInfo.setProducter(equipment.getProducter());
 		equipmentInfo.setType(equipment.getType());
+		equipmentInfo.setCowId(equipment.getCowId());
 		return equipmentInfo;
 	}
 

@@ -14,15 +14,19 @@
  */
 package com.haozileung.scau.server.service.impl;
 
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.Iterator;
 import java.util.List;
 
-import org.bson.types.ObjectId;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.haozileung.scau.server.common.dto.DoToDtoConvertorFactory;
+import com.haozileung.scau.server.common.utility.DateUtil;
+import com.haozileung.scau.server.domain.Equipment;
 import com.haozileung.scau.server.domain.SportData;
 import com.haozileung.scau.server.dto.SportDataInfo;
+import com.haozileung.scau.server.repository.IEquipmentRepository;
 import com.haozileung.scau.server.repository.ISportDataRepository;
 import com.haozileung.scau.server.service.ISportDataService;
 
@@ -44,41 +48,55 @@ public class SportDataServiceImpl implements ISportDataService {
 	@Autowired
 	private ISportDataRepository sportDataRepository;
 
-	@SuppressWarnings("unchecked")
+	@Autowired
+	private IEquipmentRepository equipmentRepository;
+
 	@Override
-	public List<SportDataInfo> getSportDataByCowId(ObjectId cowId) {
-		List<SportData> sportData = sportDataRepository
-				.findByCowIdOrderByCurrentDateDesc(cowId);
-		return DoToDtoConvertorFactory.getConvertor(SportData.class).dos2Dtos(
-				sportData);
+	public List<SportDataInfo> getSportDataByCowId(String cowId, Date endDate) {
+		Equipment equipment = equipmentRepository.findByCowId(cowId);
+		if (null != equipment) {
+			List<SportData> sportData = sportDataRepository
+					.findByEquipmentIdOrderByCurrentDateDesc(equipment.getId()
+							.toString());
+			List<SportDataInfo> datas = new ArrayList<SportDataInfo>();
+			Date now = new Date();
+			for (int i = -30; i < 0; i++) {
+				Date date = DateUtil.addDays(now, i);
+				Iterator<SportData> it = sportData.iterator();
+				SportData t = null;
+				while (it.hasNext()) {
+					t = it.next();
+					if (t.getCurrentDate() == date) {
+						it.remove();
+						break;
+					}
+				}
+				if (t == null) {
+					SportDataInfo nullData = new SportDataInfo();
+					float[] d = {-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,};
+					nullData.setEquipmentId(equipment.getId().toString());
+					nullData.setCurrentDate(DateUtil.format(date,
+							DateUtil.defaultDatePatternStr));
+					nullData.setData(d);
+				}
+			}
+			return datas;
+		}
+		return null;
 	}
 
 	@Override
 	public boolean saveSportData(SportDataInfo sportDataInfo) {
-		return false;
+		if (sportDataInfo.getSportDataId() == null) {
+			SportData data = sportDataRepository
+					.findByEquipmentIdAndCurrentDate(
+							sportDataInfo.getEquipmentId(),
+							sportDataInfo.getCurrentDate());
+			if (data != null) {
+				sportDataInfo.setSportDataId(data.getId().toString());
+			}
+		}
+		return sportDataRepository.save(new SportData(sportDataInfo)) == null ? false
+				: true;
 	}
-
-	@Override
-	public boolean updateSportData(SportDataInfo sportDataInfo) {
-		return false;
-	}
-
-	@Override
-	public boolean deleteSportDataById(ObjectId oId) {
-		// TODO Auto-generated method stub
-		return false;
-	}
-
-	@Override
-	public List<SportDataInfo> getAllSportData() {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	public SportDataInfo getSportDataById(ObjectId oId) {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
 }

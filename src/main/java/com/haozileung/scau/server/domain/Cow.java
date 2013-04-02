@@ -87,5 +87,4 @@ public class Cow implements IDomain {
 	public void setSex(String sex) {
 		this.sex = sex;
 	}
-
 }

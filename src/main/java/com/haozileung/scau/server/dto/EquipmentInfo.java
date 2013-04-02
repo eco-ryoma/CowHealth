@@ -21,8 +21,10 @@ public class EquipmentInfo implements IDataTransferObject {
 	 * 
 	 */
 	private static final long serialVersionUID = 6154318401354363106L;
-
+	
 	private String equipmentId;
+	
+	private String cowId;
 
 	private String name;
 
@@ -70,6 +72,14 @@ public class EquipmentInfo implements IDataTransferObject {
 
 	public void setExpireDate(String expireDate) {
 		this.expireDate = expireDate;
+	}
+
+	public String getCowId() {
+		return cowId;
+	}
+
+	public void setCowId(String cowId) {
+		this.cowId = cowId;
 	}
 
 }

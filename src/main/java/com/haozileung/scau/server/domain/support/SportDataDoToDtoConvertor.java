@@ -57,8 +57,6 @@ public class SportDataDoToDtoConvertor extends
 			return null;
 		}
 		SportDataInfo sportDataInfo = new SportDataInfo();
-		sportDataInfo.setCowId(null == sportData.getCowId() ? null : sportData
-				.getCowId().toString());
 		sportDataInfo.setCurrentDate(DateUtil.convertDate2Str(sportData
 				.getCurrentDate()));
 		float[] data = new float[24];
@@ -76,10 +74,8 @@ public class SportDataDoToDtoConvertor extends
 		sportDataInfo.setData(data);
 		sportDataInfo.setEquipmentId(null == sportData.getEquipmentId() ? null
 				: sportData.getEquipmentId().toString());
-		sportDataInfo.setSportDataId(null == sportData.getId() ? null : sportData
-				.getId().toString());
-		sportDataInfo.setUpdateDate(DateUtil.convertDate2Str(sportData
-				.getUpdateDate()));
+		sportDataInfo.setSportDataId(null == sportData.getId() ? null
+				: sportData.getId().toString());
 		return sportDataInfo;
 	}
 

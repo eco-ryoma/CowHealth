@@ -42,5 +42,15 @@ public interface ISportDataRepository extends
 	 * @param cowId
 	 * @return List<SportData>
 	 */
-	public List<SportData> findByCowIdOrderByCurrentDateDesc(ObjectId cowId);
+	public List<SportData> findByEquipmentIdOrderByCurrentDateDesc(String cowId);
+
+	/**
+	 * 查找设备在某天的数据
+	 * 
+	 * @param equipmentId
+	 * @param currentDate
+	 * @return
+	 */
+	public SportData findByEquipmentIdAndCurrentDate(String equipmentId,
+			String currentDate);
 }

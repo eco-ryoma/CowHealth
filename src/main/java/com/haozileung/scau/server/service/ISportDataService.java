@@ -14,9 +14,8 @@
  */
 package com.haozileung.scau.server.service;
 
+import java.util.Date;
 import java.util.List;
-
-import org.bson.types.ObjectId;
 
 import com.haozileung.scau.server.common.service.IService;
 import com.haozileung.scau.server.dto.SportDataInfo;
@@ -41,7 +40,7 @@ public interface ISportDataService extends IService {
 	 * @param cowId
 	 * @return List<SportDataInfo>
 	 */
-	public List<SportDataInfo> getSportDataByCowId(ObjectId cowId);
+	public List<SportDataInfo> getSportDataByCowId(String cowId, Date endDate);
 
 	/**
 	 * 保存从action传过来的运动数据
@@ -49,18 +48,4 @@ public interface ISportDataService extends IService {
 	 * @param sportDataInfo
 	 */
 	public boolean saveSportData(SportDataInfo sportDataInfo);
-
-	/**
-	 * 更新运动数据
-	 * 
-	 * @param sportDataInfo
-	 */
-	public boolean updateSportData(SportDataInfo sportDataInfo);
-
-	public boolean deleteSportDataById(ObjectId oId);
-
-	public List<SportDataInfo> getAllSportData();
-
-	public SportDataInfo getSportDataById(ObjectId oId);
-
 }

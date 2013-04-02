@@ -33,5 +33,7 @@ import com.haozileung.scau.server.domain.Equipment;
  */
 public interface IEquipmentRepository extends
 		MongoRepository<Equipment, ObjectId> {
+	
+	public Equipment findByCowId(String cowId);
 
 }

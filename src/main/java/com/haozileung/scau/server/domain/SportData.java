@@ -37,23 +37,11 @@ public class SportData implements IDomain {
 	private ObjectId id;
 
 	@Indexed
-	private ObjectId cowId;
-
-	@Indexed
-	private ObjectId equipmentId;
-
-	private Date updateDate;
+	private String equipmentId;
 
 	private Date currentDate;
 
 	private String data;
-
-	public boolean isPassTime() {
-		if (DateUtil.compareDateTimeIgnoreMinute(updateDate, currentDate) >= 0) {
-			return true;
-		}
-		return false;
-	}
 
 	public SportData() {
 	}
@@ -65,8 +53,8 @@ public class SportData implements IDomain {
 	}
 
 	private void update(SportDataInfo sportDataInfo) {
-		if (sportDataInfo.getCowId() != null) {
-			this.cowId = new ObjectId(sportDataInfo.getCowId());
+		if(sportDataInfo.getEquipmentId() != null){
+			this.equipmentId = sportDataInfo.getEquipmentId();
 		}
 		try {
 			this.currentDate = DateUtil.convertStr2Date(sportDataInfo
@@ -83,15 +71,9 @@ public class SportData implements IDomain {
 		} else {
 			this.data = dataStr.toString();
 		}
-		this.equipmentId = new ObjectId(sportDataInfo.getEquipmentId());
-		this.id = new ObjectId(sportDataInfo.getSportDataId());
-		try {
-			this.updateDate = DateUtil.parse(sportDataInfo.getUpdateDate(),
-					DateUtil.defaultDatePatternStr);
-		} catch (ParseException e) {
-			this.updateDate = new Date(0);
+		if (sportDataInfo.getSportDataId() != null) {
+			this.id = new ObjectId(sportDataInfo.getSportDataId());
 		}
-
 	}
 
 	public ObjectId getId() {
@@ -100,14 +82,6 @@ public class SportData implements IDomain {
 
 	public void setId(ObjectId id) {
 		this.id = id;
-	}
-
-	public Date getUpdateDate() {
-		return updateDate;
-	}
-
-	public void setUpdateDate(Date updateDate) {
-		this.updateDate = updateDate;
 	}
 
 	public Date getCurrentDate() {
@@ -130,19 +104,11 @@ public class SportData implements IDomain {
 		return serialVersionUID;
 	}
 
-	public ObjectId getCowId() {
-		return cowId;
-	}
-
-	public void setCowId(ObjectId cowId) {
-		this.cowId = cowId;
-	}
-
-	public ObjectId getEquipmentId() {
+	public String getEquipmentId() {
 		return equipmentId;
 	}
 
-	public void setEquipmentId(ObjectId equipmentId) {
+	public void setEquipmentId(String equipmentId) {
 		this.equipmentId = equipmentId;
 	}
 

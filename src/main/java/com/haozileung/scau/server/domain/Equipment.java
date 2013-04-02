@@ -38,6 +38,9 @@ public class Equipment implements IDomain {
 	private ObjectId id;
 
 	@Indexed
+	private String cowId;
+
+	@Indexed
 	private String name;
 
 	private String type;
@@ -64,6 +67,7 @@ public class Equipment implements IDomain {
 		if (equipmentInfo.getEquipmentId() != null) {
 			this.id = new ObjectId(equipmentInfo.getEquipmentId());
 		}
+		this.cowId = equipmentInfo.getCowId();
 		this.name = equipmentInfo.getName();
 		this.producter = equipmentInfo.getProducter();
 		this.type = equipmentInfo.getType();
@@ -108,5 +112,13 @@ public class Equipment implements IDomain {
 
 	public void setExpireDate(Date expireDate) {
 		this.expireDate = expireDate;
+	}
+
+	public String getCowId() {
+		return cowId;
+	}
+
+	public void setCowId(String cowId) {
+		this.cowId = cowId;
 	}
 }
