@@ -42,6 +42,8 @@
 
 	<!-- mongodb bean的仓库目录，会自动扫描扩展了MongoRepository接口的接口进行注入 -->
 	<mongo:repositories base-package="com.haozileung.scau.server.repository" />
+	
+	<bean id="tmpMap" class="com.haozileung.scau.server.common.dto.TempMap" />
 
 	<bean id="doToDtoConvertorFactory"
 		class="com.haozileung.scau.server.common.dto.DoToDtoConvertorFactory"

@@ -51,6 +51,8 @@ public class EquipmentAction extends BaseAction {
 
 	private String equipmentId;
 
+	private String cowId;
+
 	private String name;
 
 	private String type;
@@ -58,6 +60,14 @@ public class EquipmentAction extends BaseAction {
 	private String producter;
 
 	private String expireDate;
+
+	public String getCowId() {
+		return cowId;
+	}
+
+	public void setCowId(String cowId) {
+		this.cowId = cowId;
+	}
 
 	public String getEquipmentId() {
 		return equipmentId;
@@ -124,6 +134,7 @@ public class EquipmentAction extends BaseAction {
 		equipmentInfo.setProducter(producter);
 		equipmentInfo.setType(type);
 		equipmentInfo.setExpireDate(expireDate);
+		equipmentInfo.setCowId(cowId);
 		if (equimentService.addEquipment(equipmentInfo)) {
 			response.setStatus(0);
 			return SUCCESS;
@@ -141,6 +152,7 @@ public class EquipmentAction extends BaseAction {
 		equipmentInfo.setProducter(producter);
 		equipmentInfo.setType(type);
 		equipmentInfo.setExpireDate(expireDate);
+		equipmentInfo.setCowId(cowId);
 		if (equimentService.updateEquipment(equipmentInfo)) {
 			response.setStatus(0);
 			return SUCCESS;
@@ -162,4 +174,5 @@ public class EquipmentAction extends BaseAction {
 		response.setStatus(-1);
 		return ERROR;
 	}
+
 }

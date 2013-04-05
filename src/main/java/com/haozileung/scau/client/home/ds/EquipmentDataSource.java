@@ -1,6 +1,7 @@
 package com.haozileung.scau.client.home.ds;
 
 import com.google.gwt.core.shared.GWT;
+import com.haozileung.scau.client.CowHealth;
 import com.haozileung.scau.shared.Messages;
 import com.smartgwt.client.data.RestDataSource;
 import com.smartgwt.client.data.fields.DataSourceDateTimeField;
@@ -19,9 +20,9 @@ import com.smartgwt.client.types.DateDisplayFormat;
  * @version V1.0
  */
 public class EquipmentDataSource extends RestDataSource {
-	
+
 	final private Messages message = GWT.create(Messages.class);
-	
+
 	private static EquipmentDataSource instance;
 
 	public static EquipmentDataSource getInstance() {
@@ -37,15 +38,19 @@ public class EquipmentDataSource extends RestDataSource {
 				"equipmentId", message.id());
 		equipmentId.setPrimaryKey(true);
 		equipmentId.setDetail(true);
-		DataSourceTextField name = new DataSourceTextField("name", message.name());
+		DataSourceTextField cowId = new DataSourceTextField("cowId", "奶牛");
+		cowId.setValueMap(CowHealth.cowMap);
+		DataSourceTextField name = new DataSourceTextField("name",
+				message.name());
 		DataSourceTextField producter = new DataSourceTextField("producter",
 				message.producter());
-		DataSourceDateTimeField expireDate = new DataSourceDateTimeField("expireDate",
-				message.expireDate(),10);
+		DataSourceDateTimeField expireDate = new DataSourceDateTimeField(
+				"expireDate", message.expireDate(), 10);
 		expireDate.setDateFormatter(DateDisplayFormat.TOSERIALIZEABLEDATE);
-		DataSourceTextField type = new DataSourceTextField("type", message.equipmentType());
+		DataSourceTextField type = new DataSourceTextField("type",
+				message.equipmentType());
 
-		setFields(equipmentId, name, producter, type, expireDate);
+		setFields(equipmentId, name, cowId, producter, type, expireDate);
 
 		setClientOnly(false);
 		setSendMetaData(true);

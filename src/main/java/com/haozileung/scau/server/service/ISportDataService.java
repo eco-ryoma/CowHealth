@@ -40,7 +40,7 @@ public interface ISportDataService extends IService {
 	 * @param cowId
 	 * @return List<SportDataInfo>
 	 */
-	public List<SportDataInfo> getSportDataByCowId(String cowId, Date endDate);
+	public List<SportDataInfo> getSportDataByEquipmentId(String equipmentId, Date endDate);
 
 	/**
 	 * 保存从action传过来的运动数据

@@ -19,6 +19,7 @@ public class MyWebSocket implements OnTextMessage {
 	@Override
 	public void onClose(int arg0, String arg1) {
 		WebApplicationInitListener.getSocketList().remove(this);
+		System.out.println("disconnected...");
 	}
 
 	/*
@@ -33,6 +34,7 @@ public class MyWebSocket implements OnTextMessage {
 		// 如果客户端在这个MaxIdleTime中都没有活动,则它会自动结束
 		this.conn = conn;
 		WebApplicationInitListener.getSocketList().add(this);
+		System.out.println("new WebSocket...");
 	}
 
 	/*

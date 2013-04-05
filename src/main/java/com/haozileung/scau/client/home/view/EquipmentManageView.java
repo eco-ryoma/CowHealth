@@ -1,9 +1,19 @@
 package com.haozileung.scau.client.home.view;
 
 import com.google.gwt.core.shared.GWT;
+import com.google.gwt.http.client.Request;
+import com.google.gwt.http.client.RequestBuilder;
+import com.google.gwt.http.client.RequestCallback;
+import com.google.gwt.http.client.RequestException;
+import com.google.gwt.http.client.Response;
+import com.google.gwt.json.client.JSONArray;
+import com.google.gwt.json.client.JSONParser;
+import com.google.gwt.json.client.JSONValue;
+import com.haozileung.scau.client.CowHealth;
 import com.haozileung.scau.client.home.ds.EquipmentDataSource;
 import com.haozileung.scau.shared.Messages;
 import com.smartgwt.client.types.VerticalAlignment;
+import com.smartgwt.client.util.SC;
 import com.smartgwt.client.widgets.IButton;
 import com.smartgwt.client.widgets.events.ClickEvent;
 import com.smartgwt.client.widgets.events.ClickHandler;
@@ -24,7 +34,13 @@ import com.smartgwt.client.widgets.layout.VLayout;
  * @version V1.0
  */
 public class EquipmentManageView extends VLayout {
-	final private Messages message = GWT.create(Messages.class);
+
+	private EquipmentDataSource dataSource;
+	private ListGrid listGrid;
+	private DynamicForm form;
+	private VLayout editorLayout;
+	private HLayout buttonPanel;
+	private Messages message = GWT.create(Messages.class);
 
 	public EquipmentManageView() {
 		super();
@@ -34,23 +50,21 @@ public class EquipmentManageView extends VLayout {
 	}
 
 	public void initView() {
-		final EquipmentDataSource dataSource = EquipmentDataSource
-				.getInstance();
-		final ListGrid listGrid = new ListGrid();
-		final DynamicForm form = new DynamicForm();
+		buttonPanel = new HLayout(20);
+		editorLayout = new VLayout();
+		form = new DynamicForm();
+		listGrid = new ListGrid();
+		dataSource = EquipmentDataSource.getInstance();
 		final IButton newButton = new IButton(message.newButton());
 		final IButton freshButton = new IButton(message.freshButton());
 		final IButton saveButton = new IButton(message.addButton());
 		final IButton removeButton = new IButton(message.deleteButton());
-		final VLayout editorLayout = new VLayout();
-		final HLayout buttonPanel = new HLayout(20);
-		
+
 		form.setIsGroup(true);
 		form.setGroupTitle(message.editFormTitle());
-		form.setNumCols(8);
+		form.setNumCols(10);
 		form.setDataSource(dataSource);
 		form.getField("equipmentId").hide();
-		form.setHeight("50%");
 
 		newButton.setWidth(80);
 		newButton.addClickHandler(new ClickHandler() {
@@ -65,10 +79,10 @@ public class EquipmentManageView extends VLayout {
 
 			public void onClick(ClickEvent event) {
 				listGrid.invalidateCache();
+				getCowList();
 			}
 		});
 
-		
 		saveButton.setWidth(80);
 		saveButton.addClickHandler(new ClickHandler() {
 
@@ -77,7 +91,6 @@ public class EquipmentManageView extends VLayout {
 			}
 		});
 
-		
 		removeButton.setWidth(80);
 		removeButton.addClickHandler(new ClickHandler() {
 
@@ -86,7 +99,6 @@ public class EquipmentManageView extends VLayout {
 			}
 		});
 
-		
 		buttonPanel.setWidth100();
 		buttonPanel.setAlign(VerticalAlignment.CENTER);
 		buttonPanel.addMember(newButton);
@@ -111,5 +123,49 @@ public class EquipmentManageView extends VLayout {
 		});
 		addMember(listGrid);
 		addMember(editorLayout);
+	}
+
+	public void getCowList() {
+		RequestBuilder req = new RequestBuilder(RequestBuilder.GET,
+				"cow/getCow.action");
+		try {
+			req.sendRequest(null, new RequestCallback() {
+
+				@Override
+				public void onError(Request arg0, Throwable arg1) {
+					SC.say("请求奶牛列表出错！");
+
+				}
+
+				@Override
+				public void onResponseReceived(Request request,
+						Response response) {
+					String json = response.getText();
+					JSONValue jv = JSONParser.parseStrict(json).isObject()
+							.get("response");
+					if (jv != null) {
+						JSONValue jvData = jv.isObject().get("data");
+						if (jvData != null) {
+							JSONArray ja = jvData.isArray();
+							JSONValue jvCow = null;
+							for (int i = 0; i < ja.size(); i++) {
+								jvCow = ja.get(i);
+								if (jvCow != null) {
+									String cowId = jvCow.isObject()
+											.get("cowId").isString()
+											.stringValue();
+									String cowName = jvCow.isObject()
+											.get("name").isString()
+											.stringValue();
+									CowHealth.cowMap.put(cowId, cowName);
+								}
+							}
+						}
+					}
+				}
+			});
+		} catch (RequestException e) {
+		}
+
 	}
 }

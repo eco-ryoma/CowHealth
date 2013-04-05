@@ -53,24 +53,18 @@ public class SportData implements IDomain {
 	}
 
 	private void update(SportDataInfo sportDataInfo) {
-		if(sportDataInfo.getEquipmentId() != null){
+		if (sportDataInfo.getEquipmentId() != null) {
 			this.equipmentId = sportDataInfo.getEquipmentId();
 		}
 		try {
-			this.currentDate = DateUtil.convertStr2Date(sportDataInfo
-					.getCurrentDate());
+			this.currentDate = DateUtil.parse(sportDataInfo
+					.getCurrentDate(),DateUtil.defaultDatePatternStr);
 		} catch (ParseException e) {
 			this.currentDate = new Date(0);
 		}
-		StringBuffer dataStr = new StringBuffer();
-		for (int i = 0; i < sportDataInfo.getData().length; i++) {
-			dataStr.append(sportDataInfo.getData()[i] + ",");
-		}
-		if (dataStr.length() > 0) {
-			this.data = dataStr.substring(0, dataStr.length() - 1);
-		} else {
-			this.data = dataStr.toString();
-		}
+		
+		this.data = sportDataInfo.getData();
+
 		if (sportDataInfo.getSportDataId() != null) {
 			this.id = new ObjectId(sportDataInfo.getSportDataId());
 		}

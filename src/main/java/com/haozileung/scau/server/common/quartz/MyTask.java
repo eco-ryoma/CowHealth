@@ -20,8 +20,16 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 
+import com.haozileung.scau.server.common.context.SpringApplicationContextHolder;
+import com.haozileung.scau.server.common.dto.RestDataSourceResponse;
+import com.haozileung.scau.server.common.dto.TempMap;
+import com.haozileung.scau.server.common.listener.WebApplicationInitListener;
 import com.haozileung.scau.server.common.utility.DateUtil;
+import com.haozileung.scau.server.common.utility.GsonUtil;
+import com.haozileung.scau.server.common.websocket.MyWebSocket;
+import com.haozileung.scau.server.domain.Equipment;
 import com.haozileung.scau.server.dto.SportDataInfo;
+import com.haozileung.scau.server.repository.IEquipmentRepository;
 import com.haozileung.scau.server.service.ISportDataService;
 
 /**
@@ -32,33 +40,57 @@ import com.haozileung.scau.server.service.ISportDataService;
 public class MyTask {
 	@Autowired
 	private ISportDataService sportDataService;
+
+	@Autowired
+	private IEquipmentRepository equipmentRespository;
+
 	private static final Logger logger = LoggerFactory.getLogger(MyTask.class);
 	private static List<String> fileList = null;
 	private static boolean isRunning = false;
 	private static String dataPath = System.getProperty("ssh.root")
 			+ "/new_data";
 
-	@Scheduled(cron = "0 * 8-18 * * ?")
+	@Scheduled(cron = "0 * * * * ?")
 	public void execute() {
 		if (isRunning == false) {
-			System.out.println("Job...started");
 			if (logger.isDebugEnabled()) {
 				logger.debug("定时任务开始...");
 			}
 			isRunning = true;
-			System.out.println(dataPath);
 			fileList = getFileList(dataPath);
 			processFiles();
+			for (MyWebSocket socket : WebApplicationInitListener
+					.getSocketList()) {
+				try {
+					RestDataSourceResponse<SportDataInfo> response = new RestDataSourceResponse<SportDataInfo>();
+					TempMap tmpMap = (TempMap) SpringApplicationContextHolder
+							.getBean("tmpMap");
+					if (tmpMap != null && tmpMap.isStatus() == true) {
+						tmpMap.setStatus(false);
+						for (String equipmentId : tmpMap.getMap().keySet()) {
+							List<SportDataInfo> sportDatas = sportDataService
+									.getSportDataByEquipmentId(equipmentId,
+											new Date());
+							response.getData().addAll(sportDatas);
+						}
+					}
+					String json = GsonUtil.bean2json(response);
+					socket.getConn().sendMessage(json);
+				} catch (IOException e) {
+					logger.error(e.getMessage());
+				}
+			}
 			isRunning = false;
 		}
 	}
 
-	@Scheduled(cron = "0/30 * 8-18 * * ?")
+	@Scheduled(cron = "30 * * * * ?")
 	public void addNewDataFile() {
 		Random r = new Random(new Date().getTime());
 		int t = r.nextInt(30) + 1;
-		int cowId = r.nextInt(1000);
-		for (int num = 0; num < 2; num++) {
+		List<Equipment> cows = equipmentRespository.findAll();
+		String cowId = cows.get(r.nextInt(cows.size())).getId().toString();
+		for (int num = 0; num < 1; num++) {
 			StringBuffer dataBuffer = new StringBuffer();
 			for (int times = 0; times < t; times++) {
 
@@ -66,7 +98,7 @@ public class MyTask {
 						.append(cowId)
 						.append(',')
 						.append(DateUtil.format(
-								DateUtil.addDays(new Date(), r.nextInt(30)),
+								DateUtil.addDays(new Date(), 0 - r.nextInt(30)),
 								DateUtil.defaultDatePatternStr)).append(',');
 				for (int i = 0; i < 24; i++) {
 					dataBuffer.append(r.nextInt(500));
@@ -107,8 +139,12 @@ public class MyTask {
 						logger.error("读取文件失败：文件读取出错！" + e.getMessage());
 						continue;
 					}
+					TempMap tmpMap = (TempMap) SpringApplicationContextHolder
+							.getBean("tmpMap");
+					tmpMap.getMap().clear();
+					tmpMap.setStatus(false);
 					while (data != null) {
-						// processLine(data);
+						processLine(data);
 						try {
 							data = br.readLine();
 						} catch (IOException e) {
@@ -116,6 +152,7 @@ public class MyTask {
 							continue;
 						}
 					}
+					tmpMap.setStatus(true);
 					try {
 						br.close();
 					} catch (IOException e) {
@@ -158,14 +195,22 @@ public class MyTask {
 	}
 
 	public boolean processLine(String line) {
+		TempMap tmpMap = (TempMap) SpringApplicationContextHolder
+				.getBean("tmpMap");
 		SportDataInfo sportDataInfo = new SportDataInfo();
 		String[] dataArray = line.split(",");
 		sportDataInfo.setEquipmentId(dataArray[0]);
 		sportDataInfo.setCurrentDate(dataArray[1]);
-		List<Float> data = new ArrayList<Float>();
-		for (int i = 2; i < 24; i++) {
-			data.add(Float.valueOf(dataArray[i]));
+		StringBuffer data = new StringBuffer();
+		for (int i = 2; i < 26; i++) {
+			data.append(Float.valueOf(dataArray[i]));
+			if(i != 25){
+				data.append(',');
+			}
 		}
+		sportDataInfo.setData(data.toString());
+		tmpMap.getMap().put(sportDataInfo.getEquipmentId(),
+				sportDataInfo.getEquipmentId());
 		return sportDataService.saveSportData(sportDataInfo);
 	}
 }

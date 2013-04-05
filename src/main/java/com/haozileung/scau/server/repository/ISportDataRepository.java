@@ -14,6 +14,7 @@
  */
 package com.haozileung.scau.server.repository;
 
+import java.util.Date;
 import java.util.List;
 
 import org.bson.types.ObjectId;
@@ -52,5 +53,16 @@ public interface ISportDataRepository extends
 	 * @return
 	 */
 	public SportData findByEquipmentIdAndCurrentDate(String equipmentId,
-			String currentDate);
+			Date currentDate);
+
+	/**
+	 * 根据设备ID 和时间范围查找并按时间排序
+	 * 
+	 * @param EquipmentId
+	 * @param startDate
+	 * @param endDate
+	 * @return
+	 */
+	public List<SportData> findByEquipmentIdAndCurrentDateBetweenOrderByCurrentDateAsc(
+			String EquipmentId, Date startDate, Date endDate);
 }

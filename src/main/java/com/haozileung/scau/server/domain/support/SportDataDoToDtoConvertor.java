@@ -57,23 +57,10 @@ public class SportDataDoToDtoConvertor extends
 			return null;
 		}
 		SportDataInfo sportDataInfo = new SportDataInfo();
-		sportDataInfo.setCurrentDate(DateUtil.convertDate2Str(sportData
-				.getCurrentDate()));
-		float[] data = new float[24];
-		String dataStr = sportData.getData();
-		if (dataStr != null) {
-			String[] dataArr = dataStr.split(",");
-			int count = 0;
-			for (String s : dataArr) {
-				if (null != s && !s.isEmpty()) {
-					data[count] = Float.parseFloat(s);
-				}
-				count++;
-			}
-		}
-		sportDataInfo.setData(data);
-		sportDataInfo.setEquipmentId(null == sportData.getEquipmentId() ? null
-				: sportData.getEquipmentId().toString());
+		sportDataInfo.setCurrentDate(DateUtil.format(
+				sportData.getCurrentDate(), DateUtil.defaultDatePatternStr));
+		sportDataInfo.setData(sportData.getData());
+		sportDataInfo.setEquipmentId(sportData.getEquipmentId());
 		sportDataInfo.setSportDataId(null == sportData.getId() ? null
 				: sportData.getId().toString());
 		return sportDataInfo;

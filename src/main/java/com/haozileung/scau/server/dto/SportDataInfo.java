@@ -25,9 +25,11 @@ public class SportDataInfo implements IDataTransferObject {
 
 	private String equipmentId;
 
+	private String cowName;
+
 	private String currentDate;
 
-	private float[] data;
+	private String data;
 
 	public String getSportDataId() {
 		return sportDataId;
@@ -53,12 +55,19 @@ public class SportDataInfo implements IDataTransferObject {
 		this.currentDate = currentDate;
 	}
 
-	public float[] getData() {
+	public String getCowName() {
+		return cowName;
+	}
+
+	public void setCowName(String cowName) {
+		this.cowName = cowName;
+	}
+
+	public String getData() {
 		return data;
 	}
 
-	public void setData(float[] data) {
+	public void setData(String data) {
 		this.data = data;
 	}
-
 }

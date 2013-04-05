@@ -44,5 +44,7 @@ public interface IEquipmentService extends IService {
 	public List<EquipmentInfo> getAllEquipment();
 	
 	public EquipmentInfo getEquipmentById(ObjectId oId);
+	
+	public EquipmentInfo getEquipmentByCowId(String cowId);
 
 }

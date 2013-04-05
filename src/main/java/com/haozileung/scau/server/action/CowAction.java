@@ -109,8 +109,9 @@ public class CowAction extends BaseAction {
 		}
 		return SUCCESS;
 	}
-	@Action(value="refreshCowList")
-	public String getCurrentCowList(){
+
+	@Action(value = "refreshCowList")
+	public String getCurrentCowList() {
 		return SUCCESS;
 	}
 

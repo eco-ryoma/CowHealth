@@ -90,4 +90,13 @@ public class EquipmentServiceImpl implements IEquipmentService {
 		this.equipmentRepository = equipmentRepository;
 	}
 
+	@Override
+	public EquipmentInfo getEquipmentByCowId(String cowId) {
+		if (cowId != null && !cowId.isEmpty()) {
+			return EquipmentDoToDtoConvertor.getInstance().doToDto(
+					equipmentRepository.findByCowId(cowId));
+		}
+		return null;
+	}
+
 }
