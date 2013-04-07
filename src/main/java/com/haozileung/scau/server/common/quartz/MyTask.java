@@ -58,13 +58,16 @@ public class MyTask {
 			}
 			isRunning = true;
 			fileList = getFileList(dataPath);
+			TempMap tmpMap = (TempMap) SpringApplicationContextHolder
+					.getBean("tmpMap");
+			tmpMap.getMap().clear();
+			tmpMap.setStatus(false);
 			processFiles();
+			tmpMap.setStatus(true);
 			for (MyWebSocket socket : WebApplicationInitListener
 					.getSocketList()) {
 				try {
 					RestDataSourceResponse<SportDataInfo> response = new RestDataSourceResponse<SportDataInfo>();
-					TempMap tmpMap = (TempMap) SpringApplicationContextHolder
-							.getBean("tmpMap");
 					if (tmpMap != null && tmpMap.isStatus() == true) {
 						tmpMap.setStatus(false);
 						for (String equipmentId : tmpMap.getMap().keySet()) {
@@ -141,10 +144,6 @@ public class MyTask {
 						logger.error("读取文件失败：文件读取出错！" + e.getMessage());
 						continue;
 					}
-					TempMap tmpMap = (TempMap) SpringApplicationContextHolder
-							.getBean("tmpMap");
-					tmpMap.getMap().clear();
-					tmpMap.setStatus(false);
 					while (data != null) {
 						processLine(data);
 						try {
@@ -154,7 +153,6 @@ public class MyTask {
 							continue;
 						}
 					}
-					tmpMap.setStatus(true);
 					try {
 						br.close();
 					} catch (IOException e) {
