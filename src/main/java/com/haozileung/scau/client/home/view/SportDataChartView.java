@@ -1,5 +1,8 @@
 package com.haozileung.scau.client.home.view;
 
+import java.util.HashMap;
+import java.util.Map;
+
 import org.moxieapps.gwt.highcharts.client.Axis;
 import org.moxieapps.gwt.highcharts.client.Chart;
 import org.moxieapps.gwt.highcharts.client.Chart.ZoomType;
@@ -166,55 +169,61 @@ public class SportDataChartView extends HLayout {
 	}
 
 	public void setData(String json) {
-		String cowName = null;
-		StringBuffer cowData = new StringBuffer();
-		String startDate = null;
+
 		JSONValue jv = JSONParser.parseStrict(json).isObject().get("response");
 		if (jv != null) {
 			JSONValue jvData = jv.isObject().get("data");
 			if (jvData != null) {
 				JSONArray ja = jvData.isArray();
 				JSONValue jvCow = null;
+				Map<String, Series> seriesMap = new HashMap<String, Series>();
 				for (int i = 0; i < ja.size(); i++) {
 					jvCow = ja.get(i);
 					if (jvCow != null) {
-						cowData.append(jvCow.isObject().get("data").isString()
-								.stringValue());
-						cowData.append(",");
-						if (i == 0) {
+						String cowName = null;
+						String startDate = null;
+						String[] dataStr = jvCow.isObject().get("data")
+								.isString().stringValue().split(",");
+						if (dataStr.length > 0) {
+
 							cowName = jvCow.isObject().get("cowName")
 									.isString().stringValue();
 							startDate = jvCow.isObject().get("currentDate")
 									.isString().stringValue();
+
+							if (seriesMap.containsKey(cowName)) {
+								Series series = seriesMap.get(cowName);
+								for (int j = 0; j < dataStr.length; j++) {
+									if (!"".equals(dataStr[j])) {
+										series.addPoint(Float
+												.valueOf(dataStr[j]));
+									}
+								}
+							} else {
+								Series series = chart
+										.createSeries()
+										.setName("奶牛:" + cowName)
+										.setType(Type.LINE)
+										.setPlotOptions(
+												new LinePlotOptions()
+														.setPointInterval(
+																3600000)
+														.setPointStart(
+																(DateTimeFormat
+																		.getFormat("yyyy-MM-dd")
+																		.parse(startDate))
+																		.getTime()));
+								seriesMap.put(cowName, series);
+							}
 						}
 					}
 				}
-				String[] dataStr = cowData.toString().split(",");
-				if (dataStr.length > 0) {
-					Number[] finalData = new Number[dataStr.length];
-					for (int i = 0; i < finalData.length; i++) {
-						if (!"".equals(dataStr[i])) {
-							finalData[i] = Float.valueOf(dataStr[i]);
-						}
-					}
-
-					chart.removeAllSeries();
-					Series series;
-					series = chart
-							.createSeries()
-							.setName("奶牛:" + cowName)
-							.setType(Type.LINE)
-							.setPlotOptions(
-									new LinePlotOptions().setPointInterval(
-											3600000).setPointStart(
-											(DateTimeFormat
-													.getFormat("yyyy-MM-dd")
-													.parse(startDate))
-													.getTime()))
-							.setPoints(finalData, true);
-					chart.addSeries(series);
+				chart.removeAllSeries();
+				for (String cowName : seriesMap.keySet()) {
+					chart.addSeries(seriesMap.get(cowName));
 				}
 			}
+
 		}
 	}
 }
