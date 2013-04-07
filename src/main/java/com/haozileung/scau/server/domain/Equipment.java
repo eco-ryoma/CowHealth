@@ -40,7 +40,6 @@ public class Equipment implements IDomain {
 	@Indexed
 	private String cowId;
 
-	@Indexed
 	private String name;
 
 	private String type;

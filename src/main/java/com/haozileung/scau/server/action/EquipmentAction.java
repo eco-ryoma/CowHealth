@@ -120,7 +120,7 @@ public class EquipmentAction extends BaseAction {
 	@Action(value = "getEquipment")
 	public String getEquipmentInfoList() {
 		response.setData(equimentService.getAllEquipment());
-		response.setStatus(0);
+		response.setStatus(equimentService.getAllEquipment() == null ? -1 : 0);
 		response.setStartRow(0);
 		response.setEndRow(equimentService.getAllEquipment() == null ? 0
 				: equimentService.getAllEquipment().size());

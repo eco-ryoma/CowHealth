@@ -17,6 +17,8 @@ package com.haozileung.scau.server.service.impl;
 import java.util.List;
 
 import org.bson.types.ObjectId;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -41,23 +43,32 @@ import com.haozileung.scau.server.service.ICowService;
 @Service("CowService")
 public class CowServiceImpl implements ICowService {
 
+	private final static Logger logger = LoggerFactory
+			.getLogger(CowServiceImpl.class);
+
 	@Autowired
 	private ICowRepository cowRepository;
 
 	@Override
 	public boolean saveCow(CowInfo cowInfo) {
 		Cow cow = new Cow(cowInfo);
-		if (cowRepository.save(cow) != null) {
-			return true;
+		Cow c = null;
+		try {
+			c = cowRepository.save(cow);
+		} catch (Exception e) {
+			logger.error(e.getMessage());
+			return false;
 		}
-		return false;
+		if (c == null) {
+			return false;
+		}
+		return true;
 	}
 
 	@Override
 	public boolean updateCow(CowInfo cowInfo) {
 		if (cowInfo.getCowId() != null && !cowInfo.getCowId().isEmpty()) {
-			saveCow(cowInfo);
-			return true;
+			return saveCow(cowInfo);
 		}
 		return false;
 	}

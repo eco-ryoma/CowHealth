@@ -17,6 +17,8 @@ package com.haozileung.scau.server.service.impl;
 import java.util.List;
 
 import org.bson.types.ObjectId;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -41,15 +43,26 @@ import com.haozileung.scau.server.service.IEquipmentService;
 @Service("EquipmentService")
 public class EquipmentServiceImpl implements IEquipmentService {
 
+	private final static Logger logger = LoggerFactory
+			.getLogger(EquipmentServiceImpl.class);
+
 	@Autowired
 	private IEquipmentRepository equipmentRepository;
 
 	@Override
 	public boolean addEquipment(EquipmentInfo equipmentInfo) {
-		if (equipmentRepository.save(new Equipment(equipmentInfo)) != null) {
-			return true;
+		Equipment equipment = new Equipment(equipmentInfo);
+		Equipment eq = null;
+		try {
+			eq = equipmentRepository.save(equipment);
+		} catch (Exception e) {
+			logger.error(e.getMessage());
+			return false;
 		}
-		return false;
+		if (eq == null) {
+			return false;
+		}
+		return true;
 	}
 
 	@Override

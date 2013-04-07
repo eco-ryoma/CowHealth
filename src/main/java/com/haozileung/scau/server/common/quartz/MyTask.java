@@ -88,9 +88,11 @@ public class MyTask {
 	public void addNewDataFile() {
 		Random r = new Random(new Date().getTime());
 		int t = r.nextInt(30) + 1;
-		List<Equipment> cows = equipmentRespository.findAll();
-		String cowId = cows.get(r.nextInt(cows.size())).getId().toString();
-		for (int num = 0; num < 1; num++) {
+		List<Equipment> equipment = equipmentRespository.findAll();
+		for (int num = 0; num < 2; num++) {
+			String cowId = equipment
+					.get(equipment.size() <= 0 ? 0
+							: r.nextInt(equipment.size())).getId().toString();
 			StringBuffer dataBuffer = new StringBuffer();
 			for (int times = 0; times < t; times++) {
 
@@ -204,7 +206,7 @@ public class MyTask {
 		StringBuffer data = new StringBuffer();
 		for (int i = 2; i < 26; i++) {
 			data.append(Float.valueOf(dataArray[i]));
-			if(i != 25){
+			if (i != 25) {
 				data.append(',');
 			}
 		}

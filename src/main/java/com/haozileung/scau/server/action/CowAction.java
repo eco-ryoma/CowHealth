@@ -62,10 +62,15 @@ public class CowAction extends BaseAction {
 	public String getCowInfoList() {
 		response.setData(cowService.getAllCow());
 		response.setStartRow(0);
-		response.setEndRow(cowService.getAllCow().size());
+		response.setEndRow(cowService.getAllCow() == null ? 0 : cowService
+				.getAllCow().size());
 		response.setTotalRow(cowService.getAllCow() == null ? 0 : cowService
 				.getAllCow().size());
-		response.setStatus(0);
+		if (cowService.getAllCow() == null) {
+			response.setStatus(-1);
+		} else {
+			response.setStatus(0);
+		}
 		return SUCCESS;
 	}
 
