@@ -63,6 +63,8 @@ public class SportDataServiceImpl implements ISportDataService {
 	@Override
 	public List<SportDataInfo> getSportDataByEquipmentId(String equipmentId,
 			Date endDate) {
+		int totalDays = 7;
+		int start = 0 - totalDays;
 		if (equipmentId == null || endDate == null) {
 			return null;
 		}
@@ -75,14 +77,14 @@ public class SportDataServiceImpl implements ISportDataService {
 				List<SportData> sportData = sportDataRepository
 						.findByEquipmentIdAndCurrentDateBetweenOrderByCurrentDateAsc(
 								equipment.getId().toString(),
-								DateUtil.addDays(endDate, -30), endDate);
+								DateUtil.addDays(endDate, start), endDate);
 				Map<Date, SportData> dataMap = new HashMap<Date, SportData>();
 				for (SportData d : sportData) {
 					dataMap.put(d.getCurrentDate(), d);
 				}
 				List<SportDataInfo> datas = new ArrayList<SportDataInfo>();
 				Date now = DateUtil.getBeginOfDay(new Date());
-				for (int i = -30; i < 0; i++) {
+				for (int i = start; i < 0; i++) {
 					Date date = DateUtil.addDays(now, i);
 					SportData t = dataMap.get(date);
 					if (t != null) {

@@ -50,7 +50,7 @@ public class MyTask {
 	private static String dataPath = System.getProperty("ssh.root")
 			+ "/new_data";
 
-	@Scheduled(cron = "0 * * * * ?")
+	@Scheduled(cron = "0/1 * * * * ?")
 	public void execute() {
 		if (isRunning == false) {
 			if (logger.isDebugEnabled()) {
@@ -60,34 +60,41 @@ public class MyTask {
 			fileList = getFileList(dataPath);
 			TempMap tmpMap = (TempMap) SpringApplicationContextHolder
 					.getBean("tmpMap");
-			tmpMap.getMap().clear();
-			tmpMap.setStatus(false);
-			processFiles();
-			tmpMap.setStatus(true);
-			for (MyWebSocket socket : WebApplicationInitListener
-					.getSocketList()) {
-				try {
-					RestDataSourceResponse<SportDataInfo> response = new RestDataSourceResponse<SportDataInfo>();
-					if (tmpMap != null && tmpMap.isStatus() == true) {
-						tmpMap.setStatus(false);
-						for (String equipmentId : tmpMap.getMap().keySet()) {
-							List<SportDataInfo> sportDatas = sportDataService
-									.getSportDataByEquipmentId(equipmentId,
-											new Date());
-							response.getData().addAll(sportDatas);
+			if (!fileList.isEmpty()) {
+				tmpMap.getMap().clear();
+				tmpMap.setStatus(false);
+				processFiles();
+				tmpMap.setStatus(true);
+				for (MyWebSocket socket : WebApplicationInitListener
+						.getSocketList()) {
+					try {
+						RestDataSourceResponse<SportDataInfo> response = new RestDataSourceResponse<SportDataInfo>();
+						response.setData(new ArrayList<SportDataInfo>());
+						if (tmpMap != null && tmpMap.isStatus() == true) {
+							tmpMap.setStatus(false);
+							for (String equipmentId : tmpMap.getMap().keySet()) {
+								List<SportDataInfo> sportDatas = sportDataService
+										.getSportDataByEquipmentId(equipmentId,
+												new Date());
+								response.getData().addAll(sportDatas);
+							}
 						}
+						String data = GsonUtil.bean2json(response);
+						StringBuffer json = new StringBuffer();
+						json.append("{\"response\":");
+						json.append(data);
+						json.append("}");
+						socket.getConn().sendMessage(json.toString());
+					} catch (IOException e) {
+						logger.error(e.getMessage());
 					}
-					String json = GsonUtil.bean2json(response);
-					socket.getConn().sendMessage(json);
-				} catch (IOException e) {
-					logger.error(e.getMessage());
 				}
 			}
 			isRunning = false;
 		}
 	}
 
-	@Scheduled(cron = "30 * * * * ?")
+	@Scheduled(cron = "0/10 * * * * ?")
 	public void addNewDataFile() {
 		Random r = new Random(new Date().getTime());
 		int t = r.nextInt(30) + 1;

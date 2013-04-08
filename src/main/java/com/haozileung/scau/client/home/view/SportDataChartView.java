@@ -23,12 +23,14 @@ import com.google.gwt.http.client.RequestBuilder;
 import com.google.gwt.http.client.RequestCallback;
 import com.google.gwt.http.client.RequestException;
 import com.google.gwt.http.client.Response;
+import com.google.gwt.http.client.URL;
 import com.google.gwt.i18n.client.DateTimeFormat;
 import com.google.gwt.json.client.JSONArray;
 import com.google.gwt.json.client.JSONParser;
 import com.google.gwt.json.client.JSONValue;
 import com.google.gwt.user.client.Timer;
 import com.haozileung.scau.client.CowHealth;
+import com.smartgwt.client.types.Alignment;
 import com.smartgwt.client.util.SC;
 import com.smartgwt.client.widgets.IButton;
 import com.smartgwt.client.widgets.events.ClickEvent;
@@ -60,6 +62,7 @@ public class SportDataChartView extends HLayout {
 	private Chart chart;
 	private boolean running = false;
 	private boolean enabled = true;
+	private Timer timer;
 
 	private void initRightPanel() {
 		Highcharts.setOptions(new Highcharts.Options().setLang(new Lang()
@@ -94,33 +97,43 @@ public class SportDataChartView extends HLayout {
 
 	private void initLeftPanel() {
 		selectItem.setValueMap(CowHealth.cowMap);
+		form.setItems(selectItem);
+		top.setDefaultLayoutAlign(Alignment.CENTER);
+		top.setHeight("20%");
+		top.setMembersMargin(20);
+		top.addMember(form);
+		top.addMember(statusBtn);
+		statusBtn.disable();
+		buttom.setHeight("80%");
+		leftPanel.setWidth("20%");
+		leftPanel.addMember(top);
+		leftPanel.addMember(buttom);
+	}
+
+	public SportDataChartView() {
+		initLeftPanel();
+		initRightPanel();
+		addMember(leftPanel);
+		addMember(rightPanel);
 		selectItem.addChangedHandler(new ChangedHandler() {
 
 			@Override
 			public void onChanged(ChangedEvent event) {
 				statusBtn.enable();
 				enabled = false;
+				String cowId = selectItem.getValueAsString();
+				getSportData(cowId);
 			}
 		});
-		form.setItems(selectItem);
-		top.addMember(form);
-		statusBtn.disable();
 		statusBtn.addClickHandler(new ClickHandler() {
 
 			@Override
 			public void onClick(ClickEvent event) {
 				((IButton) event.getSource()).disable();
 				enabled = true;
-				getSportData(selectItem.getValueAsString());
 			}
 		});
-		top.addMember(statusBtn);
-		top.setHeight("20%");
-		buttom.setHeight("80%");
-		leftPanel.setWidth("20%");
-		leftPanel.addMember(top);
-		leftPanel.addMember(buttom);
-		Timer timer = new Timer() {
+		timer = new Timer() {
 
 			@Override
 			public void run() {
@@ -130,46 +143,88 @@ public class SportDataChartView extends HLayout {
 			}
 
 		};
+		start(this);
+	}
+
+	public void startTimer() {
 		timer.scheduleRepeating(1000);
 	}
 
-	public SportDataChartView() {
-		initLeftPanel();
-		initRightPanel();
-		addMember(leftPanel);
-		addMember(rightPanel);
-	}
+	public native void start(SportDataChartView t)/*-{
+		var ws = null;
+		var heart_beat_timer;
+		var moduleName = $moduleName;
+		var baseUrl = $moduleBase;
+		var regModuleName = new RegExp(moduleName + '/$');
+		var regProtocalName = new RegExp('^http://');
+		var regPoint = new RegExp(':[0-9]+', 'g');
+		var wsUrl = baseUrl.replace(regModuleName, '');
+		//wsUrl = wsUrl.replace(regPoint, '');
+		wsUrl = wsUrl.replace(regProtocalName, 'ws://');
+		wsUrl = wsUrl + 'ws/mywebsocket.ws';
+		if (!$wnd.WebSocket) {
+			t.@com.haozileung.scau.client.home.view.SportDataChartView::startTimer()();
+		} else {
+			// 创建WebSocket
+			ws = new WebSocket(wsUrl);
+			// 收到消息时走这个方法
+			ws.onmessage = function(evt) {
+				var enabled = t.@com.haozileung.scau.client.home.view.SportDataChartView::enabled;
+				if (enabled == true) {
+					t.@com.haozileung.scau.client.home.view.SportDataChartView::setData(Ljava/lang/String;)(evt.data);
+				}
+			};
+			// 断开时会走这个方法
+			ws.onclose = function() {
+				t.@com.haozileung.scau.client.home.view.SportDataChartView::start(Lcom/haozileung/scau/client/home/view/SportDataChartView;)(t);
+			};
+			// 连接上时走这个方法
+			ws.onopen = function() {
+				heart_beat_timer = setInterval(function() {
+					ws.send('{online:1}');
+				}, 240000);
+			};
+		}
+	}-*/;
 
 	public void getSportData(final String cowId) {
 		running = true;
+		String data = null;
+		String url = "data/getSportData.action";
+		if (cowId != null && !cowId.isEmpty()) {
+			data = "?cowId=" + cowId;
+			url += data;
+		}
 		RequestBuilder req = new RequestBuilder(RequestBuilder.GET,
-				"data/getSportData.action");
-		try {
-			String data = null;
-			if (cowId != null && !cowId.isEmpty()) {
-				data = "cowId=" + cowId;
+				URL.encode(url));
+		req.setCallback(new RequestCallback() {
+
+			@Override
+			public void onError(Request arg0, Throwable arg1) {
+				SC.say("请求运动数据出错！");
 			}
-			req.sendRequest(data, new RequestCallback() {
 
-				@Override
-				public void onError(Request arg0, Throwable arg1) {
-					SC.say("请求运动数据出错！");
-				}
-
-				@Override
-				public void onResponseReceived(Request request,
-						Response response) {
-					String json = response.getText();
+			@Override
+			public void onResponseReceived(Request request, Response response) {
+				String json = response.getText();
+				if (enabled == true && cowId == null) {
 					setData(json);
-					running = false;
 				}
-			});
+				if (enabled == false && cowId != null) {
+					setData(json);
+				}
+				running = false;
+			}
+		});
+
+		try {
+			req.send();
 		} catch (RequestException e) {
+			SC.say("发送请求失败！");
 		}
 	}
 
 	public void setData(String json) {
-
 		JSONValue jv = JSONParser.parseStrict(json).isObject().get("response");
 		if (jv != null) {
 			JSONValue jvData = jv.isObject().get("data");
@@ -195,8 +250,8 @@ public class SportDataChartView extends HLayout {
 								Series series = seriesMap.get(cowName);
 								for (int j = 0; j < dataStr.length; j++) {
 									if (!"".equals(dataStr[j])) {
-										series.addPoint(Float
-												.valueOf(dataStr[j]));
+										float f = Float.valueOf(dataStr[j]);
+										series.addPoint(f < 0 ? 0 : f);
 									}
 								}
 							} else {
