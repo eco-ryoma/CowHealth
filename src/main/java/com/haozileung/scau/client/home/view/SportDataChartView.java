@@ -8,6 +8,7 @@ import org.moxieapps.gwt.highcharts.client.Chart;
 import org.moxieapps.gwt.highcharts.client.Chart.ZoomType;
 import org.moxieapps.gwt.highcharts.client.Credits;
 import org.moxieapps.gwt.highcharts.client.DateTimeLabelFormats;
+import org.moxieapps.gwt.highcharts.client.Global;
 import org.moxieapps.gwt.highcharts.client.Highcharts;
 import org.moxieapps.gwt.highcharts.client.Lang;
 import org.moxieapps.gwt.highcharts.client.Series;
@@ -65,14 +66,17 @@ public class SportDataChartView extends HLayout {
 	private Timer timer;
 
 	private void initRightPanel() {
-		Highcharts.setOptions(new Highcharts.Options().setLang(new Lang()
-				.setMonths(
-						new String[] { "一月", "二月", "三月", "四月", "五月", "六月",
-								"七月", "八月", "九月", "十月", "十一月", "十二月" })
-				.setWeekdays(
-						new String[] { "星期一", "星期二", "星期三", "星期四", "星期五",
-								"星期六", "星期天" }).setResetZoom("重置")
-				.setResetZoomTitle("重置到初始样式")));
+		Highcharts.setOptions(new Highcharts.Options().setLang(
+				new Lang()
+						.setMonths(
+								new String[] { "一月", "二月", "三月", "四月", "五月",
+										"六月", "七月", "八月", "九月", "十月", "十一月",
+										"十二月" })
+						.setWeekdays(
+								new String[] { "星期一", "星期二", "星期三", "星期四",
+										"星期五", "星期六", "星期天" })
+						.setResetZoom("重置").setResetZoomTitle("重置到初始样式"))
+				.setGlobal(new Global().setUseUTC(false)));
 		chart = new Chart();
 		chart.setToolTip(new ToolTip().setEnabled(true).setShadow(true)
 				.setXDateFormat("%Y年%B%e日%H时 %A"));
