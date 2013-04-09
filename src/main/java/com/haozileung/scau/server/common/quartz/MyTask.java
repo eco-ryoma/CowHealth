@@ -62,16 +62,14 @@ public class MyTask {
 					.getBean("tmpMap");
 			if (!fileList.isEmpty()) {
 				tmpMap.getMap().clear();
-				tmpMap.setStatus(false);
 				processFiles();
-				tmpMap.setStatus(true);
+				tmpMap.setUpdateTime(new Date().getTime());
 				for (MyWebSocket socket : WebApplicationInitListener
 						.getSocketList()) {
 					try {
 						RestDataSourceResponse<SportDataInfo> response = new RestDataSourceResponse<SportDataInfo>();
 						response.setData(new ArrayList<SportDataInfo>());
-						if (tmpMap != null && tmpMap.isStatus() == true) {
-							tmpMap.setStatus(false);
+						if (tmpMap != null) {
 							for (String equipmentId : tmpMap.getMap().keySet()) {
 								List<SportDataInfo> sportDatas = sportDataService
 										.getSportDataByEquipmentId(equipmentId,

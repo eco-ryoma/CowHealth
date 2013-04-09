@@ -14,6 +14,13 @@ public class RestDataSourceResponse<O extends IDataTransferObject> {
 	private long totalRow;
 	private List<O> data;
 	private Map<String, Object> errors;
+	private long updateTime;
+	public long getUpdateTime() {
+		return updateTime;
+	}
+	public void setUpdateTime(long updateTime) {
+		this.updateTime = updateTime;
+	}
 	/**
 	 * @return the status
 	 */

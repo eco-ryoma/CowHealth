@@ -65,6 +65,7 @@ public class SportDataChartView extends HLayout {
 	private boolean enabled = true;
 	private Timer timer;
 	private int isWebSocket = 1;
+	private long updateTimeStr;
 
 	private void initRightPanel() {
 		Highcharts.setOptions(new Highcharts.Options().setLang(
@@ -204,6 +205,9 @@ public class SportDataChartView extends HLayout {
 		if (cowId != null && !cowId.isEmpty()) {
 			data = "?cowId=" + cowId;
 			url += data;
+			url += "&updateTimeStr=" + updateTimeStr;
+		} else {
+			url += "?updateTimeStr=" + updateTimeStr;
 		}
 		RequestBuilder req = new RequestBuilder(RequestBuilder.GET,
 				URL.encode(url));
@@ -241,6 +245,8 @@ public class SportDataChartView extends HLayout {
 		JSONValue jv = JSONParser.parseStrict(json).isObject().get("response");
 		if (jv != null) {
 			JSONValue jvData = jv.isObject().get("data");
+			updateTimeStr = Long.valueOf(String.valueOf(jv.isObject()
+					.get("updateTime").isNumber().doubleValue()));
 			if (jvData != null) {
 				JSONArray ja = jvData.isArray();
 				JSONValue jvCow = null;

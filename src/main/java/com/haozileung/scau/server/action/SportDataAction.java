@@ -14,6 +14,7 @@
  */
 package com.haozileung.scau.server.action;
 
+import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -26,6 +27,7 @@ import com.haozileung.scau.server.common.action.BaseAction;
 import com.haozileung.scau.server.common.context.SpringApplicationContextHolder;
 import com.haozileung.scau.server.common.dto.RestDataSourceResponse;
 import com.haozileung.scau.server.common.dto.TempMap;
+import com.haozileung.scau.server.common.utility.DateUtil;
 import com.haozileung.scau.server.dto.EquipmentInfo;
 import com.haozileung.scau.server.dto.SportDataInfo;
 import com.haozileung.scau.server.service.IEquipmentService;
@@ -63,6 +65,8 @@ public class SportDataAction extends BaseAction {
 
 	private String endDate;
 
+	private String updateTimeStr;
+
 	public String getCowId() {
 		return cowId;
 	}
@@ -88,9 +92,15 @@ public class SportDataAction extends BaseAction {
 			response.setData(new ArrayList<SportDataInfo>());
 			EquipmentInfo equipmentInfo = equipmentService
 					.getEquipmentByCowId(cowId);
-			List<SportDataInfo> sportDatas = sportDataService
-					.getSportDataByEquipmentId(equipmentInfo.getEquipmentId(),
-							new Date());
+			List<SportDataInfo> sportDatas = null;
+			try {
+				sportDatas = sportDataService.getSportDataByEquipmentId(
+						equipmentInfo.getEquipmentId(),
+						endDate == null ? new Date() : DateUtil.parse(endDate,
+								DateUtil.defaultDatePatternStr));
+			} catch (ParseException e) {
+				logger.error("查询日期格式出错：" + e.getMessage());
+			}
 			if (sportDatas != null) {
 				response.getData().addAll(sportDatas);
 			}
@@ -100,8 +110,9 @@ public class SportDataAction extends BaseAction {
 			heartbeat++;
 			TempMap tmpMap = (TempMap) SpringApplicationContextHolder
 					.getBean("tmpMap");
-			if (tmpMap != null && tmpMap.isStatus() == true) {
-				tmpMap.setStatus(false);
+			long updateTime = updateTimeStr != null && !updateTimeStr.isEmpty() ? Long
+					.valueOf(updateTimeStr) : 0L;
+			if (tmpMap != null && updateTime < tmpMap.getUpdateTime()) {
 				response.setData(new ArrayList<SportDataInfo>());
 				for (String equipmentId : tmpMap.getMap().keySet()) {
 					List<SportDataInfo> sportDatas = sportDataService
@@ -110,6 +121,7 @@ public class SportDataAction extends BaseAction {
 						response.getData().addAll(sportDatas);
 					}
 				}
+				response.setUpdateTime(tmpMap.getUpdateTime());
 				flag = false;
 				return SUCCESS;
 			}
@@ -131,5 +143,13 @@ public class SportDataAction extends BaseAction {
 
 	public void setResponse(RestDataSourceResponse<SportDataInfo> response) {
 		this.response = response;
+	}
+
+	public String getUpdateTimeStr() {
+		return updateTimeStr;
+	}
+
+	public void setUpdateTimeStr(String updateTimeStr) {
+		this.updateTimeStr = updateTimeStr;
 	}
 }
