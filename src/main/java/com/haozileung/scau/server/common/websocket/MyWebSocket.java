@@ -1,12 +1,17 @@
 package com.haozileung.scau.server.common.websocket;
 
 import org.eclipse.jetty.websocket.WebSocket.OnTextMessage;
+import org.json.JSONException;
+import org.json.JSONObject;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
-import com.google.gwt.json.client.JSONParser;
-import com.google.gwt.json.client.JSONValue;
 import com.haozileung.scau.server.common.listener.WebApplicationInitListener;
 
 public class MyWebSocket implements OnTextMessage {
+
+	private final static Logger logger = LoggerFactory
+			.getLogger(MyWebSocket.class);
 
 	private Connection conn;
 
@@ -19,7 +24,9 @@ public class MyWebSocket implements OnTextMessage {
 	@Override
 	public void onClose(int arg0, String arg1) {
 		WebApplicationInitListener.getSocketList().remove(this);
-		System.out.println("disconnected...");
+		if (logger.isDebugEnabled()) {
+			logger.debug("disconnected..." + conn.getMaxIdleTime());
+		}
 	}
 
 	/*
@@ -34,7 +41,9 @@ public class MyWebSocket implements OnTextMessage {
 		// 如果客户端在这个MaxIdleTime中都没有活动,则它会自动结束
 		this.conn = conn;
 		WebApplicationInitListener.getSocketList().add(this);
-		System.out.println("new WebSocket...");
+		if (logger.isDebugEnabled()) {
+			logger.debug("new WebSocket connected..." + conn.getMaxIdleTime());
+		}
 	}
 
 	/*
@@ -46,8 +55,13 @@ public class MyWebSocket implements OnTextMessage {
 	 */
 	@Override
 	public void onMessage(String data) {
-		JSONValue jv = JSONParser.parseStrict(data).isObject().get("online");
-		if (jv != null && jv.isNumber().doubleValue() != 1.0) {
+		JSONObject jo = null;
+		try {
+			jo = new JSONObject(data);
+		} catch (JSONException e) {
+			logger.error("无法解析的心跳包！" + e.getMessage());
+		}
+		if (jo != null && jo.isNull("online")) {
 			WebApplicationInitListener.getSocketList().remove(this);
 		}
 	}

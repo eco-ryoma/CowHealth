@@ -64,6 +64,7 @@ public class SportDataChartView extends HLayout {
 	private boolean running = false;
 	private boolean enabled = true;
 	private Timer timer;
+	private int isWebSocket = 1;
 
 	private void initRightPanel() {
 		Highcharts.setOptions(new Highcharts.Options().setLang(
@@ -135,6 +136,10 @@ public class SportDataChartView extends HLayout {
 			public void onClick(ClickEvent event) {
 				((IButton) event.getSource()).disable();
 				enabled = true;
+				if (isWebSocket == 0) {
+					timer.cancel();
+					startTimer();
+				}
 			}
 		});
 		timer = new Timer() {
@@ -163,12 +168,13 @@ public class SportDataChartView extends HLayout {
 		var regProtocalName = new RegExp('^http://');
 		var regPoint = new RegExp(':[0-9]+', 'g');
 		var wsUrl = baseUrl.replace(regModuleName, '');
-		//wsUrl = wsUrl.replace(regPoint, '');
 		wsUrl = wsUrl.replace(regProtocalName, 'ws://');
 		wsUrl = wsUrl + 'ws/mywebsocket.ws';
 		if (!$wnd.WebSocket) {
+			t.@com.haozileung.scau.client.home.view.SportDataChartView::isWebSocket = 0;
 			t.@com.haozileung.scau.client.home.view.SportDataChartView::startTimer()();
 		} else {
+			t.@com.haozileung.scau.client.home.view.SportDataChartView::isWebSocket = 1;
 			// 创建WebSocket
 			ws = new WebSocket(wsUrl);
 			// 收到消息时走这个方法
@@ -201,11 +207,14 @@ public class SportDataChartView extends HLayout {
 		}
 		RequestBuilder req = new RequestBuilder(RequestBuilder.GET,
 				URL.encode(url));
+		req.setTimeoutMillis(50000);
+		req.setHeader("If-Modified-Since", "0");
 		req.setCallback(new RequestCallback() {
 
 			@Override
 			public void onError(Request arg0, Throwable arg1) {
 				SC.say("请求运动数据出错！");
+				running = false;
 			}
 
 			@Override
