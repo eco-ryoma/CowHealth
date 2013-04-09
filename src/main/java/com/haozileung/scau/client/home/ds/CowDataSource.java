@@ -3,7 +3,7 @@ package com.haozileung.scau.client.home.ds;
 import java.util.LinkedHashMap;
 
 import com.google.gwt.core.shared.GWT;
-import com.haozileung.scau.shared.Messages;
+import com.haozileung.scau.Messages;
 import com.smartgwt.client.data.RestDataSource;
 import com.smartgwt.client.data.fields.DataSourceIntegerField;
 import com.smartgwt.client.data.fields.DataSourceTextField;
