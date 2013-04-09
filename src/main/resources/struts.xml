@@ -17,7 +17,7 @@
 	<!-- 指定每次配置文件更改后，自动重新加载 -->
 	<constant name="struts.configuration.xml.reload" value="false" />
 	<!-- 国际化资源文件 -->
-	<constant name="struts.custom.i18n.resources" value="com.haozileung.scau.shared.Messages" />
+	<constant name="struts.custom.i18n.resources" value="com.haozileung.scau.Messages" />
 	<!-- 浏览器缓存 -->
 	<constant name="struts.serve.static.browserCache" value="true" />
 	<!-- 默认后缀名 -->
