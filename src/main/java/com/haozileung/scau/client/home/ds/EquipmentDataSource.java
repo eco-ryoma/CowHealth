@@ -1,8 +1,8 @@
 package com.haozileung.scau.client.home.ds;
 
 import com.google.gwt.core.shared.GWT;
-import com.haozileung.scau.Messages;
 import com.haozileung.scau.client.CowHealth;
+import com.haozileung.scau.shared.Messages;
 import com.smartgwt.client.data.RestDataSource;
 import com.smartgwt.client.data.fields.DataSourceDateTimeField;
 import com.smartgwt.client.data.fields.DataSourceTextField;

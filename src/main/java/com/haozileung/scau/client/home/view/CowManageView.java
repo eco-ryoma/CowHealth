@@ -1,8 +1,8 @@
 package com.haozileung.scau.client.home.view;
 
 import com.google.gwt.core.shared.GWT;
-import com.haozileung.scau.Messages;
 import com.haozileung.scau.client.home.ds.CowDataSource;
+import com.haozileung.scau.shared.Messages;
 import com.smartgwt.client.types.VerticalAlignment;
 import com.smartgwt.client.widgets.IButton;
 import com.smartgwt.client.widgets.events.ClickEvent;

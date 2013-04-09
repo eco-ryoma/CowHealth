@@ -4,7 +4,7 @@
 package com.haozileung.scau.client.home.ds;
 
 import com.google.gwt.core.client.GWT;
-import com.haozileung.scau.Messages;
+import com.haozileung.scau.shared.Messages;
 import com.smartgwt.client.data.RestDataSource;
 import com.smartgwt.client.data.events.ErrorEvent;
 import com.smartgwt.client.data.events.HandleErrorHandler;
