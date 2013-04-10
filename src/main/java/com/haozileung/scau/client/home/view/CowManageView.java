@@ -1,9 +1,22 @@
 package com.haozileung.scau.client.home.view;
 
 import com.google.gwt.core.shared.GWT;
+import com.google.gwt.http.client.Request;
+import com.google.gwt.http.client.RequestBuilder;
+import com.google.gwt.http.client.RequestCallback;
+import com.google.gwt.http.client.RequestException;
+import com.google.gwt.http.client.Response;
+import com.google.gwt.json.client.JSONArray;
+import com.google.gwt.json.client.JSONParser;
+import com.google.gwt.json.client.JSONValue;
+import com.haozileung.scau.client.CowHealth;
 import com.haozileung.scau.client.home.ds.CowDataSource;
 import com.haozileung.scau.shared.Messages;
+import com.smartgwt.client.data.DSCallback;
+import com.smartgwt.client.data.DSRequest;
+import com.smartgwt.client.data.DSResponse;
 import com.smartgwt.client.types.VerticalAlignment;
+import com.smartgwt.client.util.SC;
 import com.smartgwt.client.widgets.IButton;
 import com.smartgwt.client.widgets.events.ClickEvent;
 import com.smartgwt.client.widgets.events.ClickHandler;
@@ -33,7 +46,7 @@ public class CowManageView extends VLayout {
 		initView();
 	}
 
-	public void initView(){
+	public void initView() {
 		final CowDataSource dataSource = CowDataSource.getInstance();
 		final ListGrid listGrid = new ListGrid();
 		final DynamicForm form = new DynamicForm();
@@ -43,7 +56,7 @@ public class CowManageView extends VLayout {
 		final IButton removeButton = new IButton(message.deleteButton());
 		final VLayout editorLayout = new VLayout();
 		final HLayout buttonPanel = new HLayout(20);
-		
+
 		form.setIsGroup(true);
 		form.setGroupTitle(message.editFormTitle());
 		form.setNumCols(6);
@@ -66,25 +79,33 @@ public class CowManageView extends VLayout {
 			}
 		});
 
-		
 		saveButton.setWidth(80);
 		saveButton.addClickHandler(new ClickHandler() {
 
 			public void onClick(ClickEvent event) {
-				form.saveData();
+				if (form.validate()) {
+					form.saveData(new DSCallback() {
+
+						@Override
+						public void execute(DSResponse response,
+								Object rawData, DSRequest request) {
+							getCowList();
+						}
+					});
+				}
+
 			}
 		});
 
-		
 		removeButton.setWidth(80);
 		removeButton.addClickHandler(new ClickHandler() {
 
 			public void onClick(ClickEvent event) {
 				listGrid.removeSelectedData();
+				form.clear();
 			}
 		});
 
-		
 		buttonPanel.setWidth100();
 		buttonPanel.setAlign(VerticalAlignment.CENTER);
 		buttonPanel.addMember(newButton);
@@ -109,5 +130,53 @@ public class CowManageView extends VLayout {
 		});
 		addMember(listGrid);
 		addMember(editorLayout);
+	}
+
+	public void getCowList() {
+		RequestBuilder req = new RequestBuilder(RequestBuilder.GET,
+				"cow/getCow.action");
+		try {
+			req.sendRequest(null, new RequestCallback() {
+
+				@Override
+				public void onError(Request arg0, Throwable arg1) {
+					SC.say("请求奶牛列表出错！");
+
+				}
+
+				@Override
+				public void onResponseReceived(Request request,
+						Response response) {
+					String json = response.getText();
+					JSONValue jv = JSONParser.parseStrict(json).isObject()
+							.get("response");
+					if (jv != null) {
+						JSONValue jvData = jv.isObject().get("data");
+						if (jvData != null) {
+							JSONArray ja = jvData.isArray();
+							JSONValue jvCow = null;
+							for (int i = 0; i < ja.size(); i++) {
+								jvCow = ja.get(i);
+								if (jvCow != null) {
+									String cowId = jvCow.isObject()
+											.get("cowId").isString()
+											.stringValue();
+									String cowName = jvCow.isObject()
+											.get("name").isString()
+											.stringValue();
+									CowHealth.cowMap.put(cowId, cowName);
+								}
+							}
+							CowHealth.equipment.getForm().getField("cowId")
+									.setValueMap(CowHealth.cowMap);
+							CowHealth.sportData.getSelectItem().setValueMap(
+									CowHealth.cowMap);
+						}
+					}
+				}
+			});
+		} catch (RequestException e) {
+		}
+
 	}
 }

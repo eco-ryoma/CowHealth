@@ -21,8 +21,10 @@ public class EquipmentInfo implements IDataTransferObject {
 	 * 
 	 */
 	private static final long serialVersionUID = 6154318401354363106L;
-	
+
 	private String equipmentId;
+
+	private String displayId;
 	
 	private String cowId;
 
@@ -80,6 +82,14 @@ public class EquipmentInfo implements IDataTransferObject {
 
 	public void setCowId(String cowId) {
 		this.cowId = cowId;
+	}
+
+	public String getDisplayId() {
+		return displayId;
+	}
+
+	public void setDisplayId(String displayId) {
+		this.displayId = displayId;
 	}
 
 }

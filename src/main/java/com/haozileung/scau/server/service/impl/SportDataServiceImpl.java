@@ -77,14 +77,15 @@ public class SportDataServiceImpl implements ISportDataService {
 				List<SportData> sportData = sportDataRepository
 						.findByEquipmentIdAndCurrentDateBetweenOrderByCurrentDateAsc(
 								equipment.getId().toString(),
-								DateUtil.addDays(endDate, start), endDate);
+								DateUtil.addDays(endDate, start),
+								DateUtil.addDays(endDate, 1));
 				Map<Date, SportData> dataMap = new HashMap<Date, SportData>();
 				for (SportData d : sportData) {
 					dataMap.put(d.getCurrentDate(), d);
 				}
 				List<SportDataInfo> datas = new ArrayList<SportDataInfo>();
 				Date now = DateUtil.getBeginOfDay(new Date());
-				for (int i = start; i < 0; i++) {
+				for (int i = start; i <= 0; i++) {
 					Date date = DateUtil.addDays(now, i);
 					SportData t = dataMap.get(date);
 					if (t != null) {
@@ -104,7 +105,7 @@ public class SportDataServiceImpl implements ISportDataService {
 					}
 				}
 				for (SportDataInfo data : datas) {
-					data.setCowName(cow.getName());
+					data.setCowName(cow == null ? "unknow" : cow.getName());
 				}
 				return datas;
 			}

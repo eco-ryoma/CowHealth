@@ -23,9 +23,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.haozileung.scau.server.domain.Cow;
+import com.haozileung.scau.server.domain.Equipment;
 import com.haozileung.scau.server.domain.support.CowDoToDtoConvertor;
 import com.haozileung.scau.server.dto.CowInfo;
 import com.haozileung.scau.server.repository.ICowRepository;
+import com.haozileung.scau.server.repository.IEquipmentRepository;
 import com.haozileung.scau.server.service.ICowService;
 
 /**
@@ -48,6 +50,9 @@ public class CowServiceImpl implements ICowService {
 
 	@Autowired
 	private ICowRepository cowRepository;
+	
+	@Autowired
+	private IEquipmentRepository equipmentRepository;
 
 	@Override
 	public boolean saveCow(CowInfo cowInfo) {
@@ -89,6 +94,10 @@ public class CowServiceImpl implements ICowService {
 	public boolean deleteCowById(ObjectId oId) {
 		if (oId != null) {
 			cowRepository.delete(oId);
+			Equipment e = equipmentRepository.findByCowId(oId.toString());
+			if(e != null){
+				equipmentRepository.delete(e);
+			}
 			return true;
 		}
 		return false;

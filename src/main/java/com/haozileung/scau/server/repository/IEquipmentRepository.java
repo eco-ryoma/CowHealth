@@ -35,5 +35,7 @@ public interface IEquipmentRepository extends
 		MongoRepository<Equipment, ObjectId> {
 	
 	public Equipment findByCowId(String cowId);
+	
+	public Equipment findByDisplayId(String displayId);
 
 }

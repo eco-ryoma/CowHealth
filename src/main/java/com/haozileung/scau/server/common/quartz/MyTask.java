@@ -95,14 +95,13 @@ public class MyTask {
 	@Scheduled(cron = "0/10 * * * * ?")
 	public void addNewDataFile() {
 		Random r = new Random(new Date().getTime());
-		int t = r.nextInt(30) + 1;
 		List<Equipment> equipment = equipmentRespository.findAll();
 		for (int num = 0; num < 2; num++) {
-			String cowId = equipment
-					.get(equipment.size() <= 0 ? 0
-							: r.nextInt(equipment.size())).getId().toString();
-			StringBuffer dataBuffer = new StringBuffer();
-			for (int times = 0; times < t; times++) {
+			String cowId = equipment.get(
+					equipment.size() <= 0 ? 0 : r.nextInt(equipment.size()))
+					.getDisplayId();
+			if (cowId != null && !cowId.isEmpty()) {
+				StringBuffer dataBuffer = new StringBuffer();
 
 				dataBuffer
 						.append(cowId)
@@ -118,16 +117,15 @@ public class MyTask {
 						dataBuffer.append('\n');
 					}
 				}
+				try {
+					FileUtils.writeStringToFile(new File(dataPath + '/'
+							+ new Date().getTime()), dataBuffer.toString(),
+							"UTF-8");
+				} catch (IOException e) {
+					logger.error("新建数据文件失败！" + e.getMessage());
+				}
+				dataBuffer = null;
 			}
-			try {
-				FileUtils
-						.writeStringToFile(
-								new File(dataPath + '/' + new Date().getTime()),
-								dataBuffer.toString(), "UTF-8");
-			} catch (IOException e) {
-				logger.error("新建数据文件失败！" + e.getMessage());
-			}
-			dataBuffer = null;
 		}
 	}
 
@@ -204,7 +202,10 @@ public class MyTask {
 				.getBean("tmpMap");
 		SportDataInfo sportDataInfo = new SportDataInfo();
 		String[] dataArray = line.split(",");
-		sportDataInfo.setEquipmentId(dataArray[0]);
+		Equipment e = equipmentRespository.findByDisplayId(dataArray[0]);
+		if (e != null) {
+			sportDataInfo.setEquipmentId(e.getId().toString());
+		}
 		sportDataInfo.setCurrentDate(dataArray[1]);
 		StringBuffer data = new StringBuffer();
 		for (int i = 2; i < 26; i++) {
@@ -218,4 +219,5 @@ public class MyTask {
 				sportDataInfo.getEquipmentId());
 		return sportDataService.saveSportData(sportDataInfo);
 	}
+
 }

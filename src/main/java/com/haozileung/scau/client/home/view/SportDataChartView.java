@@ -60,7 +60,6 @@ public class SportDataChartView extends HLayout {
 	private final DynamicForm form = new DynamicForm();
 	private final SelectItem selectItem = new SelectItem("cowId", "奶牛");
 	private final IButton statusBtn = new IButton("自动更新");
-	private final IButton refreshBtn = new IButton("更新奶牛列表");
 	private Chart chart;
 	private boolean running = false;
 	private boolean enabled = true;
@@ -109,7 +108,6 @@ public class SportDataChartView extends HLayout {
 		top.setHeight("20%");
 		top.setMembersMargin(20);
 		top.addMember(form);
-		top.addMember(refreshBtn);
 		top.addMember(statusBtn);
 		statusBtn.disable();
 		buttom.setHeight("80%");
@@ -143,13 +141,6 @@ public class SportDataChartView extends HLayout {
 					timer.cancel();
 					startTimer();
 				}
-			}
-		});
-		refreshBtn.addClickHandler(new ClickHandler() {
-
-			@Override
-			public void onClick(ClickEvent event) {
-				getCowList();
 			}
 		});
 		timer = new Timer() {
@@ -353,5 +344,73 @@ public class SportDataChartView extends HLayout {
 		} catch (RequestException e) {
 		}
 
+	}
+
+	public Chart getChart() {
+		return chart;
+	}
+
+	public void setChart(Chart chart) {
+		this.chart = chart;
+	}
+
+	public boolean isRunning() {
+		return running;
+	}
+
+	public void setRunning(boolean running) {
+		this.running = running;
+	}
+
+	public boolean isEnabled() {
+		return enabled;
+	}
+
+	public void setEnabled(boolean enabled) {
+		this.enabled = enabled;
+	}
+
+	public Timer getTimer() {
+		return timer;
+	}
+
+	public void setTimer(Timer timer) {
+		this.timer = timer;
+	}
+
+	public int getIsWebSocket() {
+		return isWebSocket;
+	}
+
+	public void setIsWebSocket(int isWebSocket) {
+		this.isWebSocket = isWebSocket;
+	}
+
+	public long getUpdateTimeStr() {
+		return updateTimeStr;
+	}
+
+	public void setUpdateTimeStr(long updateTimeStr) {
+		this.updateTimeStr = updateTimeStr;
+	}
+
+	public VLayout getLeftPanel() {
+		return leftPanel;
+	}
+
+	public VLayout getRightPanel() {
+		return rightPanel;
+	}
+
+	public VLayout getButtom() {
+		return buttom;
+	}
+
+	public DynamicForm getForm() {
+		return form;
+	}
+
+	public SelectItem getSelectItem() {
+		return selectItem;
 	}
 }

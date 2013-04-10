@@ -44,6 +44,9 @@ public class CowDataSource extends RestDataSource {
 		sexValueMap.put("M", message.manAnimal());
 		sexValueMap.put("F", message.femaleAnimal());
 		sex.setValueMap(sexValueMap);
+		name.setRequired(true);
+		age.setRequired(true);
+		sex.setRequired(true);
 		setFields(cowId, name, age, sex);
 		setClientOnly(false);
 		setSendMetaData(true);

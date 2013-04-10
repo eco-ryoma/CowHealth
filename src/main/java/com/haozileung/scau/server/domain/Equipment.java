@@ -39,6 +39,8 @@ public class Equipment implements IDomain {
 
 	@Indexed
 	private String cowId;
+	
+	private String displayId;
 
 	private String name;
 
@@ -70,6 +72,7 @@ public class Equipment implements IDomain {
 		this.name = equipmentInfo.getName();
 		this.producter = equipmentInfo.getProducter();
 		this.type = equipmentInfo.getType();
+		this.displayId = equipmentInfo.getDisplayId();
 
 	}
 
@@ -119,5 +122,13 @@ public class Equipment implements IDomain {
 
 	public void setCowId(String cowId) {
 		this.cowId = cowId;
+	}
+
+	public String getDisplayId() {
+		return displayId;
+	}
+
+	public void setDisplayId(String displayId) {
+		this.displayId = displayId;
 	}
 }

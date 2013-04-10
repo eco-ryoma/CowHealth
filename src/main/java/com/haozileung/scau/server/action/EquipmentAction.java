@@ -50,6 +50,8 @@ public class EquipmentAction extends BaseAction {
 	private IEquipmentService equimentService;
 
 	private String equipmentId;
+	
+	private String displayId;
 
 	private String cowId;
 
@@ -135,6 +137,7 @@ public class EquipmentAction extends BaseAction {
 		equipmentInfo.setType(type);
 		equipmentInfo.setExpireDate(expireDate);
 		equipmentInfo.setCowId(cowId);
+		equipmentInfo.setDisplayId(displayId);
 		if (equimentService.addEquipment(equipmentInfo)) {
 			response.setStatus(0);
 			return SUCCESS;
@@ -153,6 +156,7 @@ public class EquipmentAction extends BaseAction {
 		equipmentInfo.setType(type);
 		equipmentInfo.setExpireDate(expireDate);
 		equipmentInfo.setCowId(cowId);
+		equipmentInfo.setDisplayId(displayId);
 		if (equimentService.updateEquipment(equipmentInfo)) {
 			response.setStatus(0);
 			return SUCCESS;
@@ -173,6 +177,14 @@ public class EquipmentAction extends BaseAction {
 		}
 		response.setStatus(-1);
 		return ERROR;
+	}
+
+	public String getDisplayId() {
+		return displayId;
+	}
+
+	public void setDisplayId(String displayId) {
+		this.displayId = displayId;
 	}
 
 }

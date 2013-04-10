@@ -49,8 +49,17 @@ public class EquipmentDataSource extends RestDataSource {
 		expireDate.setDateFormatter(DateDisplayFormat.TOSERIALIZEABLEDATE);
 		DataSourceTextField type = new DataSourceTextField("type",
 				message.equipmentType());
+		DataSourceTextField displayId = new DataSourceTextField("displayId",
+				"设备ID");
 
-		setFields(equipmentId, name, cowId, producter, type, expireDate);
+		displayId.setRequired(true);
+		name.setRequired(true);
+		producter.setRequired(true);
+		type.setRequired(true);
+		expireDate.setRequired(true);
+
+		setFields(equipmentId, displayId, name, cowId, producter, type,
+				expireDate);
 
 		setClientOnly(false);
 		setSendMetaData(true);
@@ -64,5 +73,4 @@ public class EquipmentDataSource extends RestDataSource {
 		setUpdateDataURL("equipment/updateEquipment.action");
 
 	}
-
 }

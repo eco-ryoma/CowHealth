@@ -28,7 +28,11 @@ import com.smartgwt.client.widgets.tab.TabSet;
 public class CowHealth implements EntryPoint {
 
 	private final Messages messages = GWT.create(Messages.class);
-	public static LinkedHashMap<String, Object> cowMap = new LinkedHashMap<String, Object>();
+	public static LinkedHashMap<String, Object> cowMap;
+
+	public static SportDataChartView sportData;
+
+	public static EquipmentManageView equipment;
 
 	/**
 	 * This is the entry point method.
@@ -55,6 +59,7 @@ public class CowHealth implements EntryPoint {
 						if (jvData != null) {
 							JSONArray ja = jvData.isArray();
 							JSONValue jvCow = null;
+							cowMap = new LinkedHashMap<String, Object>();
 							for (int i = 0; i < ja.size(); i++) {
 								jvCow = ja.get(i);
 								if (jvCow != null) {
@@ -64,7 +69,7 @@ public class CowHealth implements EntryPoint {
 									String cowName = jvCow.isObject()
 											.get("name").isString()
 											.stringValue();
-									CowHealth.cowMap.put(cowId, cowName);
+									cowMap.put(cowId, cowName);
 								}
 							}
 						}
@@ -75,14 +80,16 @@ public class CowHealth implements EntryPoint {
 						tabs.setWidth100();
 						tabs.setHeight100();
 						final Tab testTab = new Tab(messages.cowSportData());
-						testTab.setPane(new SportDataChartView());
+						sportData = new SportDataChartView();
+						testTab.setPane(sportData);
 						tabs.addTab(testTab);
 						final Tab cowTab = new Tab(messages.cowManage());
 						cowTab.setPane(new CowManageView());
 						tabs.addTab(cowTab);
 						final Tab equipmentTab = new Tab(messages
 								.equipmentManage());
-						equipmentTab.setPane(new EquipmentManageView());
+						equipment = new EquipmentManageView();
+						equipmentTab.setPane(equipment);
 						tabs.addTab(equipmentTab);
 						tabs.draw();
 						Document.get().setTitle(messages.siteName());
