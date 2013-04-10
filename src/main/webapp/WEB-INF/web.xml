@@ -52,14 +52,7 @@
 		<servlet-name>mywebsocket</servlet-name>
 		<url-pattern>/ws/mywebsocket.ws</url-pattern>
 	</servlet-mapping>
-	<servlet>
-		<servlet-name>jUnitHostImpl</servlet-name>
-		<servlet-class>com.google.gwt.junit.server.JUnitHostImpl</servlet-class>
-	</servlet>
-	<servlet-mapping>
-		<servlet-name>jUnitHostImpl</servlet-name>
-		<url-pattern>/gwt/junithost/*</url-pattern>
-	</servlet-mapping>
+
 	<welcome-file-list>
 		<welcome-file>CowHealth.html</welcome-file>
 	</welcome-file-list>

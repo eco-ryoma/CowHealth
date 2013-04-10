@@ -160,6 +160,8 @@ public class EquipmentManageView extends VLayout {
 									CowHealth.cowMap.put(cowId, cowName);
 								}
 							}
+							form.getField("cowId")
+									.setValueMap(CowHealth.cowMap);
 						}
 					}
 				}

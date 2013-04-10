@@ -60,6 +60,7 @@ public class SportDataChartView extends HLayout {
 	private final DynamicForm form = new DynamicForm();
 	private final SelectItem selectItem = new SelectItem("cowId", "奶牛");
 	private final IButton statusBtn = new IButton("自动更新");
+	private final IButton refreshBtn = new IButton("更新奶牛列表");
 	private Chart chart;
 	private boolean running = false;
 	private boolean enabled = true;
@@ -108,6 +109,7 @@ public class SportDataChartView extends HLayout {
 		top.setHeight("20%");
 		top.setMembersMargin(20);
 		top.addMember(form);
+		top.addMember(refreshBtn);
 		top.addMember(statusBtn);
 		statusBtn.disable();
 		buttom.setHeight("80%");
@@ -141,6 +143,13 @@ public class SportDataChartView extends HLayout {
 					timer.cancel();
 					startTimer();
 				}
+			}
+		});
+		refreshBtn.addClickHandler(new ClickHandler() {
+
+			@Override
+			public void onClick(ClickEvent event) {
+				getCowList();
 			}
 		});
 		timer = new Timer() {
@@ -299,5 +308,50 @@ public class SportDataChartView extends HLayout {
 			}
 
 		}
+	}
+
+	public void getCowList() {
+		RequestBuilder req = new RequestBuilder(RequestBuilder.GET,
+				"cow/getCow.action");
+		try {
+			req.sendRequest(null, new RequestCallback() {
+
+				@Override
+				public void onError(Request arg0, Throwable arg1) {
+					SC.say("请求奶牛列表出错！");
+
+				}
+
+				@Override
+				public void onResponseReceived(Request request,
+						Response response) {
+					String json = response.getText();
+					JSONValue jv = JSONParser.parseStrict(json).isObject()
+							.get("response");
+					if (jv != null) {
+						JSONValue jvData = jv.isObject().get("data");
+						if (jvData != null) {
+							JSONArray ja = jvData.isArray();
+							JSONValue jvCow = null;
+							for (int i = 0; i < ja.size(); i++) {
+								jvCow = ja.get(i);
+								if (jvCow != null) {
+									String cowId = jvCow.isObject()
+											.get("cowId").isString()
+											.stringValue();
+									String cowName = jvCow.isObject()
+											.get("name").isString()
+											.stringValue();
+									CowHealth.cowMap.put(cowId, cowName);
+								}
+							}
+							selectItem.setValueMap(CowHealth.cowMap);
+						}
+					}
+				}
+			});
+		} catch (RequestException e) {
+		}
+
 	}
 }
