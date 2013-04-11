@@ -1,5 +1,7 @@
 package com.haozileung.scau.client.home.view;
 
+import java.util.LinkedHashMap;
+
 import com.google.gwt.core.shared.GWT;
 import com.google.gwt.http.client.Request;
 import com.google.gwt.http.client.RequestBuilder;
@@ -157,6 +159,9 @@ public class CowManageView extends VLayout {
 							JSONValue jvCow = null;
 							for (int i = 0; i < ja.size(); i++) {
 								jvCow = ja.get(i);
+								if(CowHealth.cowMap == null){
+									CowHealth.cowMap = new LinkedHashMap<String,Object>();
+								}
 								if (jvCow != null) {
 									String cowId = jvCow.isObject()
 											.get("cowId").isString()

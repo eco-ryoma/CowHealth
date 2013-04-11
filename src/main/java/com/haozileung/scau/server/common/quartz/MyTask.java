@@ -96,35 +96,38 @@ public class MyTask {
 	public void addNewDataFile() {
 		Random r = new Random(new Date().getTime());
 		List<Equipment> equipment = equipmentRespository.findAll();
-		for (int num = 0; num < 2; num++) {
-			String cowId = equipment.get(
-					equipment.size() <= 0 ? 0 : r.nextInt(equipment.size()))
-					.getDisplayId();
-			if (cowId != null && !cowId.isEmpty()) {
-				StringBuffer dataBuffer = new StringBuffer();
+		if (equipment != null && equipment.size() > 0) {
+			for (int num = 0; num < 2; num++) {
+				String cowId = equipment.get(r.nextInt(equipment.size()))
+						.getDisplayId();
+				if (cowId != null && !cowId.isEmpty()) {
+					StringBuffer dataBuffer = new StringBuffer();
 
-				dataBuffer
-						.append(cowId)
-						.append(',')
-						.append(DateUtil.format(
-								DateUtil.addDays(new Date(), 0 - r.nextInt(30)),
-								DateUtil.defaultDatePatternStr)).append(',');
-				for (int i = 0; i < 24; i++) {
-					dataBuffer.append(r.nextInt(500));
-					if (i != 23) {
-						dataBuffer.append(',');
-					} else {
-						dataBuffer.append('\n');
+					dataBuffer
+							.append(cowId)
+							.append(',')
+							.append(DateUtil.format(
+									DateUtil.addDays(new Date(),
+											0 - r.nextInt(30)),
+									DateUtil.defaultDatePatternStr))
+							.append(',');
+					for (int i = 0; i < 24; i++) {
+						dataBuffer.append(r.nextInt(500));
+						if (i != 23) {
+							dataBuffer.append(',');
+						} else {
+							dataBuffer.append('\n');
+						}
 					}
+					try {
+						FileUtils.writeStringToFile(new File(dataPath + '/'
+								+ new Date().getTime()), dataBuffer.toString(),
+								"UTF-8");
+					} catch (IOException e) {
+						logger.error("新建数据文件失败！" + e.getMessage());
+					}
+					dataBuffer = null;
 				}
-				try {
-					FileUtils.writeStringToFile(new File(dataPath + '/'
-							+ new Date().getTime()), dataBuffer.toString(),
-							"UTF-8");
-				} catch (IOException e) {
-					logger.error("新建数据文件失败！" + e.getMessage());
-				}
-				dataBuffer = null;
 			}
 		}
 	}

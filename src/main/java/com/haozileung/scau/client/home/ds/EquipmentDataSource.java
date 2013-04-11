@@ -40,6 +40,7 @@ public class EquipmentDataSource extends RestDataSource {
 		equipmentId.setDetail(true);
 		DataSourceTextField cowId = new DataSourceTextField("cowId", "奶牛");
 		cowId.setValueMap(CowHealth.cowMap);
+		cowId.setRequired(true);
 		DataSourceTextField name = new DataSourceTextField("name",
 				message.name());
 		DataSourceTextField producter = new DataSourceTextField("producter",

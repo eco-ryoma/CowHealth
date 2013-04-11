@@ -63,13 +63,17 @@ public class CowHealth implements EntryPoint {
 							for (int i = 0; i < ja.size(); i++) {
 								jvCow = ja.get(i);
 								if (jvCow != null) {
-									String cowId = jvCow.isObject()
-											.get("cowId").isString()
-											.stringValue();
-									String cowName = jvCow.isObject()
-											.get("name").isString()
-											.stringValue();
-									cowMap.put(cowId, cowName);
+									JSONValue cowId = jvCow.isObject().get(
+											"cowId");
+									JSONValue name = jvCow.isObject().get(
+											"name");
+									if (cowId != null && name != null) {
+										String cowIdStr = cowId.isString()
+												.stringValue();
+										String cowName = name.isString()
+												.stringValue();
+										cowMap.put(cowIdStr, cowName);
+									}
 								}
 							}
 						}

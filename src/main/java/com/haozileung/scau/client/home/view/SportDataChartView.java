@@ -102,7 +102,9 @@ public class SportDataChartView extends HLayout {
 	}
 
 	private void initLeftPanel() {
-		selectItem.setValueMap(CowHealth.cowMap);
+		if (CowHealth.cowMap != null && CowHealth.cowMap.size() > 0) {
+			selectItem.setValueMap(CowHealth.cowMap);
+		}
 		form.setItems(selectItem);
 		top.setDefaultLayoutAlign(Alignment.CENTER);
 		top.setHeight("20%");
@@ -187,7 +189,8 @@ public class SportDataChartView extends HLayout {
 			};
 			// 断开时会走这个方法
 			ws.onclose = function() {
-				t.@com.haozileung.scau.client.home.view.SportDataChartView::start(Lcom/haozileung/scau/client/home/view/SportDataChartView;)(t);
+				t.@com.haozileung.scau.client.home.view.SportDataChartView::isWebSocket = 0;
+				t.@com.haozileung.scau.client.home.view.SportDataChartView::startTimer()();
 			};
 			// 连接上时走这个方法
 			ws.onopen = function() {
@@ -211,7 +214,7 @@ public class SportDataChartView extends HLayout {
 		}
 		RequestBuilder req = new RequestBuilder(RequestBuilder.GET,
 				URL.encode(url));
-		req.setTimeoutMillis(50000);
+		req.setTimeoutMillis(300000);
 		req.setHeader("If-Modified-Since", "0");
 		req.setCallback(new RequestCallback() {
 
@@ -245,8 +248,12 @@ public class SportDataChartView extends HLayout {
 		JSONValue jv = JSONParser.parseStrict(json).isObject().get("response");
 		if (jv != null) {
 			JSONValue jvData = jv.isObject().get("data");
-			updateTimeStr = Long.valueOf(String.valueOf(jv.isObject()
-					.get("updateTime").isNumber().doubleValue()));
+			JSONValue updateTime = jv.isObject().get("updateTime");
+			if (updateTime != null) {
+				updateTimeStr = Long.valueOf(String.valueOf(
+						jv.isObject().get("updateTime").isNumber()
+								.doubleValue()).replaceAll(".0$", ""));
+			}
 			if (jvData != null) {
 				JSONArray ja = jvData.isArray();
 				JSONValue jvCow = null;

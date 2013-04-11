@@ -14,6 +14,9 @@
  */
 package com.haozileung.scau.server.action;
 
+import java.util.HashMap;
+import java.util.Map;
+
 import org.apache.struts2.convention.annotation.Action;
 import org.apache.struts2.convention.annotation.Namespace;
 import org.bson.types.ObjectId;
@@ -68,6 +71,9 @@ public class CowAction extends BaseAction {
 				.getAllCow().size());
 		if (cowService.getAllCow() == null) {
 			response.setStatus(-1);
+			Map<String,Object> errors = new HashMap<String,Object>();
+			errors.put("Fetch", "查询出错！");
+			response.setErrors(errors);
 		} else {
 			response.setStatus(0);
 		}
