@@ -250,9 +250,8 @@ public class SportDataChartView extends HLayout {
 			JSONValue jvData = jv.isObject().get("data");
 			JSONValue updateTime = jv.isObject().get("updateTime");
 			if (updateTime != null) {
-				updateTimeStr = Long.valueOf(String.valueOf(
-						jv.isObject().get("updateTime").isNumber()
-								.doubleValue()).replaceAll(".0$", ""));
+				updateTimeStr = new Double(jv.isObject().get("updateTime")
+						.isNumber().doubleValue()).longValue();
 			}
 			if (jvData != null) {
 				JSONArray ja = jvData.isArray();
@@ -306,51 +305,6 @@ public class SportDataChartView extends HLayout {
 			}
 
 		}
-	}
-
-	public void getCowList() {
-		RequestBuilder req = new RequestBuilder(RequestBuilder.GET,
-				"cow/getCow.action");
-		try {
-			req.sendRequest(null, new RequestCallback() {
-
-				@Override
-				public void onError(Request arg0, Throwable arg1) {
-					SC.say("请求奶牛列表出错！");
-
-				}
-
-				@Override
-				public void onResponseReceived(Request request,
-						Response response) {
-					String json = response.getText();
-					JSONValue jv = JSONParser.parseStrict(json).isObject()
-							.get("response");
-					if (jv != null) {
-						JSONValue jvData = jv.isObject().get("data");
-						if (jvData != null) {
-							JSONArray ja = jvData.isArray();
-							JSONValue jvCow = null;
-							for (int i = 0; i < ja.size(); i++) {
-								jvCow = ja.get(i);
-								if (jvCow != null) {
-									String cowId = jvCow.isObject()
-											.get("cowId").isString()
-											.stringValue();
-									String cowName = jvCow.isObject()
-											.get("name").isString()
-											.stringValue();
-									CowHealth.cowMap.put(cowId, cowName);
-								}
-							}
-							selectItem.setValueMap(CowHealth.cowMap);
-						}
-					}
-				}
-			});
-		} catch (RequestException e) {
-		}
-
 	}
 
 	public Chart getChart() {

@@ -159,8 +159,8 @@ public class CowManageView extends VLayout {
 							JSONValue jvCow = null;
 							for (int i = 0; i < ja.size(); i++) {
 								jvCow = ja.get(i);
-								if(CowHealth.cowMap == null){
-									CowHealth.cowMap = new LinkedHashMap<String,Object>();
+								if (CowHealth.cowMap == null) {
+									CowHealth.cowMap = new LinkedHashMap<String, Object>();
 								}
 								if (jvCow != null) {
 									String cowId = jvCow.isObject()
@@ -172,10 +172,13 @@ public class CowManageView extends VLayout {
 									CowHealth.cowMap.put(cowId, cowName);
 								}
 							}
-							CowHealth.equipment.getForm().getField("cowId")
-									.setValueMap(CowHealth.cowMap);
 							CowHealth.sportData.getSelectItem().setValueMap(
 									CowHealth.cowMap);
+							CowHealth.equipment.getListGrid().getField("cowId")
+									.setValueMap(CowHealth.cowMap);
+							CowHealth.equipment.getForm().getField("cowId")
+									.setValueMap(CowHealth.cowMap);
+
 						}
 					}
 				}
