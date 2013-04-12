@@ -250,9 +250,8 @@ public class SportDataChartView extends HLayout {
 			JSONValue jvData = jv.isObject().get("data");
 			JSONValue updateTime = jv.isObject().get("updateTime");
 			if (updateTime != null) {
-				updateTimeStr = Long.valueOf(String.valueOf(
-						jv.isObject().get("updateTime").isNumber()
-								.doubleValue()).replaceAll(".0$", ""));
+				updateTimeStr = (new Double(jv.isObject().get("updateTime")
+						.isNumber().doubleValue())).longValue();
 			}
 			if (jvData != null) {
 				JSONArray ja = jvData.isArray();

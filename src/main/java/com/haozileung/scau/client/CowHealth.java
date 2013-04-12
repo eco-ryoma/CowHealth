@@ -28,7 +28,7 @@ import com.smartgwt.client.widgets.tab.TabSet;
 public class CowHealth implements EntryPoint {
 
 	private final Messages messages = GWT.create(Messages.class);
-	public static LinkedHashMap<String, Object> cowMap;
+	public static LinkedHashMap<String, Object> cowMap = new LinkedHashMap<String, Object>();
 
 	public static SportDataChartView sportData;
 

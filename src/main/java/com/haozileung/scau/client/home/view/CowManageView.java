@@ -104,7 +104,7 @@ public class CowManageView extends VLayout {
 
 			public void onClick(ClickEvent event) {
 				listGrid.removeSelectedData();
-				form.clear();
+				form.clearValues();
 			}
 		});
 

@@ -1,6 +1,7 @@
 package com.haozileung.scau.client.home.view;
 
 import com.google.gwt.core.shared.GWT;
+import com.haozileung.scau.client.CowHealth;
 import com.haozileung.scau.client.home.ds.EquipmentDataSource;
 import com.haozileung.scau.shared.Messages;
 import com.smartgwt.client.types.VerticalAlignment;
@@ -55,6 +56,10 @@ public class EquipmentManageView extends VLayout {
 		form.setNumCols(10);
 		form.setDataSource(dataSource);
 		form.getField("equipmentId").hide();
+		
+		if (CowHealth.cowMap != null && CowHealth.cowMap.size() > 0) {
+			form.getField("cowId").setValueMap(CowHealth.cowMap);
+		}
 
 		newButton.setWidth(80);
 		newButton.addClickHandler(new ClickHandler() {
@@ -87,7 +92,7 @@ public class EquipmentManageView extends VLayout {
 
 			public void onClick(ClickEvent event) {
 				listGrid.removeSelectedData();
-				form.clear();
+				form.clearValues();
 			}
 		});
 
