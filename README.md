@@ -11,7 +11,8 @@ WebSocket/Comet 实时图表演示
 >* Windows/Linux/Mac/BSD/FreeBSD
 ###2. 运行过程
 >
->* 下载本项目[文件](https://raw.github.com/haozileung/CowHealth/master/CowHealth.zip)
+>* 下载本项目:[示例版本](https://raw.github.com/haozileung/CowHealth/master/CowHealth-demo.zip)或者[实际使用版本](https://raw.github.com/haozileung/CowHealth/master/CowHealth-product.zip)
+>> 2个版本的区别主要是示例版本会模拟动态数据的过程
 >* 解压，将目录CowHealth复制到 $JETTY_HOME/webapps 目录下
 >* cd到 $JETTY_HOME,启动Jetty
 >>
