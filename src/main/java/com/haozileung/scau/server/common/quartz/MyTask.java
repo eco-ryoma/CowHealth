@@ -108,10 +108,8 @@ public class MyTask {
 							.append(',')
 							.append(DateUtil.format(
 									DateUtil.addDays(new Date(),
-											0 - r.nextInt(7)),
-									DateUtil.defaultDatePatternStr))
-							.append(',').append(r.nextInt(1)).append(',')
-							.append(r.nextInt(1)).append(',');
+											0 - r.nextInt(7)), "yyyy,MM,dd"))
+							.append(',');
 					for (int i = 0; i < 24; i++) {
 						dataBuffer.append(r.nextInt(500));
 						if (i != 23) {
@@ -122,8 +120,8 @@ public class MyTask {
 					}
 					try {
 						FileUtils.writeStringToFile(new File(dataPath + '/'
-								+ new Date().getTime()+".txt"), dataBuffer.toString(),
-								"UTF-8");
+								+ new Date().getTime() + ".txt"),
+								dataBuffer.toString(), "UTF-8");
 					} catch (IOException e) {
 						logger.error("新建数据文件失败！" + e.getMessage());
 					}
@@ -210,10 +208,14 @@ public class MyTask {
 		if (e != null) {
 			sportDataInfo.setEquipmentId(e.getId().toString());
 		}
-		sportDataInfo.setCurrentDate(dataArray[1]);
+		StringBuffer dateStrBuf = new StringBuffer();
+		dateStrBuf.append(dataArray[1]).append('-').append(dataArray[2])
+				.append('-').append(dataArray[3]);
+		sportDataInfo.setCurrentDate(dateStrBuf.toString());
 		StringBuffer data = new StringBuffer();
 		int a = 4;
-		for (int i = a; i < a + 24; i++) {
+		int total = a + 24;
+		for (int i = a; i < total; i++) {
 			data.append(Float.valueOf(dataArray[i]));
 			if (i != a + 23) {
 				data.append(',');
