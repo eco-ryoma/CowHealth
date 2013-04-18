@@ -172,8 +172,6 @@ public class CowManageView extends VLayout {
 									CowHealth.cowMap.put(cowId, cowName);
 								}
 							}
-							CowHealth.sportData.getSelectItem().setValueMap(
-									CowHealth.cowMap);
 							CowHealth.equipment.getListGrid().getField("cowId")
 									.setValueMap(CowHealth.cowMap);
 							CowHealth.equipment.getForm().getField("cowId")

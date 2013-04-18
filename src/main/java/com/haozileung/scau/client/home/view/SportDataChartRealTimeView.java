@@ -11,8 +11,10 @@ import org.moxieapps.gwt.highcharts.client.DateTimeLabelFormats;
 import org.moxieapps.gwt.highcharts.client.Global;
 import org.moxieapps.gwt.highcharts.client.Highcharts;
 import org.moxieapps.gwt.highcharts.client.Lang;
+import org.moxieapps.gwt.highcharts.client.Legend;
 import org.moxieapps.gwt.highcharts.client.Series;
 import org.moxieapps.gwt.highcharts.client.Series.Type;
+import org.moxieapps.gwt.highcharts.client.Style;
 import org.moxieapps.gwt.highcharts.client.ToolTip;
 import org.moxieapps.gwt.highcharts.client.plotOptions.LinePlotOptions;
 import org.moxieapps.gwt.highcharts.client.plotOptions.Marker;
@@ -30,16 +32,7 @@ import com.google.gwt.json.client.JSONArray;
 import com.google.gwt.json.client.JSONParser;
 import com.google.gwt.json.client.JSONValue;
 import com.google.gwt.user.client.Timer;
-import com.haozileung.scau.client.CowHealth;
-import com.smartgwt.client.types.Alignment;
 import com.smartgwt.client.util.SC;
-import com.smartgwt.client.widgets.IButton;
-import com.smartgwt.client.widgets.events.ClickEvent;
-import com.smartgwt.client.widgets.events.ClickHandler;
-import com.smartgwt.client.widgets.form.DynamicForm;
-import com.smartgwt.client.widgets.form.fields.SelectItem;
-import com.smartgwt.client.widgets.form.fields.events.ChangedEvent;
-import com.smartgwt.client.widgets.form.fields.events.ChangedHandler;
 import com.smartgwt.client.widgets.layout.HLayout;
 import com.smartgwt.client.widgets.layout.VLayout;
 
@@ -52,22 +45,16 @@ import com.smartgwt.client.widgets.layout.VLayout;
  * @author lianghaopeng
  * @version V1.0
  */
-public class SportDataChartView extends HLayout {
-	private final VLayout leftPanel = new VLayout();
-	private final VLayout rightPanel = new VLayout();
-	private final VLayout top = new VLayout();
-	private final VLayout buttom = new VLayout();
-	private final DynamicForm form = new DynamicForm();
-	private final SelectItem selectItem = new SelectItem("cowId", "奶牛");
-	private final IButton statusBtn = new IButton("自动更新");
+public class SportDataChartRealTimeView extends HLayout {
 	private Chart chart;
 	private boolean running = false;
-	private boolean enabled = true;
 	private Timer timer;
 	private int isWebSocket = 1;
 	private long updateTimeStr;
+	private VLayout content;
 
-	private void initRightPanel() {
+	private void initChart() {
+		content = new VLayout();
 		Highcharts.setOptions(new Highcharts.Options().setLang(
 				new Lang()
 						.setMonths(
@@ -95,61 +82,21 @@ public class SportDataChartView extends HLayout {
 								.setDay("%B%e日").setHour("%H:%M")
 								.setMonth("%Y年%B").setYear("%Y年"));
 		chart.getYAxis().setAxisTitleText("运动量");
+		chart.setLegend(new Legend().setStyle(new Style().setFontSize("50px")));
 		chart.setSeriesPlotOptions(new SeriesPlotOptions().setCursor(
 				Cursor.POINTER).setMarker(new Marker().setLineWidth(1)));
-		rightPanel.setWidth("80%");
-		rightPanel.addMember(chart);
+		content.setWidth100();
+		content.addMember(chart);
+		this.addMember(content);
 	}
 
-	private void initLeftPanel() {
-		if (CowHealth.cowMap != null && CowHealth.cowMap.size() > 0) {
-			selectItem.setValueMap(CowHealth.cowMap);
-		}
-		form.setItems(selectItem);
-		top.setDefaultLayoutAlign(Alignment.CENTER);
-		top.setHeight("20%");
-		top.setMembersMargin(20);
-		top.addMember(form);
-		top.addMember(statusBtn);
-		statusBtn.disable();
-		buttom.setHeight("80%");
-		leftPanel.setWidth("20%");
-		leftPanel.addMember(top);
-		leftPanel.addMember(buttom);
-	}
-
-	public SportDataChartView() {
-		initLeftPanel();
-		initRightPanel();
-		addMember(leftPanel);
-		addMember(rightPanel);
-		selectItem.addChangedHandler(new ChangedHandler() {
-
-			@Override
-			public void onChanged(ChangedEvent event) {
-				statusBtn.enable();
-				enabled = false;
-				String cowId = selectItem.getValueAsString();
-				getSportData(cowId);
-			}
-		});
-		statusBtn.addClickHandler(new ClickHandler() {
-
-			@Override
-			public void onClick(ClickEvent event) {
-				((IButton) event.getSource()).disable();
-				enabled = true;
-				if (isWebSocket == 0) {
-					timer.cancel();
-					startTimer();
-				}
-			}
-		});
+	public SportDataChartRealTimeView() {
+		initChart();
 		timer = new Timer() {
 
 			@Override
 			public void run() {
-				if (running == false && enabled == true) {
+				if (running == false) {
 					getSportData(null);
 				}
 			}
@@ -162,7 +109,7 @@ public class SportDataChartView extends HLayout {
 		timer.scheduleRepeating(1000);
 	}
 
-	public native void start(SportDataChartView t)/*-{
+	public native void start(SportDataChartRealTimeView t)/*-{
 		var ws = null;
 		var heart_beat_timer;
 		var moduleName = $moduleName;
@@ -174,23 +121,20 @@ public class SportDataChartView extends HLayout {
 		wsUrl = wsUrl.replace(regProtocalName, 'ws://');
 		wsUrl = wsUrl + 'ws/mywebsocket.ws';
 		if (!$wnd.WebSocket) {
-			t.@com.haozileung.scau.client.home.view.SportDataChartView::isWebSocket = 0;
-			t.@com.haozileung.scau.client.home.view.SportDataChartView::startTimer()();
+			t.@com.haozileung.scau.client.home.view.SportDataChartRealTimeView::isWebSocket = 0;
+			t.@com.haozileung.scau.client.home.view.SportDataChartRealTimeView::startTimer()();
 		} else {
-			t.@com.haozileung.scau.client.home.view.SportDataChartView::isWebSocket = 1;
+			t.@com.haozileung.scau.client.home.view.SportDataChartRealTimeView::isWebSocket = 1;
 			// 创建WebSocket
 			ws = new WebSocket(wsUrl);
 			// 收到消息时走这个方法
 			ws.onmessage = function(evt) {
-				var enabled = t.@com.haozileung.scau.client.home.view.SportDataChartView::enabled;
-				if (enabled == true) {
-					t.@com.haozileung.scau.client.home.view.SportDataChartView::setData(Ljava/lang/String;)(evt.data);
-				}
+				t.@com.haozileung.scau.client.home.view.SportDataChartRealTimeView::setData(Ljava/lang/String;)(evt.data);
 			};
 			// 断开时会走这个方法
 			ws.onclose = function() {
-				t.@com.haozileung.scau.client.home.view.SportDataChartView::isWebSocket = 0;
-				t.@com.haozileung.scau.client.home.view.SportDataChartView::startTimer()();
+				t.@com.haozileung.scau.client.home.view.SportDataChartRealTimeView::isWebSocket = 0;
+				t.@com.haozileung.scau.client.home.view.SportDataChartRealTimeView::startTimer()();
 			};
 			// 连接上时走这个方法
 			ws.onopen = function() {
@@ -227,12 +171,7 @@ public class SportDataChartView extends HLayout {
 			@Override
 			public void onResponseReceived(Request request, Response response) {
 				String json = response.getText();
-				if (enabled == true && cowId == null) {
-					setData(json);
-				}
-				if (enabled == false && cowId != null) {
-					setData(json);
-				}
+				setData(json);
 				running = false;
 			}
 		});
@@ -305,118 +244,5 @@ public class SportDataChartView extends HLayout {
 			}
 
 		}
-	}
-
-	public void getCowList() {
-		RequestBuilder req = new RequestBuilder(RequestBuilder.GET,
-				"cow/getCow.action");
-		try {
-			req.sendRequest(null, new RequestCallback() {
-
-				@Override
-				public void onError(Request arg0, Throwable arg1) {
-					SC.say("请求奶牛列表出错！");
-
-				}
-
-				@Override
-				public void onResponseReceived(Request request,
-						Response response) {
-					String json = response.getText();
-					JSONValue jv = JSONParser.parseStrict(json).isObject()
-							.get("response");
-					if (jv != null) {
-						JSONValue jvData = jv.isObject().get("data");
-						if (jvData != null) {
-							JSONArray ja = jvData.isArray();
-							JSONValue jvCow = null;
-							for (int i = 0; i < ja.size(); i++) {
-								jvCow = ja.get(i);
-								if (jvCow != null) {
-									String cowId = jvCow.isObject()
-											.get("cowId").isString()
-											.stringValue();
-									String cowName = jvCow.isObject()
-											.get("name").isString()
-											.stringValue();
-									CowHealth.cowMap.put(cowId, cowName);
-								}
-							}
-							selectItem.setValueMap(CowHealth.cowMap);
-						}
-					}
-				}
-			});
-		} catch (RequestException e) {
-		}
-
-	}
-
-	public Chart getChart() {
-		return chart;
-	}
-
-	public void setChart(Chart chart) {
-		this.chart = chart;
-	}
-
-	public boolean isRunning() {
-		return running;
-	}
-
-	public void setRunning(boolean running) {
-		this.running = running;
-	}
-
-	public boolean isEnabled() {
-		return enabled;
-	}
-
-	public void setEnabled(boolean enabled) {
-		this.enabled = enabled;
-	}
-
-	public Timer getTimer() {
-		return timer;
-	}
-
-	public void setTimer(Timer timer) {
-		this.timer = timer;
-	}
-
-	public int getIsWebSocket() {
-		return isWebSocket;
-	}
-
-	public void setIsWebSocket(int isWebSocket) {
-		this.isWebSocket = isWebSocket;
-	}
-
-	public long getUpdateTimeStr() {
-		return updateTimeStr;
-	}
-
-	public void setUpdateTimeStr(long updateTimeStr) {
-		this.updateTimeStr = updateTimeStr;
-	}
-
-	public VLayout getLeftPanel() {
-		return leftPanel;
-	}
-
-	public VLayout getRightPanel() {
-		return rightPanel;
-	}
-
-	public VLayout getButtom() {
-		return buttom;
-	}
-
-	public DynamicForm getForm() {
-		return form;
-	}
-
-	public SelectItem getSelectItem() {
-		return selectItem;
 	}
 }

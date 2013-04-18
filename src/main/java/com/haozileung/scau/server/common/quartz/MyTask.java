@@ -92,7 +92,7 @@ public class MyTask {
 		}
 	}
 
-	//@Scheduled(cron = "0/10 * * * * ?")
+	@Scheduled(cron = "0/10 * * * * ?")
 	public void addNewDataFile() {
 		Random r = new Random(new Date().getTime());
 		List<Equipment> equipment = equipmentRespository.findAll();

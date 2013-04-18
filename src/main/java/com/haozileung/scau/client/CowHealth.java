@@ -15,7 +15,7 @@ import com.google.gwt.json.client.JSONParser;
 import com.google.gwt.json.client.JSONValue;
 import com.haozileung.scau.client.home.view.CowManageView;
 import com.haozileung.scau.client.home.view.EquipmentManageView;
-import com.haozileung.scau.client.home.view.SportDataChartView;
+import com.haozileung.scau.client.home.view.SportDataChartRealTimeView;
 import com.haozileung.scau.shared.Messages;
 import com.smartgwt.client.types.Side;
 import com.smartgwt.client.util.SC;
@@ -30,7 +30,7 @@ public class CowHealth implements EntryPoint {
 	private final Messages messages = GWT.create(Messages.class);
 	public static LinkedHashMap<String, Object> cowMap = new LinkedHashMap<String, Object>();
 
-	public static SportDataChartView sportData;
+	public static SportDataChartRealTimeView sportData;
 
 	public static EquipmentManageView equipment;
 
@@ -84,7 +84,7 @@ public class CowHealth implements EntryPoint {
 						tabs.setWidth100();
 						tabs.setHeight100();
 						final Tab testTab = new Tab(messages.cowSportData());
-						sportData = new SportDataChartView();
+						sportData = new SportDataChartRealTimeView();
 						testTab.setPane(sportData);
 						tabs.addTab(testTab);
 						final Tab cowTab = new Tab(messages.cowManage());
