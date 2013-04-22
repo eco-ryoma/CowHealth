@@ -31,7 +31,6 @@ import com.google.gwt.i18n.client.DateTimeFormat;
 import com.google.gwt.json.client.JSONArray;
 import com.google.gwt.json.client.JSONParser;
 import com.google.gwt.json.client.JSONValue;
-import com.google.gwt.user.client.Timer;
 import com.haozileung.scau.client.CowHealth;
 import com.smartgwt.client.types.Alignment;
 import com.smartgwt.client.util.SC;
@@ -61,12 +60,11 @@ public class SportDataChartHistoryView extends HLayout {
 	private final VLayout buttom = new VLayout();
 	private final DynamicForm form = new DynamicForm();
 	private final SelectItem selectItem = new SelectItem("cowId", "奶牛");
-	private final IButton statusBtn = new IButton("自动更新");
+	private final IButton _1Day = new IButton("一天");
+	private final IButton _3Days = new IButton("三天");
+	private final IButton _15Days = new IButton("十五天");
+	private final IButton _30Days = new IButton("三十天");
 	private Chart chart;
-	private boolean running = false;
-	private boolean enabled = true;
-	private Timer timer;
-	private int isWebSocket = 1;
 	private long updateTimeStr;
 
 	private void initRightPanel() {
@@ -113,8 +111,14 @@ public class SportDataChartHistoryView extends HLayout {
 		top.setHeight("20%");
 		top.setMembersMargin(20);
 		top.addMember(form);
-		top.addMember(statusBtn);
-		statusBtn.disable();
+		top.addMember(_1Day);
+		top.addMember(_3Days);
+		top.addMember(_15Days);
+		top.addMember(_30Days);
+		_1Day.hide();
+		_3Days.hide();
+		_15Days.hide();
+		_30Days.hide();
 		buttom.setHeight("80%");
 		leftPanel.setWidth("20%");
 		leftPanel.addMember(top);
@@ -130,82 +134,44 @@ public class SportDataChartHistoryView extends HLayout {
 
 			@Override
 			public void onChanged(ChangedEvent event) {
-				statusBtn.enable();
-				enabled = false;
+				_1Day.show();
+				_3Days.show();
+				_15Days.show();
+				_30Days.show();
 				String cowId = selectItem.getValueAsString();
 				getSportData(cowId);
 			}
 		});
-		statusBtn.addClickHandler(new ClickHandler() {
+		_1Day.addClickHandler(new ClickHandler() {
+			@Override
+			public void onClick(ClickEvent event) {
+
+			}
+		});
+		_3Days.addClickHandler(new ClickHandler() {
 
 			@Override
 			public void onClick(ClickEvent event) {
-				((IButton) event.getSource()).disable();
-				enabled = true;
-				if (isWebSocket == 0) {
-					timer.cancel();
-					startTimer();
-				}
+
 			}
 		});
-		timer = new Timer() {
+		_15Days.addClickHandler(new ClickHandler() {
 
 			@Override
-			public void run() {
-				if (running == false && enabled == true) {
-					getSportData(null);
-				}
+			public void onClick(ClickEvent event) {
+
 			}
+		});
+		_30Days.addClickHandler(new ClickHandler() {
 
-		};
-		start(this);
+			@Override
+			public void onClick(ClickEvent event) {
+
+			}
+		});
 	}
-
-	public void startTimer() {
-		timer.scheduleRepeating(1000);
-	}
-
-	public native void start(SportDataChartHistoryView t)/*-{
-		var ws = null;
-		var heart_beat_timer;
-		var moduleName = $moduleName;
-		var baseUrl = $moduleBase;
-		var regModuleName = new RegExp(moduleName + '/$');
-		var regProtocalName = new RegExp('^http://');
-		var regPoint = new RegExp(':[0-9]+', 'g');
-		var wsUrl = baseUrl.replace(regModuleName, '');
-		wsUrl = wsUrl.replace(regProtocalName, 'ws://');
-		wsUrl = wsUrl + 'ws/mywebsocket.ws';
-		if (!$wnd.WebSocket) {
-			t.@com.haozileung.scau.client.home.view.SportDataChartHistoryView::isWebSocket = 0;
-			t.@com.haozileung.scau.client.home.view.SportDataChartHistoryView::startTimer()();
-		} else {
-			t.@com.haozileung.scau.client.home.view.SportDataChartHistoryView::isWebSocket = 1;
-			// 创建WebSocket
-			ws = new WebSocket(wsUrl);
-			// 收到消息时走这个方法
-			ws.onmessage = function(evt) {
-				var enabled = t.@com.haozileung.scau.client.home.view.SportDataChartHistoryView::enabled;
-				if (enabled == true) {
-					t.@com.haozileung.scau.client.home.view.SportDataChartHistoryView::setData(Ljava/lang/String;)(evt.data);
-				}
-			};
-			// 断开时会走这个方法
-			ws.onclose = function() {
-				t.@com.haozileung.scau.client.home.view.SportDataChartHistoryView::isWebSocket = 0;
-				t.@com.haozileung.scau.client.home.view.SportDataChartHistoryView::startTimer()();
-			};
-			// 连接上时走这个方法
-			ws.onopen = function() {
-				heart_beat_timer = setInterval(function() {
-					ws.send('{online:1}');
-				}, 240000);
-			};
-		}
-	}-*/;
 
 	public void getSportData(final String cowId) {
-		running = true;
 		String data = null;
 		String url = "data/getSportData.action";
 		if (cowId != null && !cowId.isEmpty()) {
@@ -224,19 +190,12 @@ public class SportDataChartHistoryView extends HLayout {
 			@Override
 			public void onError(Request arg0, Throwable arg1) {
 				SC.say("请求运动数据出错！");
-				running = false;
 			}
 
 			@Override
 			public void onResponseReceived(Request request, Response response) {
 				String json = response.getText();
-				if (enabled == true && cowId == null) {
-					setData(json);
-				}
-				if (enabled == false && cowId != null) {
-					setData(json);
-				}
-				running = false;
+				setData(json);
 			}
 		});
 
@@ -310,89 +269,12 @@ public class SportDataChartHistoryView extends HLayout {
 		}
 	}
 
-	public void getCowList() {
-		RequestBuilder req = new RequestBuilder(RequestBuilder.GET,
-				"cow/getCow.action");
-		try {
-			req.sendRequest(null, new RequestCallback() {
-
-				@Override
-				public void onError(Request arg0, Throwable arg1) {
-					SC.say("请求奶牛列表出错！");
-
-				}
-
-				@Override
-				public void onResponseReceived(Request request,
-						Response response) {
-					String json = response.getText();
-					JSONValue jv = JSONParser.parseStrict(json).isObject()
-							.get("response");
-					if (jv != null) {
-						JSONValue jvData = jv.isObject().get("data");
-						if (jvData != null) {
-							JSONArray ja = jvData.isArray();
-							JSONValue jvCow = null;
-							for (int i = 0; i < ja.size(); i++) {
-								jvCow = ja.get(i);
-								if (jvCow != null) {
-									String cowId = jvCow.isObject()
-											.get("cowId").isString()
-											.stringValue();
-									String cowName = jvCow.isObject()
-											.get("name").isString()
-											.stringValue();
-									CowHealth.cowMap.put(cowId, cowName);
-								}
-							}
-							selectItem.setValueMap(CowHealth.cowMap);
-						}
-					}
-				}
-			});
-		} catch (RequestException e) {
-		}
-
-	}
-
 	public Chart getChart() {
 		return chart;
 	}
 
 	public void setChart(Chart chart) {
 		this.chart = chart;
-	}
-
-	public boolean isRunning() {
-		return running;
-	}
-
-	public void setRunning(boolean running) {
-		this.running = running;
-	}
-
-	public boolean isEnabled() {
-		return enabled;
-	}
-
-	public void setEnabled(boolean enabled) {
-		this.enabled = enabled;
-	}
-
-	public Timer getTimer() {
-		return timer;
-	}
-
-	public void setTimer(Timer timer) {
-		this.timer = timer;
-	}
-
-	public int getIsWebSocket() {
-		return isWebSocket;
-	}
-
-	public void setIsWebSocket(int isWebSocket) {
-		this.isWebSocket = isWebSocket;
 	}
 
 	public long getUpdateTimeStr() {

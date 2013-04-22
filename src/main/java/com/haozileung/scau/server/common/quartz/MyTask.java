@@ -141,12 +141,14 @@ public class MyTask {
 						br = new BufferedReader(new FileReader(file));
 					} catch (FileNotFoundException e) {
 						logger.error("读取文件失败：文件没有找到！" + e.getMessage());
+						fileList.remove(file);
 						continue;
 					}
 					try {
 						data = br.readLine();
 					} catch (IOException e) {
 						logger.error("读取文件失败：文件读取出错！" + e.getMessage());
+						fileList.remove(file);
 						continue;
 					}
 					while (data != null) {
@@ -155,6 +157,7 @@ public class MyTask {
 							data = br.readLine();
 						} catch (IOException e) {
 							logger.error("读取文件失败：文件读取出错！" + e.getMessage());
+							fileList.remove(file);
 							continue;
 						}
 					}
@@ -162,6 +165,8 @@ public class MyTask {
 						br.close();
 					} catch (IOException e) {
 						logger.error("文件关闭失败！" + e.getMessage());
+						fileList.remove(file);
+						return;
 					}
 					moveFile(file);
 				}

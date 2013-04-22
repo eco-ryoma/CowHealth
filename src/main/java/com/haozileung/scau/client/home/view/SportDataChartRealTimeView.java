@@ -11,10 +11,8 @@ import org.moxieapps.gwt.highcharts.client.DateTimeLabelFormats;
 import org.moxieapps.gwt.highcharts.client.Global;
 import org.moxieapps.gwt.highcharts.client.Highcharts;
 import org.moxieapps.gwt.highcharts.client.Lang;
-import org.moxieapps.gwt.highcharts.client.Legend;
 import org.moxieapps.gwt.highcharts.client.Series;
 import org.moxieapps.gwt.highcharts.client.Series.Type;
-import org.moxieapps.gwt.highcharts.client.Style;
 import org.moxieapps.gwt.highcharts.client.ToolTip;
 import org.moxieapps.gwt.highcharts.client.plotOptions.LinePlotOptions;
 import org.moxieapps.gwt.highcharts.client.plotOptions.Marker;
@@ -82,7 +80,6 @@ public class SportDataChartRealTimeView extends HLayout {
 								.setDay("%B%e日").setHour("%H:%M")
 								.setMonth("%Y年%B").setYear("%Y年"));
 		chart.getYAxis().setAxisTitleText("运动量");
-		chart.setLegend(new Legend().setStyle(new Style().setFontSize("50px")));
 		chart.setSeriesPlotOptions(new SeriesPlotOptions().setCursor(
 				Cursor.POINTER).setMarker(new Marker().setLineWidth(1)));
 		content.setWidth100();
