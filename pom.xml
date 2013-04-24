@@ -151,6 +151,13 @@
 			<version>${junit.version}</version>
 			<scope>test</scope>
 		</dependency>
+		<dependency>
+			<groupId>org.moxieapps.gwt</groupId>
+			<artifactId>highcharts</artifactId>
+			<version>1.5.0</version>
+			<scope>system</scope>
+			<systemPath>${project.basedir}/lib/org.moxieapps.gwt.highcharts-1.5.0.jar</systemPath>
+		</dependency>
 		<!-- GWT dependencies -->
 		<dependency>
 			<groupId>com.google.gwt</groupId>
