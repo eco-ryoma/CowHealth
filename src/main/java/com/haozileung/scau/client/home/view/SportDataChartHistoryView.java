@@ -1,6 +1,7 @@
 package com.haozileung.scau.client.home.view;
 
 import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.Map;
 
 import org.moxieapps.gwt.highcharts.client.Axis;
@@ -34,13 +35,13 @@ import com.google.gwt.json.client.JSONValue;
 import com.haozileung.scau.client.CowHealth;
 import com.smartgwt.client.types.Alignment;
 import com.smartgwt.client.util.SC;
-import com.smartgwt.client.widgets.IButton;
-import com.smartgwt.client.widgets.events.ClickEvent;
-import com.smartgwt.client.widgets.events.ClickHandler;
+import com.smartgwt.client.widgets.Label;
 import com.smartgwt.client.widgets.form.DynamicForm;
-import com.smartgwt.client.widgets.form.fields.SelectItem;
-import com.smartgwt.client.widgets.form.fields.events.ChangedEvent;
-import com.smartgwt.client.widgets.form.fields.events.ChangedHandler;
+import com.smartgwt.client.widgets.form.fields.ButtonItem;
+import com.smartgwt.client.widgets.form.fields.MultiComboBoxItem;
+import com.smartgwt.client.widgets.form.fields.RadioGroupItem;
+import com.smartgwt.client.widgets.form.fields.events.ClickEvent;
+import com.smartgwt.client.widgets.form.fields.events.ClickHandler;
 import com.smartgwt.client.widgets.layout.HLayout;
 import com.smartgwt.client.widgets.layout.VLayout;
 
@@ -59,13 +60,20 @@ public class SportDataChartHistoryView extends HLayout {
 	private final VLayout top = new VLayout();
 	private final VLayout buttom = new VLayout();
 	private final DynamicForm form = new DynamicForm();
-	private final SelectItem selectItem = new SelectItem("cowId", "奶牛");
-	private final IButton _1Day = new IButton("一天");
-	private final IButton _3Days = new IButton("三天");
-	private final IButton _15Days = new IButton("十五天");
-	private final IButton _30Days = new IButton("三十天");
+	private final MultiComboBoxItem selectItem = new MultiComboBoxItem("cowId",
+			"奶牛");
+	private final RadioGroupItem radioGroupItem = new RadioGroupItem(
+			"dateCount", "最近");
+	private final ButtonItem buttonItem = new ButtonItem("查询");
+	private final Label cowNameLable = new Label();
 	private Chart chart;
-	private long updateTimeStr;
+
+	public SportDataChartHistoryView() {
+		initLeftPanel();
+		initRightPanel();
+		addMember(leftPanel);
+		addMember(rightPanel);
+	}
 
 	private void initRightPanel() {
 		Highcharts.setOptions(new Highcharts.Options().setLang(
@@ -106,80 +114,43 @@ public class SportDataChartHistoryView extends HLayout {
 		if (CowHealth.cowMap != null && CowHealth.cowMap.size() > 0) {
 			selectItem.setValueMap(CowHealth.cowMap);
 		}
-		form.setItems(selectItem);
+		radioGroupItem.setVertical(true);
+		LinkedHashMap<String, Object> radioGroupValueMap = new LinkedHashMap<String, Object>();
+		radioGroupValueMap.put("3天", 3);
+		radioGroupValueMap.put("7天", 7);
+		radioGroupValueMap.put("15天", 15);
+		radioGroupValueMap.put("30天", 30);
+		radioGroupItem.setValueMap(radioGroupValueMap);
+		radioGroupItem.setDefaultValue(3);
+		buttonItem.addClickHandler(new ClickHandler() {
+
+			@Override
+			public void onClick(ClickEvent event) {
+				String cowId = (String) selectItem.getValue();
+				int dateCount = (Integer) radioGroupItem.getValue();
+				if (cowId != null && !cowId.isEmpty()) {
+					getSportData(cowId, dateCount);
+				}
+			}
+		});
+		form.setItems(selectItem, radioGroupItem);
 		top.setDefaultLayoutAlign(Alignment.CENTER);
-		top.setHeight("20%");
+		top.setHeight("50%");
 		top.setMembersMargin(20);
 		top.addMember(form);
-		top.addMember(_1Day);
-		top.addMember(_3Days);
-		top.addMember(_15Days);
-		top.addMember(_30Days);
-		_1Day.hide();
-		_3Days.hide();
-		_15Days.hide();
-		_30Days.hide();
-		buttom.setHeight("80%");
+		top.addMember(cowNameLable);
 		leftPanel.setWidth("20%");
 		leftPanel.addMember(top);
 		leftPanel.addMember(buttom);
 	}
 
-	public SportDataChartHistoryView() {
-		initLeftPanel();
-		initRightPanel();
-		addMember(leftPanel);
-		addMember(rightPanel);
-		selectItem.addChangedHandler(new ChangedHandler() {
-
-			@Override
-			public void onChanged(ChangedEvent event) {
-				_1Day.show();
-				_3Days.show();
-				_15Days.show();
-				_30Days.show();
-				String cowId = selectItem.getValueAsString();
-				getSportData(cowId);
-			}
-		});
-		_1Day.addClickHandler(new ClickHandler() {
-			@Override
-			public void onClick(ClickEvent event) {
-
-			}
-		});
-		_3Days.addClickHandler(new ClickHandler() {
-
-			@Override
-			public void onClick(ClickEvent event) {
-
-			}
-		});
-		_15Days.addClickHandler(new ClickHandler() {
-
-			@Override
-			public void onClick(ClickEvent event) {
-
-			}
-		});
-		_30Days.addClickHandler(new ClickHandler() {
-
-			@Override
-			public void onClick(ClickEvent event) {
-
-			}
-		});
-	}
-
-	public void getSportData(final String cowId) {
+	public void getSportData(final String cowId, final int dateCount) {
 		String data = null;
 		String url = "data/getSportData.action";
 		if (cowId != null && !cowId.isEmpty()) {
 			data = "?cowId=" + cowId;
 			url += data;
-			url += "&updateTimeStr=" + updateTimeStr;
-		} else {
-			url += "?updateTimeStr=" + updateTimeStr;
+			url += "&dateCount=" + dateCount;
 		}
 		RequestBuilder req = new RequestBuilder(RequestBuilder.GET,
 				URL.encode(url));
@@ -210,15 +181,11 @@ public class SportDataChartHistoryView extends HLayout {
 		JSONValue jv = JSONParser.parseStrict(json).isObject().get("response");
 		if (jv != null) {
 			JSONValue jvData = jv.isObject().get("data");
-			JSONValue updateTime = jv.isObject().get("updateTime");
-			if (updateTime != null) {
-				updateTimeStr = (new Double(jv.isObject().get("updateTime")
-						.isNumber().doubleValue())).longValue();
-			}
 			if (jvData != null) {
 				JSONArray ja = jvData.isArray();
 				JSONValue jvCow = null;
 				Map<String, Series> seriesMap = new HashMap<String, Series>();
+				cowNameLable.clear();
 				for (int i = 0; i < ja.size(); i++) {
 					jvCow = ja.get(i);
 					if (jvCow != null) {
@@ -230,6 +197,8 @@ public class SportDataChartHistoryView extends HLayout {
 
 							cowName = jvCow.isObject().get("cowName")
 									.isString().stringValue();
+							cowNameLable
+									.setContents("<h1>" + cowName + "</h1>");
 							startDate = jvCow.isObject().get("currentDate")
 									.isString().stringValue();
 
@@ -277,14 +246,6 @@ public class SportDataChartHistoryView extends HLayout {
 		this.chart = chart;
 	}
 
-	public long getUpdateTimeStr() {
-		return updateTimeStr;
-	}
-
-	public void setUpdateTimeStr(long updateTimeStr) {
-		this.updateTimeStr = updateTimeStr;
-	}
-
 	public VLayout getLeftPanel() {
 		return leftPanel;
 	}
@@ -299,9 +260,5 @@ public class SportDataChartHistoryView extends HLayout {
 
 	public DynamicForm getForm() {
 		return form;
-	}
-
-	public SelectItem getSelectItem() {
-		return selectItem;
 	}
 }
