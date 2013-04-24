@@ -185,7 +185,6 @@ public class SportDataChartHistoryView extends HLayout {
 				JSONArray ja = jvData.isArray();
 				JSONValue jvCow = null;
 				Map<String, Series> seriesMap = new HashMap<String, Series>();
-				cowNameLable.clear();
 				for (int i = 0; i < ja.size(); i++) {
 					jvCow = ja.get(i);
 					if (jvCow != null) {
@@ -197,11 +196,8 @@ public class SportDataChartHistoryView extends HLayout {
 
 							cowName = jvCow.isObject().get("cowName")
 									.isString().stringValue();
-							cowNameLable
-									.setContents("<h1>" + cowName + "</h1>");
 							startDate = jvCow.isObject().get("currentDate")
 									.isString().stringValue();
-
 							if (seriesMap.containsKey(cowName)) {
 								Series series = seriesMap.get(cowName);
 								for (int j = 0; j < dataStr.length; j++) {
@@ -230,35 +226,15 @@ public class SportDataChartHistoryView extends HLayout {
 					}
 				}
 				chart.removeAllSeries();
+				cowNameLable.clear();
+				String contents = new String();
 				for (String cowName : seriesMap.keySet()) {
 					chart.addSeries(seriesMap.get(cowName));
+					contents += "<h1>" + cowName + "</h1>";
 				}
+				cowNameLable.setContents(contents);
 			}
 
 		}
-	}
-
-	public Chart getChart() {
-		return chart;
-	}
-
-	public void setChart(Chart chart) {
-		this.chart = chart;
-	}
-
-	public VLayout getLeftPanel() {
-		return leftPanel;
-	}
-
-	public VLayout getRightPanel() {
-		return rightPanel;
-	}
-
-	public VLayout getButtom() {
-		return buttom;
-	}
-
-	public DynamicForm getForm() {
-		return form;
 	}
 }

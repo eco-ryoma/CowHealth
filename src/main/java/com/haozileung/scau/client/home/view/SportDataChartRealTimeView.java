@@ -30,7 +30,9 @@ import com.google.gwt.json.client.JSONArray;
 import com.google.gwt.json.client.JSONParser;
 import com.google.gwt.json.client.JSONValue;
 import com.google.gwt.user.client.Timer;
+import com.smartgwt.client.types.VerticalAlignment;
 import com.smartgwt.client.util.SC;
+import com.smartgwt.client.widgets.Label;
 import com.smartgwt.client.widgets.layout.HLayout;
 import com.smartgwt.client.widgets.layout.VLayout;
 
@@ -50,6 +52,7 @@ public class SportDataChartRealTimeView extends HLayout {
 	private int isWebSocket = 1;
 	private long updateTimeStr;
 	private VLayout content;
+	private Label label = new Label();
 
 	private void initChart() {
 		content = new VLayout();
@@ -89,6 +92,10 @@ public class SportDataChartRealTimeView extends HLayout {
 
 	public SportDataChartRealTimeView() {
 		initChart();
+		HLayout buttom = new HLayout();
+		buttom.setAlign(VerticalAlignment.CENTER);
+		buttom.addMember(label);
+		this.addMember(buttom);
 		timer = new Timer() {
 
 			@Override
@@ -235,9 +242,13 @@ public class SportDataChartRealTimeView extends HLayout {
 					}
 				}
 				chart.removeAllSeries();
+				label.clear();
+				String contents = new String();
 				for (String cowName : seriesMap.keySet()) {
 					chart.addSeries(seriesMap.get(cowName));
+					contents += "<h1>"+cowName+"</h1>";
 				}
+				label.setContents(contents);
 			}
 
 		}
