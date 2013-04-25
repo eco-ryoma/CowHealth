@@ -116,10 +116,10 @@ public class SportDataChartHistoryView extends HLayout {
 		}
 		radioGroupItem.setVertical(true);
 		LinkedHashMap<String, Object> radioGroupValueMap = new LinkedHashMap<String, Object>();
-		radioGroupValueMap.put("3天", 3);
-		radioGroupValueMap.put("7天", 7);
-		radioGroupValueMap.put("15天", 15);
-		radioGroupValueMap.put("30天", 30);
+		radioGroupValueMap.put("3", "3天");
+		radioGroupValueMap.put("7", "7天");
+		radioGroupValueMap.put("15", "15天");
+		radioGroupValueMap.put("30", "30天");
 		radioGroupItem.setValueMap(radioGroupValueMap);
 		radioGroupItem.setDefaultValue(3);
 		buttonItem.addClickHandler(new ClickHandler() {
@@ -127,13 +127,14 @@ public class SportDataChartHistoryView extends HLayout {
 			@Override
 			public void onClick(ClickEvent event) {
 				String cowId = (String) selectItem.getValue();
-				int dateCount = (Integer) radioGroupItem.getValue();
+				int dateCount = Integer.valueOf(radioGroupItem.getValue().toString());
 				if (cowId != null && !cowId.isEmpty()) {
 					getSportData(cowId, dateCount);
 				}
 			}
 		});
-		form.setItems(selectItem, radioGroupItem);
+		buttonItem.setAlign(Alignment.RIGHT);
+		form.setItems(selectItem, radioGroupItem, buttonItem);
 		top.setDefaultLayoutAlign(Alignment.CENTER);
 		top.setHeight("50%");
 		top.setMembersMargin(20);
