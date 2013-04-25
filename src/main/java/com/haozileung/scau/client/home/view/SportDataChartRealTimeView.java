@@ -30,7 +30,6 @@ import com.google.gwt.json.client.JSONArray;
 import com.google.gwt.json.client.JSONParser;
 import com.google.gwt.json.client.JSONValue;
 import com.google.gwt.user.client.Timer;
-import com.smartgwt.client.types.VerticalAlignment;
 import com.smartgwt.client.util.SC;
 import com.smartgwt.client.widgets.Label;
 import com.smartgwt.client.widgets.layout.HLayout;
@@ -46,16 +45,22 @@ import com.smartgwt.client.widgets.layout.VLayout;
  * @version V1.0
  */
 public class SportDataChartRealTimeView extends HLayout {
+	private final VLayout leftPanel = new VLayout();
+	private final VLayout rightPanel = new VLayout();
 	private Chart chart;
 	private boolean running = false;
 	private Timer timer;
 	private int isWebSocket = 1;
 	private long updateTimeStr;
-	private VLayout content;
 	private Label label = new Label();
+	
+	private void initLeft(){
+		leftPanel.addMember(label);
+		leftPanel.setWidth("20%");
+		this.addMember(leftPanel);
+	}
 
 	private void initChart() {
-		content = new VLayout();
 		Highcharts.setOptions(new Highcharts.Options().setLang(
 				new Lang()
 						.setMonths(
@@ -85,17 +90,14 @@ public class SportDataChartRealTimeView extends HLayout {
 		chart.getYAxis().setAxisTitleText("运动量");
 		chart.setSeriesPlotOptions(new SeriesPlotOptions().setCursor(
 				Cursor.POINTER).setMarker(new Marker().setLineWidth(1)));
-		content.setWidth100();
-		content.addMember(chart);
-		this.addMember(content);
+		rightPanel.setWidth("80%");
+		rightPanel.addMember(chart);
+		this.addMember(rightPanel);
 	}
 
 	public SportDataChartRealTimeView() {
+		initLeft();
 		initChart();
-		HLayout buttom = new HLayout();
-		buttom.setAlign(VerticalAlignment.CENTER);
-		buttom.addMember(label);
-		this.addMember(buttom);
 		timer = new Timer() {
 
 			@Override

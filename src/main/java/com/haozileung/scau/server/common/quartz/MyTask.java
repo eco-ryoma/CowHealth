@@ -31,6 +31,7 @@ import com.haozileung.scau.server.domain.Equipment;
 import com.haozileung.scau.server.dto.SportDataInfo;
 import com.haozileung.scau.server.repository.IEquipmentRepository;
 import com.haozileung.scau.server.service.ISportDataService;
+import com.haozileung.scau.shared.SharedConfig;
 
 /**
  * @author haozi
@@ -73,7 +74,7 @@ public class MyTask {
 							for (String equipmentId : tmpMap.getMap().keySet()) {
 								List<SportDataInfo> sportDatas = sportDataService
 										.getSportDataByEquipmentId(equipmentId,
-												new Date());
+												new Date(), SharedConfig.defaultDateCount);
 								response.getData().addAll(sportDatas);
 							}
 						}

@@ -14,7 +14,6 @@
  */
 package com.haozileung.scau.server.action;
 
-import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -27,11 +26,11 @@ import com.haozileung.scau.server.common.action.BaseAction;
 import com.haozileung.scau.server.common.context.SpringApplicationContextHolder;
 import com.haozileung.scau.server.common.dto.RestDataSourceResponse;
 import com.haozileung.scau.server.common.dto.TempMap;
-import com.haozileung.scau.server.common.utility.DateUtil;
 import com.haozileung.scau.server.dto.EquipmentInfo;
 import com.haozileung.scau.server.dto.SportDataInfo;
 import com.haozileung.scau.server.service.IEquipmentService;
 import com.haozileung.scau.server.service.ISportDataService;
+import com.haozileung.scau.shared.SharedConfig;
 
 /**
  * 
@@ -63,7 +62,7 @@ public class SportDataAction extends BaseAction {
 
 	private String cowId;
 
-	private String endDate;
+	private String dateCount;
 
 	private String updateTimeStr;
 
@@ -75,12 +74,12 @@ public class SportDataAction extends BaseAction {
 		this.cowId = cowId;
 	}
 
-	public String getEndDate() {
-		return endDate;
+	public String getDateCount() {
+		return dateCount;
 	}
 
-	public void setEndDate(String endDate) {
-		this.endDate = endDate;
+	public void setDateCount(String dateCount) {
+		this.dateCount = dateCount;
 	}
 
 	@Action(value = "getSportData")
@@ -93,14 +92,9 @@ public class SportDataAction extends BaseAction {
 			EquipmentInfo equipmentInfo = equipmentService
 					.getEquipmentByCowId(cowId);
 			List<SportDataInfo> sportDatas = null;
-			try {
-				sportDatas = sportDataService.getSportDataByEquipmentId(
-						equipmentInfo.getEquipmentId(),
-						endDate == null ? new Date() : DateUtil.parse(endDate,
-								DateUtil.defaultDatePatternStr));
-			} catch (ParseException e) {
-				logger.error("查询日期格式出错：" + e.getMessage());
-			}
+			sportDatas = sportDataService.getSportDataByEquipmentId(
+					equipmentInfo.getEquipmentId(), new Date(),
+					Integer.parseInt(dateCount));
 			if (sportDatas != null) {
 				response.getData().addAll(sportDatas);
 			}
@@ -116,7 +110,8 @@ public class SportDataAction extends BaseAction {
 				response.setData(new ArrayList<SportDataInfo>());
 				for (String equipmentId : tmpMap.getMap().keySet()) {
 					List<SportDataInfo> sportDatas = sportDataService
-							.getSportDataByEquipmentId(equipmentId, new Date());
+							.getSportDataByEquipmentId(equipmentId, new Date(),
+									SharedConfig.defaultDateCount);
 					if (sportDatas != null) {
 						response.getData().addAll(sportDatas);
 					}

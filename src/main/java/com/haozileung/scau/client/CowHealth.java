@@ -22,6 +22,10 @@ import com.smartgwt.client.types.Side;
 import com.smartgwt.client.util.SC;
 import com.smartgwt.client.widgets.tab.Tab;
 import com.smartgwt.client.widgets.tab.TabSet;
+import com.smartgwt.client.widgets.tab.events.TabDeselectedEvent;
+import com.smartgwt.client.widgets.tab.events.TabDeselectedHandler;
+import com.smartgwt.client.widgets.tab.events.TabSelectedEvent;
+import com.smartgwt.client.widgets.tab.events.TabSelectedHandler;
 
 /**
  * Entry point classes define <code>onModuleLoad()</code>.
@@ -84,17 +88,89 @@ public class CowHealth implements EntryPoint {
 						tabs.setHeight100();
 						final Tab realtimeTab = new Tab(messages.cowSportData());
 						realtimeTab.setPane(new SportDataChartRealTimeView());
+						realtimeTab
+								.addTabSelectedHandler(new TabSelectedHandler() {
+
+									@Override
+									public void onTabSelected(
+											TabSelectedEvent event) {
+										realtimeTab.getPane().show();
+									}
+								});
+						realtimeTab
+								.addTabDeselectedHandler(new TabDeselectedHandler() {
+
+									@Override
+									public void onTabDeselected(
+											TabDeselectedEvent event) {
+										realtimeTab.getPane().hide();
+									}
+
+								});
 						tabs.addTab(realtimeTab);
 						final Tab historyTab = new Tab(messages.cowSportData());
 						historyTab.setPane(new SportDataChartHistoryView());
+						historyTab
+								.addTabSelectedHandler(new TabSelectedHandler() {
+
+									@Override
+									public void onTabSelected(
+											TabSelectedEvent event) {
+										historyTab.getPane().show();
+									}
+								});
+						historyTab
+								.addTabDeselectedHandler(new TabDeselectedHandler() {
+
+									@Override
+									public void onTabDeselected(
+											TabDeselectedEvent event) {
+										historyTab.getPane().hide();
+									}
+
+								});
 						tabs.addTab(historyTab);
 						final Tab cowTab = new Tab(messages.cowManage());
 						cowTab.setPane(new CowManageView());
+						cowTab.addTabSelectedHandler(new TabSelectedHandler() {
+
+							@Override
+							public void onTabSelected(TabSelectedEvent event) {
+								cowTab.getPane().show();
+							}
+						});
+						cowTab.addTabDeselectedHandler(new TabDeselectedHandler() {
+
+							@Override
+							public void onTabDeselected(TabDeselectedEvent event) {
+								cowTab.getPane().hide();
+							}
+
+						});
 						tabs.addTab(cowTab);
 						final Tab equipmentTab = new Tab(messages
 								.equipmentManage());
 						equipment = new EquipmentManageView();
 						equipmentTab.setPane(equipment);
+						equipmentTab
+								.addTabSelectedHandler(new TabSelectedHandler() {
+
+									@Override
+									public void onTabSelected(
+											TabSelectedEvent event) {
+										equipmentTab.getPane().show();
+									}
+								});
+						equipmentTab
+								.addTabDeselectedHandler(new TabDeselectedHandler() {
+
+									@Override
+									public void onTabDeselected(
+											TabDeselectedEvent event) {
+										equipmentTab.getPane().hide();
+									}
+
+								});
 						tabs.addTab(equipmentTab);
 						tabs.draw();
 						Document.get().setTitle(messages.siteName());

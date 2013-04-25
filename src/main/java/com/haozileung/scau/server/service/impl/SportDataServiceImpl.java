@@ -62,9 +62,8 @@ public class SportDataServiceImpl implements ISportDataService {
 
 	@Override
 	public List<SportDataInfo> getSportDataByEquipmentId(String equipmentId,
-			Date endDate) {
-		int totalDays = 7;
-		int start = 0 - totalDays;
+			Date endDate,int dateCount) {
+		int start = 0 - dateCount;
 		if (equipmentId == null || endDate == null) {
 			return null;
 		}

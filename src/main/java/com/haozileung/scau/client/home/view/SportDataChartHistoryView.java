@@ -38,8 +38,8 @@ import com.smartgwt.client.util.SC;
 import com.smartgwt.client.widgets.Label;
 import com.smartgwt.client.widgets.form.DynamicForm;
 import com.smartgwt.client.widgets.form.fields.ButtonItem;
-import com.smartgwt.client.widgets.form.fields.MultiComboBoxItem;
 import com.smartgwt.client.widgets.form.fields.RadioGroupItem;
+import com.smartgwt.client.widgets.form.fields.SelectItem;
 import com.smartgwt.client.widgets.form.fields.events.ClickEvent;
 import com.smartgwt.client.widgets.form.fields.events.ClickHandler;
 import com.smartgwt.client.widgets.layout.HLayout;
@@ -60,10 +60,9 @@ public class SportDataChartHistoryView extends HLayout {
 	private final VLayout top = new VLayout();
 	private final VLayout buttom = new VLayout();
 	private final DynamicForm form = new DynamicForm();
-	private final MultiComboBoxItem selectItem = new MultiComboBoxItem("cowId",
-			"奶牛");
-	private final RadioGroupItem radioGroupItem = new RadioGroupItem(
-			"dateCount", "最近");
+	private final SelectItem selectItem = new SelectItem("cowId", "奶牛");
+	private final RadioGroupItem radioGroupItem = new RadioGroupItem("dateCount",
+			"最近");
 	private final ButtonItem buttonItem = new ButtonItem("查询");
 	private final Label cowNameLable = new Label();
 	private Chart chart;
@@ -115,7 +114,7 @@ public class SportDataChartHistoryView extends HLayout {
 			selectItem.setValueMap(CowHealth.cowMap);
 		}
 		radioGroupItem.setVertical(true);
-		LinkedHashMap<String, Object> radioGroupValueMap = new LinkedHashMap<String, Object>();
+		LinkedHashMap<String, String> radioGroupValueMap = new LinkedHashMap<String, String>();
 		radioGroupValueMap.put("3", "3天");
 		radioGroupValueMap.put("7", "7天");
 		radioGroupValueMap.put("15", "15天");
@@ -127,7 +126,8 @@ public class SportDataChartHistoryView extends HLayout {
 			@Override
 			public void onClick(ClickEvent event) {
 				String cowId = (String) selectItem.getValue();
-				int dateCount = Integer.valueOf(radioGroupItem.getValue().toString());
+				int dateCount = Integer.valueOf(radioGroupItem.getValue()
+						.toString());
 				if (cowId != null && !cowId.isEmpty()) {
 					getSportData(cowId, dateCount);
 				}
