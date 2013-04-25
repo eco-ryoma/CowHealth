@@ -4,6 +4,7 @@ import java.util.LinkedHashMap;
 
 import com.google.gwt.core.client.EntryPoint;
 import com.google.gwt.core.client.GWT;
+import com.google.gwt.core.client.GWT.UncaughtExceptionHandler;
 import com.google.gwt.dom.client.Document;
 import com.google.gwt.http.client.Request;
 import com.google.gwt.http.client.RequestBuilder;
@@ -41,6 +42,13 @@ public class CowHealth implements EntryPoint {
 	 * This is the entry point method.
 	 */
 	public void onModuleLoad() {
+		GWT.setUncaughtExceptionHandler(new UncaughtExceptionHandler() {
+			
+			@Override
+			public void onUncaughtException(Throwable e) {
+				SC.say("客户端发现异常："+e.getMessage());				
+			}
+		});
 		RequestBuilder req = new RequestBuilder(RequestBuilder.GET,
 				"cow/getCow.action");
 		try {
