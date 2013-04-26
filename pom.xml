@@ -20,8 +20,8 @@
 		<junit.version>4.10</junit.version>
 		<log4j.version>1.2.17</log4j.version>
 		<slf4j.version>1.7.2</slf4j.version>
-		<compile.source>1.6</compile.source>
-		<compile.target>1.6</compile.target>
+		<compile.source>1.7</compile.source>
+		<compile.target>1.7</compile.target>
 	</properties>
 	<build>
 		<!-- Generate compiled stuff in the folder used for developing mode -->
@@ -296,8 +296,11 @@
 				<enabled>false</enabled>
 			</snapshots>
 		</repository>
-
-		<!-- <repository> <id>spring-release</id> <name>Spring Maven Release Repository</name> 
-			<url>http://repo.springsource.org/libs-release</url> </repository> -->
+		<repository>
+			<id>spring-release</id>
+			<name>Spring 
+			Maven Release Repository</name>
+			<url>http://repo.springsource.org/libs-release</url>
+		</repository>
 	</repositories>
 </project>

@@ -12,12 +12,10 @@ WebSocket/Comet 实时图表演示
 
 ###2. 运行过程
 
->* 下载本项目:[项目](https://github.com/haozileung/CowHealth/archive/master.zip),包括*示例版本*和*实际使用版本*
->> 2个版本的区别主要是示例版本会模拟动态数据的过程
-
->* 解压，将目录CowHealth复制到 $JETTY_HOME/webapps 目录下
-
->* cd到 $JETTY_HOME,启动Jetty
+>* 下载[项目](https://github.com/haozileung/CowHealth/archive/master.zip)
+>* 解压
+>* 在eclipse/Maven中编译项目
+>* 将目录target/CowHealth复制到 Jetty 的 webapps 目录下
+>* 启动Jetty
 >>* java -jar start.jar
-
->* 打开浏览器，输入localhost:8080/CowHealth/ 即可（网站端口可以自己设置，具体参照[Jetty配置文档](http://wiki.eclipse.org/Jetty)）
+>* 打开浏览器，输入localhost:8080/CowHealth/ 即可（网站端口可以修改设置，具体参照[Jetty配置文档](http://wiki.eclipse.org/Jetty)）
