@@ -94,7 +94,7 @@ public class CowHealth implements EntryPoint {
 						tabs.setTabBarAlign(Side.RIGHT);
 						tabs.setWidth100();
 						tabs.setHeight100();
-						final Tab realtimeTab = new Tab(messages.cowSportData());
+						final Tab realtimeTab = new Tab("实时数据展示");
 						realtimeTab.setPane(new SportDataChartRealTimeView());
 						realtimeTab
 								.addTabSelectedHandler(new TabSelectedHandler() {
@@ -116,7 +116,7 @@ public class CowHealth implements EntryPoint {
 
 								});
 						tabs.addTab(realtimeTab);
-						final Tab historyTab = new Tab(messages.cowSportData());
+						final Tab historyTab = new Tab("历史数据查询");
 						historyTab.setPane(new SportDataChartHistoryView());
 						historyTab
 								.addTabSelectedHandler(new TabSelectedHandler() {
