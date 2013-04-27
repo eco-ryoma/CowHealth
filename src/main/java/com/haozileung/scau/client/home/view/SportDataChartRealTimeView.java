@@ -244,11 +244,10 @@ public class SportDataChartRealTimeView extends HLayout {
 					}
 				}
 				chart.removeAllSeries();
-				label.clear();
-				String contents = new String();
+				String contents = new String("<h1>当前通过的奶牛：</h1>");
 				for (String cowName : seriesMap.keySet()) {
 					chart.addSeries(seriesMap.get(cowName));
-					contents += "<h1>"+cowName+"</h1>";
+					contents += "<h1>奶牛："+cowName+"</h1>";
 				}
 				label.setContents(contents);
 			}
